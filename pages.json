@@ -62,6 +62,22 @@
 				"navigationBarTitleText": "药物",
 				"navigationBarBackgroundColor": "#FFcc99"
 			}
+		},
+		{
+			"path" : "pages/diary/diary_index",
+			"style" : 
+			{
+				"navigationBarTitleText" : "",
+				"enablePullDownRefresh" : false
+			}
+		},
+		{
+			"path" : "pages/diary/diary_detail",
+			"style" : 
+			{
+				"navigationBarTitleText" : "",
+				"enablePullDownRefresh" : false
+			}
 		}
 
 	],

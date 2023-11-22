@@ -3,46 +3,50 @@
 		<view class="container">
 			<view class="rate-section">
 				<text class="rate-title">食欲</text>
-				<uni-rate :max="10" :value="10" v-model="appetite" @change="saveAppetite" :size="25"
+				<uni-rate :max="10" :value="10" v-model="appetite"  :size="25"
 					active-color="#FFD700" :void-color="'#ccc'"></uni-rate>
 				<text class="rate-value">{{ appetite }}</text>
 			</view>
 			<view class="rate-section">
 				<text class="rate-title">心情</text>
-				<uni-rate :max="10" :value="10" v-model="mood" @change="saveMood" :size="25" active-color="#FFA07A"
+				<uni-rate :max="10" :value="10" v-model="mood"  :size="25" active-color="#FFA07A"
 					:void-color="'#ccc'"></uni-rate>
 				<text class="rate-value">{{ mood }}</text>
 			</view>
 			<view class="rate-section">
 				<text class="rate-title">睡眠</text>
-				<uni-rate :max="10" :value="10" v-model="sleep" @change="saveSleep" :size="25" active-color="#87CEFA"
+				<uni-rate :max="10" :value="10" v-model="sleep"  :size="25" active-color="#87CEFA"
 					:void-color="'#ccc'"></uni-rate>
 				<text class="rate-value">{{ sleep }}</text>
 			</view>
 		</view>
 		<view class="input-section">
 			<text class="input-title">标题</text>
-			<uni-easyinput> v-model="title" placeholder="请输入标题"></uni-easyinput>
+			<uni-easyinput v-model="title" placeholder="请输入标题"></uni-easyinput>
 		</view>
 		<view class="input-section">
 			<text class="input-title">内容</text>
 			<textarea v-model="content" class="content-input" placeholder="请输入内容"></textarea>
 		</view>
-		<view>
+		
+		<!-- 在记录日记的时候选择和显示图片的功能，后端的接口还没有开发好先搁置一下 -->
+		<!-- <view>
 			<view class="image-grid" v-if="imageUrls.length > 0">
 				<image v-for="(imageUrl, index) in displayedImages" :key="index" :src="imageUrl" mode="aspectFit"
 					class="grid-item" @longpress="showDeleteButton(index)"></image>
 			</view>
 
-			<!-- 删除按钮弹窗 -->
+			
 			<uni-popup ref="popup" type="bottom">
 				<view class="popup-content">
 					<button class="delete-button" @tap="deleteImage">删除图片</button>
 				</view>
 			</uni-popup>
 			<button @tap="chooseImage">选择图片</button>
-		</view>
-		<button @click="uploadData">提交</button>
+		</view> -->
+		
+		
+		<button @click="uploadData_withoutPic">提交</button>
 	</view>
 </template>
 
@@ -102,6 +106,40 @@
 					this.$refs.popup.close();
 				}
 			},
+			
+			
+			
+			uploadData_withoutPic(){
+				const dataToSend = {
+					title: this.title,
+					content: this.content,
+					mood_score: this.mood,
+					eat_score: this.appetite,
+					sleep_score: this.sleep
+				};
+				console.log(dataToSend);
+				uni.request({
+					url: 'http://82.157.244.44:8000/api/v1/diary/',  // 后端接口地址
+					method: 'POST', 
+					header: {
+						'Authorization': `Bearer ${uni.getStorageSync('token')}`,
+						
+					},
+					data: dataToSend,
+					success: (res) => {
+						console.log('数据发送成功:', res.data);
+						uni.navigateTo({
+							url:"/pages/diary/diary_index"
+						})
+					},
+					fail: (err) => {
+						console.error('数据发送失败:', err);
+					}
+				});
+			},
+			
+			
+			
 
 			uploadData() {
 				// 首先上传图片

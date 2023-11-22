@@ -145,7 +145,7 @@
 			},
 			go_diary() {
 				uni.navigateTo({
-					url: '/pages/diary/diary',
+					url: '/pages/diary/diary_index',
 				});
 			},
 		},
