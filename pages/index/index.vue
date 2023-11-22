@@ -1,9 +1,32 @@
 <template>
-	<view class="container">
-		<u-button @click="chat" hair-line="false" :ripple="true" ripple-bg-color="#e86158"
-			:custom-style="btnStyle">聊一聊</u-button>
-		<u-button @click="write_diary" hair-line="false" :ripple="true" ripple-bg-color="#e86158"
-			:custom-style="btnStyle">心情记录</u-button>
+	<view>
+		<swiper class="swiper" :indicator-dots="true" :autoplay="true" :interval="3000" :duration="1000">
+			<swiper-item class="swiper-item">
+				<image class="swiper-image" mode="aspectFill" src="../../static/index-swiper/cat1.jpg"></image>
+			</swiper-item>
+			<swiper-item class="swiper-item">
+				<image class="swiper-image" mode="aspectFill" src="../../static/index-swiper/cat2.jpeg"></image>
+			</swiper-item>
+			<swiper-item class="swiper-item">
+				<image class="swiper-image" mode="aspectFill" src="../../static/index-swiper/cat3.jpg"></image>
+			</swiper-item>
+		</swiper>
+		<view class="container">
+			<view class="box">
+				<image class="box-image" mode="aspectFit" src="../../static/index/robot.png"></image>
+				<text
+					class="encouragement-text">在这段疗愈之旅中，你并非孤身一人。勇敢尝试与AI展开对话，它可以成为你的倾诉伙伴，帮你理清思绪，缓解心情。科技的力量已经证明在心理治疗领域发挥着积极的作用。给予自己这个宝贵的机会，让对话成为你治愈过程中不可或缺的一环。</text>
+				<u-button @click="go_chat" hair-line="false" :ripple="true" ripple-bg-color="#e86158"
+					:custom-style="btnStyle">聊一聊</u-button>
+			</view>
+			<view class="box">
+				<image class="box-image" mode="aspectFit" src="../../static/index/diary.png"></image>
+				<text
+					class="encouragement-text">每天都是新的开始，而记录下你的感受是迈向康复的一步。尝试将情绪、想法和反应写在日记中，这不仅有助于更好地了解自己，还有助于追踪变化。就像有人说的那样，文字是治愈的良药。日记是你独特的故事，每一页都是自我关爱的表现。</text>
+				<u-button @click="go_diary" hair-line="false" :ripple="true" ripple-bg-color="#e86158"
+					:custom-style="btnStyle">心情记录</u-button>
+			</view>
+		</view>
 	</view>
 </template>
 
@@ -15,17 +38,16 @@
 					color: "#f9f8e5",
 					backgroundColor: '#ff8a89',
 					marginTop: '20rpx',
-
 				},
 			}
 		},
 		methods: {
-			chat() {
+			go_chat() {
 				uni.navigateTo({
 					url: "/pages/AiChat/AiChat"
 				})
 			},
-			write_diary() {
+			go_diary() {
 				uni.navigateTo({
 					url: "/pages/diary/diary"
 				})
@@ -37,8 +59,41 @@
 
 <style lang="scss">
 	.container {
-		padding: 20px;
+		padding: 20rpx;
 		font-size: 14px;
-		line-height: 24px;
+		display: flex;
+		justify-content: space-between;
+	}
+
+	.box {
+		width: 48%;
+		/* 设置盒子宽度为容器的48% */
+		text-align: center;
+	}
+
+	.box-image {
+		width: 100%;
+		height: 150rpx;
+		margin-top: 10px;
+		/* 调整图片与文本之间的间距 */
+	}
+
+	.encouragement-text {
+		margin-top: 10rpx;
+	}
+
+	.swiper {
+		height: 400upx;
+	}
+
+	.swiper-item {
+		display: block;
+		text-align: center;
+	}
+
+	/*图片宽度设置100% ，高度300upx（设为auto图片无法显示）*/
+	.swiper-image {
+		width: 100%;
+		height: 400upx;
 	}
 </style>

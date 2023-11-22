@@ -1,0 +1,117 @@
+/* 内外边距 */
+.p-2 {
+	padding: 20rpx;
+}
+
+/* flex布局 */
+.flex {
+	display: flex;
+}
+
+.align-center {
+	align-items: center;
+}
+
+.justify-between {
+	justify-content: space-between;
+}
+
+.justify-center {
+	justify-content: center;
+}
+
+.flex-1 {
+	flex: 1;
+}
+
+/* 圆角 */
+.rounded-circle {
+	border-radius: 100%;
+}
+
+.rounded {
+	border-radius: 8rpx;
+}
+
+/* margin */
+.mr-2 {
+	margin-right: 20rpx;
+}
+
+.my-1 {
+	margin-top: 10rpx;
+	margin-bottom: 0rpx;
+}
+
+/* padding */
+.px-5 {
+	padding-left: 50rpx;
+	padding-right: 50rpx;
+}
+
+.px-3 {
+	padding-left: 30rpx;
+	padding-right: 30rpx;
+}
+
+.py-3 {
+	padding-top: 30rpx;
+	padding-bottom: 30rpx;
+}
+
+.py-2 {
+	padding-top: 20rpx;
+	padding-bottom: 20rpx;
+}
+
+/* 字体 */
+.font-lg {
+	font-size: 40rpx;
+}
+
+.font-md {
+	font-size: 35rpx;
+}
+
+.font {
+	font-size: 30rpx;
+}
+
+.font-sm {
+	font-size: 25rpx;
+}
+
+.font-weight-bold {
+	font-weight: bold;
+}
+
+/* 文字颜色 */
+.text-white {
+	color: #FFFFFF;
+}
+
+.text-light-muted {
+	color: #A9A5A0;
+}
+
+/* 宽度 */
+/* #ifndef APP-PLUS-NVUE */
+.w-100 {
+	width: 100%;
+}
+
+/* #endif */
+
+/* scroll-view */
+/* #ifndef APP-PLUS-NVUE */
+.scroll-row {
+	width: 100%;
+	white-space: nowrap;
+}
+
+.scroll-row-item {
+	display: inline-block !important;
+}
+
+/* #endif */
+
