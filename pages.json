@@ -5,28 +5,53 @@
 	"pages": [{
 			"path": "pages/index/index",
 			"style": {
-				"navigationBarTitleText": "uni-app"
+				"navigationBarTitleText": "HeartFriend",
+				"navigationBarBackgroundColor": "#FFcc99",
+				"navigationBarTextStyle": "black"
 			}
 		},
 		{
 			"path": "pages/consult/consult",
 			"style": {
-				"navigationBarTitleText": "",
+				"navigationBarTitleText": "HeartFriend",
 				"enablePullDownRefresh": false
 			}
 		},
 		{
 			"path": "pages/msg/msg",
 			"style": {
-				"navigationBarTitleText": "",
+				"navigationBarTitleText": "HeartFriend",
+				"navigationBarBackgroundColor": "#FFcc99",
 				"enablePullDownRefresh": false
 			}
 		},
 		{
 			"path": "pages/my/my",
 			"style": {
-				"navigationBarTitleText": "",
+				"navigationBarTitleText": "HeartFriend",
+				"navigationBarBackgroundColor": "#FFcc99",
 				"enablePullDownRefresh": false
+			}
+		},
+		{
+			"path": "pages/AiChat/AiChat",
+			"style": {
+				"navigationBarTitleText": "ai聊天",
+				"enablePullDownRefresh": false
+			}
+		},
+		{
+			"path": "pages/diary/diary",
+			"style": {
+				"navigationBarTitleText": "日记",
+				"enablePullDownRefresh": false
+			}
+		},
+		{
+			"path": "pages/medicine/medicine",
+			"style": {
+				"navigationBarTitleText": "药物",
+				"navigationBarBackgroundColor": "#FFcc99"
 			}
 		}
 	],
@@ -41,30 +66,30 @@
 	},
 	"tabBar": {
 		"color": "#3a3a3a",
-		"selectedColor": "#ffc64b",
+		"selectedColor": "#FF9900",
 		"borderStyle": "black",
 		"backgroundColor": "#ffffff",
 		"list": [{
 				"pagePath": "pages/index/index",
-				"iconPath": "static/tabbar/index.png",
-				"selectedIconPath": "static/tabbar/indexd.png",
+				"iconPath": "static/tabbar/indexx.png",
+				"selectedIconPath": "static/tabbar/indexxd.png",
 				"text": "主页"
 			},
 			{
-				"pagePath": "pages/consult/consult",
-				"iconPath": "static/tabbar/consult.png",
-				"selectedIconPath": "static/tabbar/consultd.png",
-				"text": "咨询"
+				"pagePath": "pages/medicine/medicine",
+				"iconPath": "static/tabbar/medicine.png",
+				"selectedIconPath": "static/tabbar/medicined.png",
+				"text": "用药"
 			},
 			{
 				"pagePath": "pages/msg/msg",
-				"iconPath": "static/tabbar/msg.png",
-				"selectedIconPath": "static/tabbar/msgd.png",
-				"text": "消息"
+				"iconPath": "static/tabbar/community.png",
+				"selectedIconPath": "static/tabbar/communityd.png",
+				"text": "社群"
 			},
 			{
 				"pagePath": "pages/my/my",
-				"iconPath": "static/tabbar/my.png",
+				"iconPath": "static/tabbar/myy.png",
 				"selectedIconPath": "static/tabBar/myd.png",
 				"text": "我的"
 			}
