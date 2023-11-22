@@ -16,7 +16,7 @@
 					<u-button type="default" shape="circle" @click="wxLogin" plain>登录</u-button>
 				</view>
 			</block>
-			<u-grid :col="4" :border="false" style="margin: 20rpx 0;" @click="toNav">
+			<u-grid :col="3" :border="false" style="margin: 20rpx 0;" @click="toNav">
 				<u-grid-item>
 					<text>{{ userInfo.fans || 0}}</text>
 					<view class="grid-text">粉丝</view>
@@ -29,15 +29,12 @@
 					<text>{{ userInfo.postNum || 0 }}</text>
 					<view class="grid-text">帖子</view>
 				</u-grid-item>
-				<u-grid-item>
-					<text>{{ userInfo.integral || 0 }}</text>
-					<view class="grid-text">积分</view>
-				</u-grid-item>
+
 			</u-grid>
 		</view>
 		<view class="block-wrap">
 			<view class="block-title">我的服务</view>
-			<u-grid :col="4" :border="false" style="margin: 20rpx 0;" @click="toNav">
+			<u-grid :col="1" :border="false" style="margin: 20rpx 0;" @click="toNav">
 
 				<u-grid-item index="/pages/my/post?type=2">
 					<image class="gn-icon"></image>
@@ -56,13 +53,14 @@
 
 				<u-grid-item index="/pages/my/user?type=2">
 					<image class="gn-icon"></image>
-					<view class="grid-text">我的粉丝</view>
+					<view class="grid-text">我的设置</view>
 				</u-grid-item>
+
 
 			</u-grid>
 		</view>
 
-
+		<button @click="exit">退出登陆</button>
 	</view>
 
 </template>
@@ -81,6 +79,14 @@
 
 
 			};
+		},
+		methods: {
+			exit() {
+				uni.navigateTo({
+					url: "/pages/login/login"
+				})
+			}
+
 		}
 	}
 </script>

@@ -3,20 +3,20 @@
 		"^u-(.*)": "uview-ui/components/u-$1/u-$1.vue"
 	},
 	"pages": [{
-			"path": "pages/login/register",
-			"style": {
-				"navigationBarTitleText": "注册账号",
-				"navigationBarBackgroundColor": "#FFcc99",
-				"backgroundColor": "#ff9"
-			}
-		},
-		{
 			"path": "pages/index/index",
 			"style": {
 				"navigationBarTitleText": "HeartFriend",
 				"navigationBarBackgroundColor": "#FFcc99",
 				"navigationBarTextStyle": "black"
 
+			}
+		},
+		{
+			"path": "pages/login/register",
+			"style": {
+				"navigationBarTitleText": "注册账号",
+				"navigationBarBackgroundColor": "#FFcc99",
+				"backgroundColor": "#ff9"
 			}
 		},
 		{
@@ -53,8 +53,7 @@
 		{
 			"path": "pages/diary/diary",
 			"style": {
-				"navigationBarTitleText": "日记",
-				"enablePullDownRefresh": false
+				"navigationBarTitleText": "日记"
 			}
 		},
 		{
@@ -64,6 +63,7 @@
 				"navigationBarBackgroundColor": "#FFcc99"
 			}
 		}
+
 	],
 	"globalStyle": {
 		"navigationBarTextStyle": "black",

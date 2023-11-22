@@ -1,12 +1,48 @@
 <template>
 	<view>
-		<button>日记</button>
-		<uni-section title="食欲" subTitle="今天有没有好好吃饭？" type="line" padding>
-			<uni-rate size="18" :value="10" max="10" />
-		</uni-section>
-		<uni-section title="情绪" subTitle="今天的心情怎么样？" type="line" padding>
-			<uni-rate size="18" :value="10" max="10" />
-		</uni-section>
+		<view class="container">
+			<view class="rate-section">
+				<text class="rate-title">食欲</text>
+				<uni-rate :max="10" :value="10" v-model="appetite" @change="saveAppetite" :size="25"
+					active-color="#FFD700" :void-color="'#ccc'"></uni-rate>
+				<text class="rate-value">{{ appetite }}</text>
+			</view>
+			<view class="rate-section">
+				<text class="rate-title">心情</text>
+				<uni-rate :max="10" :value="10" v-model="mood" @change="saveMood" :size="25" active-color="#FFA07A"
+					:void-color="'#ccc'"></uni-rate>
+				<text class="rate-value">{{ mood }}</text>
+			</view>
+			<view class="rate-section">
+				<text class="rate-title">睡眠</text>
+				<uni-rate :max="10" :value="10" v-model="sleep" @change="saveSleep" :size="25" active-color="#87CEFA"
+					:void-color="'#ccc'"></uni-rate>
+				<text class="rate-value">{{ sleep }}</text>
+			</view>
+		</view>
+		<view class="input-section">
+			<text class="input-title">标题</text>
+			<uni-easyinput> v-model="title" placeholder="请输入标题"></uni-easyinput>
+		</view>
+		<view class="input-section">
+			<text class="input-title">内容</text>
+			<textarea v-model="content" class="content-input" placeholder="请输入内容"></textarea>
+		</view>
+		<view>
+			<view class="image-grid" v-if="imageUrls.length > 0">
+				<image v-for="(imageUrl, index) in displayedImages" :key="index" :src="imageUrl" mode="aspectFit"
+					class="grid-item" @longpress="showDeleteButton(index)"></image>
+			</view>
+
+			<!-- 删除按钮弹窗 -->
+			<uni-popup ref="popup" type="bottom">
+				<view class="popup-content">
+					<button class="delete-button" @tap="deleteImage">删除图片</button>
+				</view>
+			</uni-popup>
+			<button @tap="chooseImage">选择图片</button>
+		</view>
+		<button @click="uploadData">提交</button>
 	</view>
 </template>
 
@@ -14,15 +50,204 @@
 	export default {
 		data() {
 			return {
+				imageUrls: [], // 存储选择的图片地址数组
+				appetite: 8,
+				mood: 8,
+				sleep: 8,
+				title: '', // 保存用户输入的标题
+				content: '', // 保存用户输入的内容
+				deleteIndex: null // 保存需要删除的图片索引
+			};
+		},
+		computed: {
+			displayedImages() {
+				// 显示的图片数量最多为9张
+				return this.imageUrls.slice(0, 9);
+			},
+			remainingImageCount() {
+				// 剩余未显示的图片数量
+				return Math.max(0, this.imageUrls.length - 9);
+			},
+		},
 
+		methods: {
+			chooseImage() {
+				uni.chooseImage({
+					count: 9 - this.imageUrls.length, // 最多选择未选择的图片数量
+					sizeType: ['compressed'], // 压缩图片
+					sourceType: ['album', 'camera'], // 从相册选择或拍照
+					success: (res) => {
+						const tempFilePaths = res.tempFilePaths;
+						this.imageUrls = this.imageUrls.concat(tempFilePaths); // 将选择的图片添加到数组中
+					},
+					fail: (err) => {
+						console.log('选择图片失败:', err);
+					},
+				});
+			},
+
+			showDeleteButton(index) {
+				// 点击图片时展示删除按钮
+				console.log("s")
+				this.deleteIndex = index;
+				this.$refs.popup.open();
+				console.log(this.showPopup)
+			},
+
+			deleteImage() {
+				// 点击删除按钮时删除对应图片
+				if (this.deleteIndex !== null) {
+					this.imageUrls.splice(this.deleteIndex, 1); // 从数组中删除图片
+					this.deleteIndex = null; // 重置删除索引
+					this.$refs.popup.close();
+				}
+			},
+
+			uploadData() {
+				// 首先上传图片
+				this.uploadImages().then((imageUrls) => {
+					// 图片上传成功后，将图片地址和其他数据一起发送给后端
+					const dataToSend = {
+						title: this.title,
+						content: this.content,
+						appetite: this.appetite,
+						mood: this.mood,
+						sleep: this.sleep,
+						imageUrls: imageUrls, // 上传后的图片地址数组
+						// 其他需要发送的数据...
+						token: ""
+					};
+
+					// 发送数据给后端服务器
+					uni.request({
+						url: 'https://your-backend-api.com/saveData', // 后端接口地址
+						method: 'POST', // POST 或者适合你的请求方式
+						data: dataToSend,
+						success: (res) => {
+							console.log('数据发送成功:', res.data);
+						},
+						fail: (err) => {
+							console.error('数据发送失败:', err);
+						}
+					});
+				}).catch((error) => {
+					console.error('上传图片失败:', error);
+				});
+			},
+
+			// 上传图片方法
+			uploadImages() {
+				return new Promise((resolve, reject) => {
+					const uploadedImageUrls = []; // 保存上传后的图片地址的数组
+
+					// 循环上传图片
+					const promises = this.imageUrls.map((imageUrl) => {
+						return new Promise((resolve, reject) => {
+							uni.uploadFile({
+								url: 'https://your-backend-api.com/upload', // 后端上传图片接口地址
+								filePath: imageUrl,
+								name: 'file',
+								success: (uploadRes) => {
+									console.log('上传成功:', uploadRes.data);
+									uploadedImageUrls.push(uploadRes
+									.data); // 将上传后的图片地址保存到数组中
+									resolve();
+								},
+								fail: (err) => {
+									console.error('上传失败:', err);
+									reject(err);
+								}
+							});
+						});
+					});
+
+					// 等待所有图片上传完成
+					Promise.all(promises)
+						.then(() => {
+							resolve(uploadedImageUrls); // 将上传后的图片地址数组返回
+						})
+						.catch((error) => {
+							reject(error);
+						});
+				});
 			}
 		},
-		methods: {
-
-		}
-	}
+	};
 </script>
-
 <style lang="scss">
+	.image-grid {
+		display: flex;
+		flex-wrap: wrap;
+	}
 
+	.grid-item {
+		width: calc(33.33% - 10px);
+		/* 以三列排布，减去间隔 */
+		margin-bottom: 10px;
+		border: 2px solid #ccc;
+		/* 添加边框样式 */
+		box-sizing: border-box;
+		/* 边框不增加宽度 */
+		height: 200rpx
+	}
+
+	.container {
+		padding: 10px;
+		/* 设置容器与页面边界的距离 */
+		border: 1px solid #ddd;
+		/* 添加边框样式 */
+	}
+
+	.rate-section {
+		display: flex;
+		align-items: center;
+		margin-bottom: 10px;
+		padding: 10px;
+		/* 设置每个区块的内边距 */
+		border: 1px solid #ccc;
+		/* 添加边框样式 */
+		border-radius: 5px;
+		/* 圆角边框 */
+	}
+
+	.rate-title {
+		font-size: 18px;
+		margin-right: 10px;
+		color: #333;
+		font-weight: bold;
+	}
+
+	.rate-value {
+		margin-left: 10px;
+		font-size: 16px;
+		color: #666;
+	}
+
+	.input-section {
+		margin-bottom: 20px;
+		margin-left: 20rpx;
+		margin-right: 30rpx;
+	}
+
+	.input-title {
+		font-size: 18px;
+		margin-bottom: 0px;
+		margin-left: 10rpx;
+		margin-right: 20rpx;
+		color: #333;
+	}
+
+
+	.content-input {
+		width: 90%;
+		height: 200px;
+		padding: 5%;
+		border: 3rpx solid #ccc;
+		border-radius: 5px;
+		resize: none;
+		/* 禁止调整文本框大小 */
+		font-size: 18px;
+		line-height: 1.5;
+		background-color: antiquewhite;
+	}
 </style>
