@@ -4,35 +4,30 @@
 			<image :src="avatar_url" class="face"></image>
 		</button>
 		<view class="face_btn">点击上传头像</view>
-		<uni-forms class="register_box" :modelValue="userData" @submit="register" :rules="registerRules"
-			ref="register_form">
+		<uni-forms class="register_box" label-position="top" :modelValue="userData" @submit="register"
+			:rules="registerRules" ref="register_form">
 			<uni-group>
-				<uni-forms-item name="username" label="用户名" required>
-					<uni-easyinput focus prefixIcon="person-filled" placeholder="请输入用户名"
-						v-model="userData.username"></uni-easyinput>
-				</uni-forms-item>
 				<uni-forms-item name="nickname" label="昵称" required>
 					<uni-easyinput type="nickname" prefixIcon="auth-filled" placeholder="请输入昵称" @blur="bindblur"
 						@input="bindinput" v-model="userData.nickname"></uni-easyinput>
 				</uni-forms-item>
+				<uni-forms-item name="self_intro" label="个人介绍" required>
+					<uni-easyinput focus prefixIcon="person-filled" placeholder="请输入个人介绍"
+						v-model="userData.self_intro"></uni-easyinput>
+				</uni-forms-item>
 				<uni-forms-item name="gender" label="性别" required>
 					<uni-data-checkbox v-model="userData.gender" :localdata="sexs" />
 				</uni-forms-item>
-				<uni-forms-item name="phone_number" label="手机号" required>
-					<uni-easyinput prefixIcon="phone-filled" placeholder="请输入手机号"
-						v-model="userData.phone_number"></uni-easyinput>
-				</uni-forms-item>
-				<uni-forms-item name="password" label="密码" required>
-					<uni-easyinput prefixIcon="locked" placeholder="请输入密码" type="password"
-						v-model="userData.password"></uni-easyinput>
-				</uni-forms-item>
-				<uni-forms-item name="password2" label="密码" required>
-					<uni-easyinput prefixIcon="locked-filled" placeholder="请再次输入密码" type="password"
-						v-model="userData.password2"></uni-easyinput>
+				<uni-forms-item name="age" label="年龄" required>
+					<!-- 使用picker选择年龄 -->
+					<picker mode="selector" :range="ageRange" @change="onAgeChange">
+						<view class="picker">
+							{{ ageRange[userData.age] }}
+						</view>
+					</picker>
 				</uni-forms-item>
 			</uni-group>
 			<u-button @click="register" :custom-style="btnStyle">注册</u-button>
-			<u-button @click="to_login" :custom-style="btnStyle2">已有账号，去登陆</u-button>
 		</uni-forms>
 
 	</view>
@@ -42,56 +37,36 @@
 	export default {
 		data() {
 			return {
+				ageRange: Array.from({
+					length: 100
+				}, (_, i) => i.toString()), // 0 to 99
 				btnStyle: {
 					color: "#f9f8e5",
 					backgroundColor: '#ff8a89'
-				},
-				btnStyle2: {
-					marginTop: '20rpx',
-					color: "#f9f8e5",
-					backgroundColor: '#454545'
 				},
 				avatar_url: "../../static/默认_头像.png",
 				// 单选数据源
 				sexs: [{
 					text: '男',
-					value: 0
+					value: "male"
 				}, {
 					text: '女',
-					value: 1
+					value: "female"
 				}, {
 					text: '保密',
-					value: 2
+					value: "secret"
+				}, {
+					text: '其他',
+					value: "other"
 				}],
 				userData: {
-					username: '',
 					nickname: '',
 					gender: 2,
-					phone_number: '',
-					password: '',
-					password2: '',
-					avatar_url: "../../static/默认_头像.png"
+					self_intro: '',
+					avatar_url: "../../static/默认_头像.png",
+					age: 0
 				},
 				registerRules: {
-					// 对username字段进行必填验证
-					username: {
-						// username 字段的校验规则
-						rules: [
-							// 校验 name 不能为空
-							{
-								required: true,
-								errorMessage: '请填写用户名',
-							},
-							// 对name字段进行长度验证
-							{
-								minLength: 1,
-								maxLength: 9,
-								errorMessage: '{label}长度在 {minLength} 到 {maxLength} 个字符',
-							}
-						],
-						// 当前表单域的字段中文名，可不填写
-						label: '用户名'
-					},
 					// 对nickname字段进行必填验证
 					nickname: {
 						rules: [{
@@ -106,43 +81,21 @@
 						],
 						label: '昵称'
 					},
-					// 对phone_number字段进行必填验证
-					phone_number: {
+					age: {
 						rules: [{
-								required: true,
-								errorMessage: '请填写手机号',
-							}
-							// {
-							// 	pattern: /^[1][3-9][0-9]{9}$/,
-							// 	errorMessage: '请输入有效的{label}',
-							// }
-						],
-						label: '手机号'
-					},
-					// 对password字段进行必填验证
-					password: {
-						rules: [{
-								required: true,
-								errorMessage: '请填写密码',
-							},
-							// Add other rules as needed for the password field
-						],
-						label: '密码'
-					},
-					// 对password2字段进行必填验证
-					password2: {
-						rules: [{
-								required: true,
-								errorMessage: '请填写密码',
-							},
-							// Add other rules as needed for the password field
-						],
-						label: '密码'
+							required: true,
+							errorMessage: '请选择年龄',
+						}, ],
+						label: '年龄',
 					},
 				}
 			}
 		},
 		methods: {
+			onAgeChange(e) {
+				// 用户选择年龄后的处理逻辑
+				this.userData.age = parseInt(e.detail.value);
+			},
 			bindblur(e) {
 				console.log(e.detail.value);
 				this.userData.nickname = e.detail.value; // 获取微信昵称
@@ -159,7 +112,6 @@
 			getFaceImg(event) {
 				console.log(event);
 				let self = this;
-
 				this.avatar_url = event.detail.avatarUrl;
 				console.log(this.avatar_url);
 				// Set the avatar_url in the userData object
@@ -167,26 +119,58 @@
 				console.log('Avatar URL:', this.userData.avatar_url);
 				//获取到的头像地址是临时地址，所以拿到地址以后我们要将图片上传到自己的服务器上面
 			},
-			register() {
-				this.$refs.register_form.validate().then(res => {
-					console.log('表单数据信息：', res);
-					console.log('User Data:', this.userData);
-					// You can send the data to your backend API here once it's available
-					// For example, you can use uni.request to make an HTTP request to your backend
-					// uni.request({
-					//   url: 'your_backend_api_url',
-					//   method: 'POST',
-					//   data: this.userData,
-					//   success(res) {
-					//     console.log('Backend Response:', res.data);
-					//   },
-					//   fail(err) {
-					//     console.error('Error sending data to backend:', err);
-					//   }
-					// });
-				}).catch(err => {
+			async register() {
+				// 表单验证
+				try {
+					await this.$refs.register_form.validate();
+				} catch (err) {
 					console.log('表单错误信息：', err);
-				})
+					// 在这里处理表单验证失败的逻辑
+					return; // 如果表单验证失败，不进行后续的请求
+				}
+
+				// 表单验证通过，发送注册请求到后端
+				try {
+					const res = await uni.request({
+						url: 'http://82.157.244.44:8000/api/v1/user/info/',
+						method: 'PATCH',
+						header: {
+							'Authorization': `Bearer ${uni.getStorageSync('token')}`,
+							'Content-Type': 'application/json',
+						},
+						data: this.userData,
+					});
+					console.log(res);
+					// 检查后端返回的注册信息，如果成功则进行进一步操作
+					if (res[1].data) {
+						console.log('注册成功！');
+						// 在这里执行注册成功后的逻辑，例如跳转到首页
+						try {
+							const userInfoRes = await uni.request({
+								url: 'http://82.157.244.44:8000/api/v1/user/info/',
+								method: 'GET',
+								header: {
+									'Authorization': `Bearer ${uni.getStorageSync('token')}`,
+								},
+							});
+							console.log(userInfoRes[1].data);
+							const userInfo = userInfoRes[1].data;
+							console.log(userInfo);
+							// 在获取用户信息后，将其存储在本地存储中以备将来使用
+							uni.setStorageSync('userInfo', userInfo);
+							// 做任何其他关于用户信息的操作
+						} catch (error) {
+							console.error(error);
+							// 处理获取用户信息失败的逻辑
+						}
+					} else {
+						console.error('注册失败，后端返回:', res.data);
+						// 在这里处理注册失败的逻辑
+					}
+				} catch (error) {
+					console.error('注册请求失败:', error);
+					// 在这里处理请求失败的逻辑
+				}
 			}
 		}
 	}

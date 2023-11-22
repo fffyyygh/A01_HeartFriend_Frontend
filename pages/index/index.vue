@@ -32,6 +32,18 @@
 
 <script>
 	export default {
+		onLoad() {
+			console.log("a");
+			// 检查本地存储中是否有令牌
+			const token = uni.getStorageSync('token');
+			if (!token) {
+				// 如果没有令牌，执行登录和注册流程（操作A）
+				this.performLoginAndRegistration();
+			} else {
+				// 如果令牌存在，向后端请求用户信息
+				this.requestUserInfo(token);
+			}
+		},
 		data() {
 			return {
 				btnStyle: {
@@ -42,18 +54,101 @@
 			}
 		},
 		methods: {
+			async getLoginCode() {
+				return new Promise((resolve, reject) => {
+					uni.login({
+						provider: 'weixin',
+						success: function(loginRes) {
+							resolve(loginRes.code);
+						},
+					});
+				});
+			},
+			async performLoginAndRegistration() {
+				console.log("开始登录注册流程");
+				// 在这里实现登录和注册流程
+				try {
+					uni.showLoading({
+						mask: true,
+						title: '正在登录中',
+					});
+					const code = await this.getLoginCode();
+					// 注册测试用code
+					// const code = "testaSaa";
+					console.log(code);
+					// 发送登录请求
+					const loginRes = await uni.request({
+						url: 'http://82.157.244.44:8000/api/v1/user/login/',
+						method: 'POST',
+						header: {
+							'Content-Type': 'application/json',
+						},
+						data: {
+							code: code,
+						},
+					});
+					console.log(loginRes);
+					console.log(loginRes[1]);
+					console.log(loginRes[1].data);
+					const res = loginRes[1].data;
+					console.log(res);
+
+					if (res.access) {
+						uni.setStorageSync('hasLogin', true);
+						uni.setStorageSync('token', res.access);
+
+						// 检查 'created' 标志并采取适当的操作
+						if (res.created) {
+							// 如果用户已注册，请求用户信息
+							this.requestUserInfo(res.access);
+						} else {
+							// 如果用户未注册，跳转到注册页面
+							uni.navigateTo({
+								url: '/pages/login/register',
+							});
+						}
+					}
+				} catch (error) {
+					console.error(error);
+					// 处理登录失败的逻辑，显示错误信息给用户
+				} finally {
+					uni.hideLoading();
+				}
+			},
+			async requestUserInfo(token) {
+				console.log("开始请求用户信息");
+				// 在这里实现使用令牌向后端请求用户信息的逻辑
+				try {
+					const userInfoRes = await uni.request({
+						url: 'http://82.157.244.44:8000/api/v1/user/info/',
+						method: 'GET',
+						header: {
+							'Authorization': `Bearer ${token}`,
+						},
+					});
+					console.log(userInfoRes[1].data);
+					const userInfo = userInfoRes[1].data;
+					console.log(userInfo);
+					// 在获取用户信息后，将其存储在本地存储中以备将来使用
+					uni.setStorageSync('userInfo', userInfo);
+
+					// 做任何其他关于用户信息的操作
+				} catch (error) {
+					console.error(error);
+					// 处理获取用户信息失败的逻辑
+				}
+			},
 			go_chat() {
 				uni.navigateTo({
-					url: "/pages/AiChat/AiChat"
-				})
+					url: '/pages/AiChat/AiChat',
+				});
 			},
 			go_diary() {
 				uni.navigateTo({
-					url: "/pages/diary/diary"
-				})
-			}
-
-		}
+					url: '/pages/diary/diary',
+				});
+			},
+		},
 	}
 </script>
 
