@@ -3,11 +3,20 @@
 		<view class="head">
 			<block v-if="has_login">
 				<view class="userinfo" @click="goUser">
-					<u-avatar :src="userInfo.avatar"></u-avatar>
+					<u-avatar :src="userInfo.avatar_url"></u-avatar>
 					<view class="username">
 						<text>{{ userInfo.username }}</text>
-						<text class="sub-txt">{{ userInfo.intro }}</text>
+						<text class="sub-txt">{{ userInfo.self_intro }}</text>
 					</view>
+
+					<image v-if="userInfo.gender === 'male'" src="/static/my/male.png" class="gender-icon"></image>
+					<image v-else-if="userInfo.gender === 'female'" src="/static/my/female.png" class="gender-icon">
+					</image>
+					<image v-else-if="userInfo.gender === 'other'" src="/static/my/other.png" class="gender-icon">
+					</image>
+					<image v-else-if="userInfo.gender === 'secret'" src="/static/my/secret.png" class="gender-icon">
+					</image>
+
 					<u-icon name="arrow-right" class="arrow-right"></u-icon>
 				</view>
 			</block>
@@ -67,17 +76,14 @@
 
 <script>
 	export default {
+		onShow() {
+			console.log('my.vue is shown');
+			this.userInfo = uni.getStorageSync('userInfo');
+		},
 		data() {
 			return {
-
-				userInfo: {
-					avatar: "https://cdn4.iconfinder.com/data/icons/transportation-190/1000/aircraft_fighter_war_army_military_helicopter_helicopter_military-512.png",
-					username: "wyt",
-					intro: "好好好"
-				},
+				userInfo: uni.getStorageSync('userInfo'),
 				has_login: true
-
-
 			};
 		},
 		methods: {
@@ -85,8 +91,12 @@
 				uni.navigateTo({
 					url: "/pages/login/login"
 				})
+			},
+			goUser() {
+				uni.navigateTo({
+					url: "/pages/login/register"
+				})
 			}
-
 		}
 	}
 </script>
@@ -188,5 +198,11 @@
 			background-color: #fff;
 			padding: 20rpx;
 		}
+	}
+
+	.gender-icon {
+		width: 30rpx;
+		height: 30rpx;
+		margin-left: 15rpx;
 	}
 </style>

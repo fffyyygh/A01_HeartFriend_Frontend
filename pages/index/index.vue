@@ -87,14 +87,14 @@
 							code: code,
 						},
 					});
-					console.log(loginRes);
-					console.log(loginRes[1]);
-					console.log(loginRes[1].data);
+					// console.log(loginRes);
+					// console.log(loginRes[1]);
+					// console.log(loginRes[1].data);
 					const res = loginRes[1].data;
 					console.log(res);
 
 					if (res.access) {
-						uni.setStorageSync('hasLogin', true);
+						uni.setStorageSync('has_Login', true);
 						uni.setStorageSync('token', res.access);
 
 						// 检查 'created' 标志并采取适当的操作
@@ -130,8 +130,19 @@
 					const userInfo = userInfoRes[1].data;
 					console.log(userInfo);
 					// 在获取用户信息后，将其存储在本地存储中以备将来使用
-					uni.setStorageSync('userInfo', userInfo);
-
+					// uni.setStorageSync('userInfo', userInfo);
+					// 修改为先判断本地存储中是否有userInfo，如果存在，则更新它，否则就存储新的 userInfo。
+					let storedUserInfo = uni.getStorageSync('userInfo');
+					if (storedUserInfo) {
+					    // 如果本地存储中已经有 userInfo，则更新它
+					    storedUserInfo = Object.assign({}, storedUserInfo, userInfo);
+					} else {
+					    // 如果本地存储中没有 userInfo，则直接存储新的 userInfo
+					    storedUserInfo = userInfo;
+					}
+					// 存储 userInfo 到本地存储
+					uni.setStorageSync('userInfo', storedUserInfo);
+					
 					// 做任何其他关于用户信息的操作
 				} catch (error) {
 					console.error(error);
