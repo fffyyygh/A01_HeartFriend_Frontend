@@ -8,6 +8,7 @@
 				"navigationBarTitleText": "HeartFriend",
 				"navigationBarBackgroundColor": "#FFcc99",
 				"navigationBarTextStyle": "black"
+
 			}
 		},
 		{
@@ -30,6 +31,7 @@
 			"style": {
 				"navigationBarTitleText": "HeartFriend",
 				"navigationBarBackgroundColor": "#FFcc99",
+
 				"enablePullDownRefresh": false
 			}
 		},
@@ -53,15 +55,23 @@
 				"navigationBarTitleText": "药物",
 				"navigationBarBackgroundColor": "#FFcc99"
 			}
+		},
+		{
+			"path": "pages/login/register",
+			"style": {
+				"navigationBarTitleText": "注册账号",
+				"navigationBarBackgroundColor": "#FFcc99",
+				"backgroundColor": "#ff9"
+			}
 		}
 	],
 	"globalStyle": {
 		"navigationBarTextStyle": "black",
 		"navigationBarTitleText": "uni-app",
 		"navigationBarBackgroundColor": "#F8F8F8",
-		"backgroundColor": "#F8F8F8",
+		"backgroundColor": "#fff",
 		"app-plus": {
-			"background": "#efeff4"
+			"background": "#fff"
 		}
 	},
 	"tabBar": {

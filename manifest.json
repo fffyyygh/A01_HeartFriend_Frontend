@@ -52,9 +52,12 @@
         /* 小程序特有相关 */
         "appid" : "wxbb2f77f832606537",
         "setting" : {
-            "urlCheck" : false
+            "urlCheck" : false,
+            "postcss" : true
         },
-        "usingComponents" : true
+        "usingComponents" : true,
+        "permission" : {},
+        "lazyCodeLoading" : "requiredComponents"
     },
     "vueVersion" : "2"
 }
