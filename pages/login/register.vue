@@ -107,75 +107,66 @@
 				})
 			},
 			async getFaceImg(event) {
-				console.log(event);
-				let self = this;
-				this.avatar_url = event.detail.avatarUrl;
-				console.log('this.avatar_url:', this.avatar_url);
-				// Set the avatar_url in the userInfo object
-				this.userInfo.avatar_url = event.detail.avatarUrl;
-				// console.log('this.avatar_url:', this.userInfo.avatar_url);
-				//获取到的头像地址是临时地址，所以拿到地址以后我们要将图片上传到自己的服务器上面
-				//这里暂时传给后端临时地址，获取图片URL待解决
-
-				const tempImageUrl = this.avatar_url;
-				console.log('tempImageUrl:', this.avatar_url);
-
-				// Step 1: Download the image
-				await uni.downloadFile({
-					url: tempImageUrl,
-					success: (downloadRes) => {
-						const tempFilePath = downloadRes.tempFilePath;
-
-						// Step 2: Save the image locally
-						wx.getFileSystemManager().saveFile({
-							tempFilePath: tempFilePath,
-							success: (saveRes) => {
-								const savedFilePath = saveRes.savedFilePath;
-
-								// Step 3: Upload the saved file to the server
-								uni.uploadFile({
-									url: 'http://82.157.244.44:8000/api/v1/user/upload-avatar/',
-									filePath: savedFilePath,
-									name: 'avatar_url',
-									header: {
-										'content-type': 'multipart/form-data',
-										'Authorization': `Bearer ${uni.getStorageSync('token')}`,
-										// Add any other headers if needed
-									},
-									success: (uploadRes) => {
-										const data = JSON.parse(uploadRes.data);
-										console.log('Upload successful:', data);
-										// Handle the response from the server
-										// Step 4: Request user info after the upload is complete
-										this.requestUserInfo(uni.getStorageSync('token')).then(() => {
-											  this.avatar_url = uni.getStorageSync('userInfo').avatar_url;
-											  console.log('更新后的this.avatar_url', this.avatar_url);
-											})
-										
-										// this.avatar_url = uni.getStorageSync('userInfo').avatar_url;
-										// console.log('更新后的this.avatar_url', this.avatar_url);
-										
-									},
-									fail: (uploadErr) => {
-										console.error('Upload failed:', uploadErr);
-										// Handle the upload failure
-									},
-								});
-							},
-							fail: (saveErr) => {
-								console.error('Save file failed:', saveErr);
-								// Handle the save failure
-							},
-						});
-					},
-					fail: (downloadErr) => {
-						console.error('Download failed:', downloadErr);
-						// Handle the download failure
-					},
-				});
-				
+			  try {
+			    let self = this;
+			    this.avatar_url = event.detail.avatarUrl;
+			    console.log('this.avatar_url:', this.avatar_url);
+			
+			    // Set the avatar_url in the userInfo object
+			    this.userInfo.avatar_url = event.detail.avatarUrl;
+			
+			    const tempImageUrl = this.avatar_url;
+			    console.log('tempImageUrl:', this.avatar_url);
+			
+			    // Use uni.getImageInfo to get the local path of the image
+			    const imageInfo = await uni.getImageInfo({
+			      src: tempImageUrl,
+			    });
+			
+			    console.log('imageInfo:', imageInfo);
+			    console.log('imageInfo[1].path:', imageInfo[1].path);
+			
+			    // Step 2: Save the image locally
+			    wx.getFileSystemManager().saveFile({
+			      tempFilePath: imageInfo[1].path,
+			      success: async (saveRes) => {
+			        const savedFilePath = saveRes.savedFilePath;
+			
+			        // Step 3: Upload the saved file to the server
+			        uni.uploadFile({
+			          url: 'http://82.157.244.44:8000/api/v1/user/upload-avatar/',
+			          filePath: savedFilePath,
+			          name: 'avatar_url',
+			          header: {
+			            'content-type': 'multipart/form-data',
+			            'Authorization': `Bearer ${uni.getStorageSync('token')}`,
+			            // Add any other headers if needed
+			          },
+			          success: (uploadRes) => {
+			            const data = JSON.parse(uploadRes.data);
+			            console.log('Upload successful:', data);
+			
+			            // Step 4: Request user info after the upload is complete
+			            this.requestUserInfo(uni.getStorageSync('token')).then(() => {
+			              this.avatar_url = uni.getStorageSync('userInfo').avatar_url;
+			              console.log('更新后的this.avatar_url', this.avatar_url);
+			            });
+			          },
+			          fail: (uploadErr) => {
+			            console.error('Upload failed:', uploadErr);
+			            // Handle the upload failure
+			          },
+			        });
+			      },
+			      fail: (saveErr) => {
+			        console.error('Save file failed:', saveErr);
+			        // Handle the save failure
+			      },
+			    });
+			  } catch (error) {
+			    console.error('Error in getFaceImg:', error);
+			  }
 			},
-
 
 			async requestUserInfo(token) {
 				console.log("开始请求用户信息");
