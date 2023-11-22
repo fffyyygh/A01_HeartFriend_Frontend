@@ -1,7 +1,9 @@
 <template>
 	<view class="container">
-		<u-button @click="chat">聊一聊</u-button>
-		<u-button @click="write_diary">心情记录</u-button>
+		<u-button @click="chat" hair-line="false" :ripple="true" ripple-bg-color="#e86158"
+			:custom-style="btnStyle">聊一聊</u-button>
+		<u-button @click="write_diary" hair-line="false" :ripple="true" ripple-bg-color="#e86158"
+			:custom-style="btnStyle">心情记录</u-button>
 	</view>
 </template>
 
@@ -9,7 +11,12 @@
 	export default {
 		data() {
 			return {
-				href: 'https://uniapp.dcloud.io/component/README?id=uniui'
+				btnStyle: {
+					color: "#f9f8e5",
+					backgroundColor: '#ff8a89',
+					marginTop: '20rpx',
+
+				},
 			}
 		},
 		methods: {
@@ -23,6 +30,7 @@
 					url: "/pages/diary/diary"
 				})
 			}
+
 		}
 	}
 </script>
