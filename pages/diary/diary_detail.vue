@@ -33,15 +33,15 @@
 							console.log('数据接收成功:', res.data);
 							console.log(diaryId);
 							const diaries = res.data; // 将获取的日记信息存储到diaries数组中
-							//this.diary = res.data.find(a => a.id === diaryId);
-							this.diary=diaries[1];
+							this.diary = res.data.find(a => a.id === Number(diaryId));
+							// this.diary=diaries[1];
 							console.log(this.diary)
 						},
 						fail: (err) => {
 							console.error('数据发送失败:', err);
 						}
 					});
-				},
+				}
 			},
 		};
 </script>

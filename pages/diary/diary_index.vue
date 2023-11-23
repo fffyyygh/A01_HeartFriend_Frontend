@@ -3,11 +3,17 @@
 		<button @click="write_diary">写个日记</button>
 
 		<div v-for="(diary, index) in diaries" :key="index" class="diary-item">
-			<div @click="showDiaryContent(diary)" class="diary-content">
+			<div @click="showDiaryContent(diary)" class="diary-content" @longpress="showDeleteDiaryButton(diary)">
 				<p class="diary-title">{{ diary.title }}</p>
 				<p class="diary-date">{{ diary.create_time }}</p>
 			</div>
 		</div>
+		
+		<uni-popup ref="popup" type="bottom">
+			<view class="popup-content">
+				<button class="delete-button" @tap="deleteDiary">删除日记</button>
+			</view>
+		</uni-popup>
 	</view>
 </template>
 
@@ -18,12 +24,13 @@ export default {
 	},
 	data() {
 		return {
-			diaries: [] //存储所有的日记
+			diaries: [] ,//存储所有的日记
+			deleteDiaryId:null
 		}
 	},
 	methods: {
 		write_diary() {
-			uni.navigateTo({
+			uni.redirectTo({
 				url: "/pages/diary/diary"
 			})
 		},
@@ -51,7 +58,43 @@ export default {
 			uni.navigateTo({
 				url: `/pages/diary/diary_detail?diaryId=${diary.id}`,
 			});
+		},
+		
+		showDeleteDiaryButton(diary) {
+			// 点击图片时展示删除按钮
+			console.log("s");
+			this.deleteDiaryId = diary.id;
+			this.$refs.popup.open();
+			console.log(this.deleteDiaryId);
+	
+		},
+		deleteDiary(){
+			
+			if (this.deleteDiaryId !== null) {
+				
+				uni.request({
+					url: 'http://82.157.244.44:8000/api/v1/diary/' + String(this.deleteDiaryId), // 后端接口地址
+					method: 'DELETE',
+					header: {
+						'Authorization': `Bearer ${uni.getStorageSync('token')}`,
+					},
+					success: (res) => {
+						console.log("删除成功");
+						this.get_all_diary();
+					},
+					fail: (err) => {
+						console.error('数据发送失败:', err);
+					}
+				});
+				
+				
+				this.deleteDiaryId = null; // 重置删除索引
+				this.$refs.popup.close();
+			}
+			
+			
 		}
+		
 	}
 }
 </script>

@@ -92,10 +92,10 @@
 
 			showDeleteButton(index) {
 				// 点击图片时展示删除按钮
-				console.log("s")
+				
 				this.deleteIndex = index;
 				this.$refs.popup.open();
-				console.log(this.showPopup)
+				
 			},
 
 			deleteImage() {
@@ -128,9 +128,10 @@
 					data: dataToSend,
 					success: (res) => {
 						console.log('数据发送成功:', res.data);
-						uni.navigateTo({
+						uni.redirectTo({
 							url:"/pages/diary/diary_index"
 						})
+						// uni.navigateBack();
 					},
 					fail: (err) => {
 						console.error('数据发送失败:', err);
