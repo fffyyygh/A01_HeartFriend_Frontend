@@ -1,6 +1,6 @@
 <template>
-	<view>
-		<button @click="write_diary">写个日记</button>
+	<view class="diary_index">
+		<button class="write_button" @click="write_diary">写个日记</button>
 
 		<div v-for="(diary, index) in diaries" :key="index" class="diary-item">
 			<div @click="showDiaryContent(diary)" class="diary-content" @longpress="showDeleteDiaryButton(diary)">
@@ -100,9 +100,28 @@ export default {
 </script>
 
 <style>
+	
+	.write_button{
+	
+		margin: 20rpx;
+		font-size: 18px;
+		/* 标题字体大小 */
+		font-weight: bold;
+		/* 标题粗体 */
+		border-radius: 8px;
+		background-color: #008CBA;
+		box-shadow: 0 8px 16px 0 rgba(0,0,0,0.2), 0 6px 20px 0 rgba(0,0,0,0.19);
+		height: 110rpx;
+	}
 	.diary-item {
 		margin-bottom: 20px;
+		margin-left: 10rpx;
+		margin-right: 10rpx;
 		/* 添加间距，使日记组件之间有一定的空隙 */
+		border-radius: 44px;
+		background: linear-gradient(145deg, #f0f0f0, #cacaca);
+		box-shadow:  5px 5px 5px #797979,
+		             -5px -5px 5px #ffffff;
 	}
 
 	.diary-content {
@@ -117,10 +136,7 @@ export default {
 		background-color: #F0FFFF;
 	}
 
-	.diary-content:hover {
-		background-color: #f9f9f9;
-		/* 鼠标悬停时的背景色 */
-	}
+
 
 	.diary-title {
 		font-size: 18px;

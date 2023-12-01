@@ -67,8 +67,10 @@
 			"path" : "pages/diary/diary_index",
 			"style" : 
 			{
-				"navigationBarTitleText" : "",
-				"enablePullDownRefresh" : false
+				"navigationBarTitleText" : "心情记录",
+				"enablePullDownRefresh" : false,
+				"backgroundColor": "#C1FFC1",
+				"navigationBarBackgroundColor": "#C1FFC1"
 			}
 		},
 		{
@@ -76,7 +78,9 @@
 			"style" : 
 			{
 				"navigationBarTitleText" : "",
-				"enablePullDownRefresh" : false
+				"enablePullDownRefresh" : false,
+				"backgroundColor": "#C1FFC1",
+				"navigationBarBackgroundColor": "#C1FFC1"
 			}
 		}
 
