@@ -1,7 +1,7 @@
 <template>
 	<view>
 		<div v-for="(medicine, index) in medicines" :key="index" class="diary-item">
-			<div @click="showDiaryContent(diary)" class="diary-content" @longpress="showDeleteDiaryButton(diary)">
+			<div @click="showMedicineContent" class="diary-content" @longpress="showDeleteDiaryButton(diary)">
 				<p class="diary-title">{{ medicine.name }}</p>
 				<p class="diary-date">服药周期：{{ medicine.start_date }}---{{ medicine.finish_date }}</p>
 				<p class="diary-date">取药时间：{{ medicine.next_pick_date }}</p>
@@ -55,9 +55,14 @@
 						console.error('数据发送失败:', err);
 					}
 				});
-			
+			 
 			
 			},
+			showMedicineContent(){
+							 uni.navigateTo({
+							 	url:"/pages/medicine/medicine_detail"
+							 })
+			}
 			
 		}
 	}

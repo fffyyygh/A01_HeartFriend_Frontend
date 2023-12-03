@@ -5,14 +5,14 @@
 			
 			<view class="button-content">
 			<text>添加药物提醒</text>
-			<image src="/static/medicine/医药制造业.png"></image>
+			<image src="/static/medicine/药丸.png"></image>
 			</view>
 		</button>
 		
 		<button @click="all_medicine">
 		<view class="button-content">
 		       <text>查看药物提醒</text>
-		      <image src="/static/medicine/药丸.png"></image>
+		      <image src="/static/medicine/医药制造业.png"></image>
 		</view></button>
 		</view>
 		
