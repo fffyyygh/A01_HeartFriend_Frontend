@@ -22,8 +22,8 @@
 					
 					
 					 <view v-for="(time, index) in selectedTimes" :key="index" class="time">
-					        <text>{{ time }}</text>
-					        <button class="delete_button" @click="deleteTime(index)">删除</button>
+					        <text class="medicine_time">{{ time }}</text>
+							<image class="delete_img" @click="deleteTime(index)" src="/static/medicine/叉号.png"></image>
 					</view>
 				</view>
 			</uni-section>
@@ -96,16 +96,25 @@
 					note:this.note,   //用药备注					
 				};
 				
-				for (const key in dataToSend) {
-				    if (!dataToSend[key]) {
-				      uni.showToast({
-				        title: '请填写完整药物信息',
-				        icon: 'none',
-				        duration: 2000
-				      });
-				      return; // 停止提交
+				const requiredFields = ['name', 'amount', 'unit', 'select_time', "start_date"];
+				const text = {
+					name:"药物名称",
+					amount: "剂量",
+					unit:"单位",
+					select_time:"用药时间",
+					start_date:"用药周期"
+					
+				}
+				 for (const field of requiredFields) {
+				        if (!dataToSend[field]) {
+				            uni.showToast({
+				                title: `请填写${text[field]}`,
+				                icon: 'none',
+				                duration: 2000
+				            });
+				            return; // 停止提交
+				        }
 				    }
-				  }
 				  
 				console.log(dataToSend);
 				uni.request({
@@ -118,11 +127,18 @@
 					success: (res) => {
 						console.log('数据发送成功:', res.data);
 						console.log(dataToSend);
+						//跳转不了 很奇怪  等后端开发好之后试一下
+						// uni.navigateTo({
+						// 	url:"/pages/medicine/medicine"
+						// })
 						
 					},
 					fail: (err) => {
 						console.error('数据发送失败:', err);
 						console.log(dataToSend);
+						// uni.redirectTo({
+						// 	url:"/pages/medicine/medicine"
+						// })
 					}
 				});
 			}
@@ -187,17 +203,25 @@
 	
 	.time {
 	  display: flex;
+
 	  justify-content: space-between;
 	  align-items: center;
 	  margin-bottom: 10px;
+	  margin-right: 280rpx;
+	  margin-left: 10rpx;	  
+	    border: 2px solid #008CBA; /* 边框样式 */
+	    border-radius: 5px; /* 可以添加圆角 */
 	}
 	
-	.delete_button {
-	  background-color: #CD3333;
-	  color: #fff;
-	  font-size: 15px;
-	  border: none;
-	  border-radius: 3px;
-	  height: 60rpx;
+	.medicine_time{
+	margin-left: 10rpx;
+	}
+	
+	
+	
+	.delete_img{
+		width: 20px;
+		height:20px;
+		margin-right: 10rpx;
 	}
 </style>
