@@ -1,0 +1,203 @@
+<template>
+	<view>
+		<view>
+			<uni-section title="药物名称" type="line" padding>
+				<uni-easyinput v-model="medicineName" focus placeholder="请输入药物名称"></uni-easyinput>
+			</uni-section>
+			<uni-section title="剂量" type="line" padding>
+				<view class="input-container">
+					<input class="input-left" type="number" v-model="quantity" placeholder="输入数量">
+					<picker class="input-right" mode="selector" :range="units" @change="unitSelected">
+						<view>{{ selectedUnit }}</view>
+					</picker>
+				</view>
+			</uni-section>
+			<uni-section title="提醒时间" type="line" padding>
+				<view>
+					<picker class="time-picker" mode="time" :value="time" start="09:01" end="21:01"
+						@change="bindTimeChange">
+						选择提醒时间
+					</picker>
+
+					
+					
+					 <view v-for="(time, index) in selectedTimes" :key="index" class="time">
+					        <text>{{ time }}</text>
+					        <button class="delete_button" @click="deleteTime(index)">删除</button>
+					</view>
+				</view>
+			</uni-section>
+			<uni-section title="服药周期" type="line" padding>
+				<uni-datetime-picker v-model="range"  type="daterange"
+					@change="onDatetimeConfirm1"></uni-datetime-picker>
+			</uni-section>
+			
+			<uni-section title="下次取药时间" type="line" padding>
+				<uni-datetime-picker v-model="nextPickTime"  type="date"
+					@change="onDatetimeConfirm"></uni-datetime-picker>
+			</uni-section>
+			
+			<uni-section title="服药备注" type="line" padding>
+				<uni-easyinput v-model="note" focus placeholder="请输入服药提醒事项"></uni-easyinput>
+			</uni-section>
+			
+			<button class="submit_medicine" @click="submitForm">提交</button>
+			
+		</view>
+	</view>
+</template>
+
+<script>
+	export default {
+		data() {
+			return {
+				medicineName: "", //药名
+
+				quantity: '', // 左侧输入的数字
+				units: ['粒', '瓶', '毫升','毫克'], // 可选择的单位列表
+				selectedUnit: '单位', // 初始显示的单位
+				
+				selectedTimes: [],
+
+				range:[],
+				nextPickTime:"",
+				
+				note:"",
+				
+			}
+		},
+		methods: {
+
+			bindTimeChange: function(e) {
+				this.selectedTimes.push(e.detail.value);
+			},
+			unitSelected(event) {
+				const index = event.detail.value;
+				this.selectedUnit = this.units[index];
+			},
+			onDatetimeConfirm(e){
+				console.log(e);
+				
+				console.log(this.nextPickTime);
+				
+			},
+			deleteTime(index) {
+			      this.selectedTimes.splice(index, 1);
+			    },
+			submitForm(){
+				const dataToSend = {
+					name: this.medicineName,  //名称
+					amount: this.quantity,      // 数量
+					unit: this.selectedUnit,  //单位
+					select_time: this.selectedTimes,  //时间         //周期
+					start_date :this.range[0],
+					finish_date :this.range[1],
+					next_pick_date:this.nextPickTime,  // 取药时间
+					note:this.note,   //用药备注					
+				};
+				
+				for (const key in dataToSend) {
+				    if (!dataToSend[key]) {
+				      uni.showToast({
+				        title: '请填写完整药物信息',
+				        icon: 'none',
+				        duration: 2000
+				      });
+				      return; // 停止提交
+				    }
+				  }
+				  
+				console.log(dataToSend);
+				uni.request({
+					url: 'http://82.157.244.44:8000/api/v1',  // 后端接口地址
+					method: 'POST', 
+					header: {
+						'Authorization': `Bearer ${uni.getStorageSync('token')}`,
+					},
+					data: dataToSend,
+					success: (res) => {
+						console.log('数据发送成功:', res.data);
+						console.log(dataToSend);
+						
+					},
+					fail: (err) => {
+						console.error('数据发送失败:', err);
+						console.log(dataToSend);
+					}
+				});
+			}
+		}
+	}
+</script>
+
+<style>
+	.time_picker {
+		height: 100rpx;
+	}
+
+	.input-container {
+		display: flex;
+		align-items: center;
+		border: 1px solid #ccc;
+		border-radius: 5px;
+		padding: 5px;
+	}
+
+	.input-left {
+		flex: 1;
+		padding: 10px;
+		border: none;
+		outline: none;
+	}
+
+	.input-right {
+		flex-basis: 80px;
+		text-align: center;
+		color: #333;
+	}
+
+	.time-picker {
+		width: 80%;
+		margin-bottom: 20px;
+		border: 1px solid #ccc;
+		border-radius: 5px;
+		padding: 10px;
+		text-align: center;
+	}
+
+	.selected-times {
+		display: flex;
+		flex-direction: column;
+		align-items: center;
+	}
+
+	
+	
+		
+	.submit_medicine{
+		
+		margin-top: 20rpx;
+		margin-bottom: 60rpx;
+		width: 60%;
+		border-radius: 12px;
+		background-color: #008CBA;
+		box-shadow: 0 8px 16px 0 rgba(0,0,0,0.2), 0 6px 20px 0 rgba(0,0,0,0.19);
+		
+	}
+	
+	.time {
+	  display: flex;
+	  justify-content: space-between;
+	  align-items: center;
+	  margin-bottom: 10px;
+	}
+	
+	.delete_button {
+	  background-color: #CD3333;
+	  color: #fff;
+	  font-size: 15px;
+	  border: none;
+	  border-radius: 3px;
+	  height: 60rpx;
+	}
+</style>

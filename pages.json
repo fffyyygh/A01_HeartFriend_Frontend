@@ -82,6 +82,22 @@
 				"backgroundColor": "#C1FFC1",
 				"navigationBarBackgroundColor": "#C1FFC1"
 			}
+		},
+		{
+			"path" : "pages/medicine/medicine_add",
+			"style" : 
+			{
+				"navigationBarTitleText" : "",
+				"enablePullDownRefresh" : false
+			}
+		},
+		{
+			"path" : "pages/medicine/medicine_all",
+			"style" : 
+			{
+				"navigationBarTitleText" : "",
+				"enablePullDownRefresh" : false
+			}
 		}
 
 	],

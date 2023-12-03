@@ -1,11 +1,11 @@
 <template>
 	<view>
 		<!-- 触发弹出输入框的按钮 -->
-		<u-button @click="openForm" hair-line="false" :ripple="true" ripple-bg-color="#e86158"
-			:custom-style="btnStyle">添加药物信息</u-button>
+		<!-- <u-button @click="openForm" hair-line="false" :ripple="true" ripple-bg-color="#e86158"
+			:custom-style="btnStyle">添加药物信息</u-button> -->
 
 		<!-- 输入表单弹窗 -->
-		<view v-if="showForm">
+		<!-- <view v-if="showForm">
 			<uni-section title="名称" type="line" padding>
 				<uni-easyinput v-model="medicineName" focus placeholder="请输入药物名称"></uni-easyinput>
 			</uni-section>
@@ -21,10 +21,10 @@
 			</uni-section>
 			<u-button @click="submitForm" hair-line="false" :ripple="true" ripple-bg-color="#e86158"
 				:custom-style="btnStyle">提交</u-button>
-		</view>
+		</view> -->
 
 		<!-- 用药记录显示 -->
-		<view v-if="medicineRecords.length > 0">
+		<!-- <view v-if="medicineRecords.length > 0">
 			<uni-table class="medicine-table">
 				<uni-tr>
 					<uni-th width="150rpx" align="center">名称</uni-th>
@@ -39,7 +39,14 @@
 					<uni-td>{{ record.time }}</uni-td>
 				</uni-tr>
 			</uni-table>
-		</view>
+		</view> -->
+		
+		<button @click="add_medicine">添加药物提醒</button>
+		
+		<button @click="all_medicine">查看药物提醒</button>
+		
+		<u-button @click="openForm" hair-line="false" :ripple="true" ripple-bg-color="#e86158"
+			:custom-style="btnStyle">添加药物信息</u-button>
 	</view>
 </template>
 
@@ -93,6 +100,16 @@
 			// 时间选择器确认事件处理
 			onDatetimeConfirm(value) {
 				this.medicineTime = value;
+			},
+			add_medicine(){
+				uni.navigateTo({
+					url:"/pages/medicine/medicine_add"
+				})
+			},
+			all_medicine(){
+				uni.navigateTo({
+					url:"/pages/medicine/medicine_all"
+				})
 			}
 		}
 	};

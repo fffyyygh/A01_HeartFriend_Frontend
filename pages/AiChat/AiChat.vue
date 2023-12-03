@@ -1,6 +1,17 @@
 <template>
 	<view>
 		<button @click="navigateBack">返回</button>
+		
+		  <view class="container">  
+		    <view class="chat-log">  
+		      <text v-for="message in messages" :key="message.id">{{message.text}}</text>  
+		    </view>  
+		    <view class="chat-input">  
+		      <input type="text" v-model="inputText" @input="sendMessage" placeholder="请输入消息内容">  
+		      <button @click="sendMessage">发送</button>  
+		    </view>  
+		  </view>  
+		
 	</view>
 </template>
 
