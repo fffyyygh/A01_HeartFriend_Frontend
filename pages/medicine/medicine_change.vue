@@ -2,13 +2,13 @@
 	<view>
 		<view>
 			<uni-section title="药物名称" type="line" padding>
-				<uni-easyinput v-model="medicineName" focus placeholder="请输入药物名称"></uni-easyinput>
+				<uni-easyinput v-model="medicine.name" focus placeholder="请输入药物名称"></uni-easyinput>
 			</uni-section>
 			<uni-section title="剂量" type="line" padding>
 				<view class="input-container">
-					<input class="input-left" type="number" v-model="quantity" placeholder="输入数量">
+					<input class="input-left" type="number" v-model="medicine.amount" placeholder="输入数量">
 					<picker class="input-right" mode="selector" :range="units" @change="unitSelected">
-						<view>{{ selectedUnit }}</view>
+						<view>{{ medicine.unit }}</view>
 					</picker>
 				</view>
 			</uni-section>
@@ -21,7 +21,7 @@
 
 					
 					
-					 <view v-for="(time, index) in selectedTimes" :key="index" class="time">
+					 <view v-for="(time, index) in medicine.select_time" :key="index" class="time">
 					        <text class="medicine_time">{{ time }}</text>
 							<image class="delete_img" @click="deleteTime(index)" src="/static/medicine/叉号.png"></image>
 					</view>
@@ -51,22 +51,34 @@
 	export default {
 		data() {
 			return {
-				medicineName: "药物", //药名
-
-				quantity: '1', // 左侧输入的数字
-				units: ['粒', '瓶', '毫升','毫克'], // 可选择的单位列表
-				selectedUnit: '粒', // 初始显示的单位
-				
-				selectedTimes: ["09:01","10:11"],
-
-				range:["2023-11-1","2023-11-10"],
-				nextPickTime:"2023-11-15",
-				
-				note:"提醒",
-				
+				medicine:{},			
 			}
 		},
 		methods: {
+			
+			onLoad(query) {
+				const medicineId = query.medicineId;
+				this.fetchMedicineDetails(medicineId);
+				console.log(medicineId);
+			},
+			fetchMedicineDetails(medicineId) {
+				uni.request({
+					url: 'http://82.157.244.44:8000/api/v1/medicine/', // 后端接口地址
+					method: 'GET',
+					header: {
+						'Authorization': `Bearer ${uni.getStorageSync('token')}`,
+					},
+					success: (res) => {
+						console.log('数据接收成功:', res.data);
+						this.medicine = res.data.find(a => a.id === Number(medicineId));
+						console.log(this.medicine);
+					},
+					fail: (err) => {
+						console.error('数据发送失败:', err);
+					}
+				});
+			},
+			
 
 			bindTimeChange: function(e) {
 				this.selectedTimes.push(e.detail.value);
@@ -85,52 +97,49 @@
 			      this.selectedTimes.splice(index, 1);
 			    },
 			submitForm(){
-				const dataToSend = {
-					name: this.medicineName,  //名称
-					amount: this.quantity,      // 数量
-					unit: this.selectedUnit,  //单位
-					select_time: this.selectedTimes,  //时间         //周期
-					start_date :this.range[0],
-					finish_date :this.range[1],
-					next_pick_date:this.nextPickTime,  // 取药时间
-					note:this.note,   //用药备注					
-				};
+				// const dataToSend = {
+				// 	name: this.medicineName,  //名称
+				// 	amount: this.quantity,      // 数量
+				// 	unit: this.selectedUnit,  //单位
+				// 	select_time: this.selectedTimes,  //时间         //周期
+				// 	start_date :this.range[0],
+				// 	finish_date :this.range[1],
+				// 	next_pick_date:this.nextPickTime,  // 取药时间
+				// 	note:this.note,   //用药备注					
+				// };
 				
-				const requiredFields = ['name', 'amount', 'unit', 'select_time', "start_date"];
-				const text = {
-					name:"药物名称",
-					amount: "剂量",
-					unit:"单位",
-					select_time:"用药时间",
-					start_date:"用药周期"
+				// const requiredFields = ['name', 'amount', 'unit', 'select_time', "start_date"];
+				// const text = {
+				// 	name:"药物名称",
+				// 	amount: "剂量",
+				// 	unit:"单位",
+				// 	select_time:"用药时间",
+				// 	start_date:"用药周期"
 					
-				}
-				 for (const field of requiredFields) {
-				        if (!dataToSend[field]) {
-				            uni.showToast({
-				                title: `请填写${text[field]}`,
-				                icon: 'none',
-				                duration: 2000
-				            });
-				            return; // 停止提交
-				        }
-				    }
+				// }
+				//  for (const field of requiredFields) {
+				//         if (!dataToSend[field]) {
+				//             uni.showToast({
+				//                 title: `请填写${text[field]}`,
+				//                 icon: 'none',
+				//                 duration: 2000
+				//             });
+				//             return; // 停止提交
+				//         }
+				//     }
 				  
-				console.log(dataToSend);
+				console.log(this.medicine);
 				uni.request({
-					url: 'http://82.157.244.44:8000/api/v1',  // 后端接口地址
-					method: 'POST', 
+					url: 'http://82.157.244.44:8000/api/v1/medicine/' + String(this.medicine.id), // 后端接口地址
+					method: 'PATCH', 
 					header: {
 						'Authorization': `Bearer ${uni.getStorageSync('token')}`,
 					},
-					data: dataToSend,
+					data: this.medicine,
 					success: (res) => {
 						console.log('数据发送成功:', res.data);
-						console.log(dataToSend);
-						//跳转不了 很奇怪  等后端开发好之后试一下
-						// uni.navigateTo({
-						// 	url:"/pages/medicine/medicine"
-						// })
+						console.log(this.medicine);
+						
 						
 					},
 					fail: (err) => {

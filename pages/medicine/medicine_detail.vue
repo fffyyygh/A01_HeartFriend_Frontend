@@ -3,24 +3,24 @@
 		<view class="diary-item">
 			<view class="item-row">
 				<text class="item-label">药名：</text>
-				<text class="item-value">{{ diary.name }}</text>
+				<text class="item-value">{{ medicine.name }}</text>
 			</view>
 			<view class="item-row">
 				<text class="item-label">数量：</text>
-				<text class="item-value">{{ diary.amount }}{{ diary.unit }}</text>
+				<text class="item-value">{{ medicine.amount }}{{ medicine.unit }}</text>
 			</view>
 			<view class="item-row">
 				<text class="item-label">开始日期：</text>
-				<text class="item-value">{{ diary.start_date }}</text>
+				<text class="item-value">{{ medicine.start_date }}</text>
 				
 			</view>
 			<view class="item-row">
 				<text class="item-label">结束日期：</text>
-				<text class="item-value">{{ diary.finish_date }}</text>
+				<text class="item-value">{{ medicine.finish_date }}</text>
 			</view>
 			<view class="item-row">
 				<text class="item-label">下次取药日期：</text>
-				<text class="item-value">{{ diary.next_pick_date }}</text>
+				<text class="item-value">{{ medicine.next_pick_date }}</text>
 			</view>
 			<view class="item-row">
 				<text class="item-label">服药时间：</text>
@@ -28,7 +28,7 @@
 			</view>
 			
 			
-				<view v-for="(time, index) in diary.select_time" :key="index" class="item-row">
+				<view v-for="(time, index) in medicine.select_time" :key="index" class="item-row">
 				            <view class="item-value">{{ time }}</view>
 							
 				</view>
@@ -38,7 +38,7 @@
 
 			<view class="item-row">
 				<text class="item-label">备注：</text>
-				<text class="item-value">{{ diary.note }}</text>
+				<text class="item-value">{{ medicine.note }}</text>
 			</view>
 		</view>
 		<button @click="change">更改</button>
@@ -46,26 +46,40 @@
 </template>
 
 <script>
+
 	export default {
 		data() {
 			return {
-				diary: {
-					amount: "1",
-					finish_date: "2023-12-21",
-					name: "药名",
-					next_pick_date: "2023-12-13",
-					note: "在饭后服用",
-					select_time:["09:01", "11:02"],
-					start_date: "2023-12-06",
-					unit: "瓶",
-				},
+				medicine: {},
 
 			}
 		},
 		methods: {
+			onLoad(query) {
+				const medicineId = query.medicineId;
+				console.log(medicineId);
+				this.fetchMedicineDetails(medicineId);
+			},
+			fetchMedicineDetails(medicineId) {
+				uni.request({
+					url: 'http://82.157.244.44:8000/api/v1/medicine/', // 后端接口地址
+					method: 'GET',
+					header: {
+						'Authorization': `Bearer ${uni.getStorageSync('token')}`,
+					},
+					success: (res) => {
+						console.log('数据接收成功:', res.data);
+						this.medicine = res.data.find(a => a.id === Number(medicineId));
+			
+					},
+					fail: (err) => {
+						console.error('数据发送失败:', err);
+					}
+				});
+			},
 			change() {
 				uni.navigateTo({
-					url: "/pages/medicine/medicine_change"
+					url: `/pages/medicine/medicine_change?medicineId=${this.medicine.id}`
 				})
 			}
 		}

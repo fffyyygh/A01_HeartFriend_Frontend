@@ -29,12 +29,12 @@
 			</uni-section>
 			<uni-section title="服药周期" type="line" padding>
 				<uni-datetime-picker v-model="range"  type="daterange"
-					@change="onDatetimeConfirm1"></uni-datetime-picker>
+					></uni-datetime-picker>
 			</uni-section>
 			
 			<uni-section title="下次取药时间" type="line" padding>
 				<uni-datetime-picker v-model="nextPickTime"  type="date"
-					@change="onDatetimeConfirm"></uni-datetime-picker>
+					></uni-datetime-picker>
 			</uni-section>
 			
 			<uni-section title="服药备注" type="line" padding>
@@ -75,12 +75,7 @@
 				const index = event.detail.value;
 				this.selectedUnit = this.units[index];
 			},
-			onDatetimeConfirm(e){
-				console.log(e);
-				
-				console.log(this.nextPickTime);
-				
-			},
+			
 			deleteTime(index) {
 			      this.selectedTimes.splice(index, 1);
 			    },
@@ -118,7 +113,7 @@
 				  
 				console.log(dataToSend);
 				uni.request({
-					url: 'http://82.157.244.44:8000/api/v1',  // 后端接口地址
+					url: 'http://82.157.244.44:8000/api/v1/medicine/',  // 后端接口地址
 					method: 'POST', 
 					header: {
 						'Authorization': `Bearer ${uni.getStorageSync('token')}`,
@@ -128,9 +123,7 @@
 						console.log('数据发送成功:', res.data);
 						console.log(dataToSend);
 						//跳转不了 很奇怪  等后端开发好之后试一下
-						// uni.navigateTo({
-						// 	url:"/pages/medicine/medicine"
-						// })
+						
 						
 					},
 					fail: (err) => {
@@ -141,6 +134,7 @@
 						// })
 					}
 				});
+				uni.navigateBack();
 			}
 		}
 	}
