@@ -72,9 +72,10 @@
 						mask: true,
 						title: '正在登录中',
 					});
+					//正常code
 					const code = await this.getLoginCode();
 					// 注册测试用code
-					// const code = "testaSaa";
+					// const code = "test12051052";
 					console.log(code);
 					// 发送登录请求
 					const loginRes = await uni.request({
