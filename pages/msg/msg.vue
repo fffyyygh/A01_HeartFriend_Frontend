@@ -1,8 +1,5 @@
 <template>
 	<view>
-		<uni-search-bar bg-color="#ffffff" radius="15" @confirm="search" :focus="true" v-model="searchValue"
-			@blur="blur" @focus="focus" @input="input" @cancel="cancel" @clear="clear">
-		</uni-search-bar>
 		<!-- 顶部选项卡 -->
 		<scroll-view scroll-x="true" class="scroll-row" :scroll-into-view="scrollInto" :scroll-with-animation="true"
 			style="height: 100rpx;">
@@ -34,7 +31,8 @@
 				</scroll-view>
 			</swiper-item>
 		</swiper>
-
+		<!-- 发贴入口 -->
+		<add-post-tag></add-post-tag>
 	</view>
 </template>
 
@@ -101,10 +99,15 @@
 	];
 	import commonList from '@/components/common/common-list.vue';
 	import loadMore from '@/components/common/load-more.vue';
+	import addPostTag from '@/components/add-post-tag/add-post-tag.vue';
 	export default {
+		components: {
+			commonList,
+			loadMore,
+			addPostTag
+		},
 		data() {
 			return {
-				searchValue: '123123',
 				newsList: [],
 				// 顶部选项卡
 				tabBars: [{
@@ -133,57 +136,21 @@
 				tabIndex: 0,
 				scrollInto: '',
 				// 列表高度
-				scrollH: 600
+				scrollH: 600,
+				list: []
 			}
-		},
-		components: {
-			commonList,
-			loadMore
 		},
 		onLoad() {
 			uni.getSystemInfo({
-					success: function(res) {
-						console.log(res);
-						this.scrollH = res.windowHeight - uni.upx2px(100);
-					}
-				}),
-				// 根据选项生成列表
-				this.getData();
+				success: (res) => {
+					console.log(res);
+					this.scrollH = res.windowHeight - uni.upx2px(100);
+				}
+			});
+			// 根据选项生成列表
+			this.getData();
 		},
 		methods: {
-			search(res) {
-				uni.showToast({
-					title: '搜索：' + res.value,
-					icon: 'none'
-				})
-			},
-			input(res) {
-				console.log('----input:', res)
-			},
-			clear(res) {
-				uni.showToast({
-					title: 'clear事件，清除值为：' + res.value,
-					icon: 'none'
-				})
-			},
-			blur(res) {
-				uni.showToast({
-					title: 'blur事件，输入值为：' + res.value,
-					icon: 'none'
-				})
-			},
-			focus(e) {
-				uni.showToast({
-					title: 'focus事件，输出值为：' + e.value,
-					icon: 'none'
-				})
-			},
-			cancel(res) {
-				uni.showToast({
-					title: '点击取消，输入值为：' + res.value,
-					icon: 'none'
-				})
-			},
 			// 关注
 			follow(e) {
 				console.log('Index followed');
@@ -201,15 +168,18 @@
 				let msg = e.type === 'support' ? '顶' : '踩';
 				// 之前未顶踩过
 				if (item.support.type === '') {
+					console.log(1);
 					item.support[e.type + '_count']++;
 				}
 				// 之前已顶过并且现在的操作为踩，则顶-1、踩+1
 				else if (item.support.type === 'support' && e.type === 'unsupport') {
+					console.log(2);
 					item.support.support_count--;
 					item.support.unsupport_count++;
 				}
 				// 之前已踩过并且现在的操作为顶，则踩-1、顶+1
 				else if (item.support.type === 'unsupport' && e.type === 'support') {
+					console.log(3);
 					item.support.unsupport_count--;
 					item.support.support_count++;
 				}
@@ -224,6 +194,7 @@
 					return;
 				}
 				this.tabIndex = index;
+				this.list = this.newsList[this.tabIndex].list;
 				// 滚动到指定元素
 				this.scrollInto = 'tab' + index;
 			},
@@ -248,6 +219,7 @@
 					arr.push(obj)
 				}
 				this.newsList = arr;
+				this.list = this.newsList[this.tabIndex].list;
 			},
 			// 上拉加载更多
 			loadMore(index) {

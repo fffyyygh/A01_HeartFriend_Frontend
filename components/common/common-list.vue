@@ -1,5 +1,5 @@
 <template>
-	<view class="p-2">
+	<view class="p-2 animate__animated animate__fast animate__fadeIn">
 		<!-- 头像、昵称和关注按钮 -->
 		<view class="flex align-center justify-between">
 			<view class="flex align-center">
@@ -22,8 +22,11 @@
 		<view class="font my-1" @click="openDetail">
 			{{item.title}}
 		</view>
-		<!-- 图片 -->
-		<image v-if="item.titlepic" class="rounded w-100" :src="item.titlepic" style="height: 350rpx;" @click="openDetail"></image>
+		<!-- 帖子详情 -->
+		<slot>
+			<!-- 图片 -->
+			<image v-if="item.titlepic" class="rounded w-100" :src="item.titlepic" style="height: 350rpx;" @click="openDetail"></image>
+		</slot>
 		<!-- 图标按钮 -->
 		<view class="flex align-center">
 			<!-- 顶 -->
@@ -39,12 +42,12 @@
 				<text>{{item.support.unsupport_count > 0 ? item.support.unsupport_count : '反对'}}</text>
 			</view>
 			<view class="flex align-center justify-center flex-1 animate__animated animate__faster" hover-class="animate__jello text-main"
-			 @click="openDetail">
+			 @click="doComment">
 				<text class="iconfont icon-pinglun mr-2"></text>
 				<text>{{item.comment_count > 0 ? item.comment_count : '评论'}}</text>
 			</view>
 			<view class="flex align-center justify-center flex-1 animate__animated animate__faster" hover-class="animate__jello text-main"
-			 @click="openDetail">
+			 @click="doShare">
 				<text class="iconfont icon-fenxiang mr-2"></text>
 				<text>{{item.share_count > 0 ? item.share_count : '分享'}}</text>
 			</view>
@@ -56,12 +59,21 @@
 	export default {
 		props: {
 			item: Object,
-			index: Number
+			index: {
+				type:Number,
+				default: -1
+			},
+			isdetail: {
+				type: Boolean,
+				default: false
+			}
 		},
 		methods: {
 			// 打开个人空间
 			openSpace() {
-				console.log('Space opened');
+				uni.navigateTo({
+					url: '/pages/user-space/user-space'
+				});
 			},
 			// 关注
 			follow() {
@@ -71,7 +83,11 @@
 			},
 			// 进入详情页
 			openDetail() {
-				console.log('Detail opened');
+				// 处于详情页
+				if (this.isdetail) return;
+				uni.navigateTo({
+					url: '../../pages/detail/detail?detail='+JSON.stringify(this.item),
+				});
 			},
 			// 顶踩操作
 			doSupport(type) {
@@ -80,7 +96,21 @@
 				this.$emit('doSupport', {
 					type,
 					index: this.index
-				})
+				});
+			},
+			// 评论
+			doComment() {
+				if (!this.isdetail) {
+					return this.openDetail();
+				}
+				this.$emit('doComment');
+			},
+			// 分享
+			doShare() {
+				if (!this.isdetail) {
+					return this.openDetail();
+				}
+				this.$emit('doShare');
 			}
 		}
 	}
@@ -91,4 +121,3 @@
 		color: #FF4A6A;
 	}
 </style>
-
