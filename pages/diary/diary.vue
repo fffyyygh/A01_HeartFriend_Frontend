@@ -30,7 +30,7 @@
 		</view>
 		
 		<!-- 在记录日记的时候选择和显示图片的功能，后端的接口还没有开发好先搁置一下 -->
-		<!-- <view>
+		<view>
 			<view class="image-grid" v-if="imageUrls.length > 0">
 				<image v-for="(imageUrl, index) in displayedImages" :key="index" :src="imageUrl" mode="aspectFit"
 					class="grid-item" @longpress="showDeleteButton(index)"></image>
@@ -43,10 +43,10 @@
 				</view>
 			</uni-popup>
 			<button @tap="chooseImage">选择图片</button>
-		</view> -->
+		</view>
 		
 		
-		<button @click="uploadData_withoutPic">提交</button>
+		<button @click="uploadData">提交</button>
 	</view>
 </template>
 
@@ -81,8 +81,23 @@
 					sizeType: ['compressed'], // 压缩图片
 					sourceType: ['album', 'camera'], // 从相册选择或拍照
 					success: (res) => {
-						const tempFilePaths = res.tempFilePaths;
-						this.imageUrls = this.imageUrls.concat(tempFilePaths); // 将选择的图片添加到数组中
+						const tempFilePaths = res.tempFilePaths;						
+						tempFilePaths.forEach((item,index)=>{
+							wx.getFileSystemManager().saveFile({
+								tempFilePath: item,
+								success: async (saveRes) => {
+									const savedFilePath = saveRes.savedFilePath;
+									console.log(savedFilePath);
+									this.imageUrls = this.imageUrls.concat(savedFilePath); // 将选择的图片添加到数组中
+								},
+								fail: (saveErr) => {
+									console.error('Save file failed:', saveErr);
+									// Handle the save failure
+								},
+							});
+							
+						
+						});						
 					},
 					fail: (err) => {
 						console.log('选择图片失败:', err);
@@ -115,7 +130,8 @@
 					content: this.content,
 					mood_score: this.mood,
 					eat_score: this.appetite,
-					sleep_score: this.sleep
+					sleep_score: this.sleep,
+					images:["a"]
 				};
 				console.log(dataToSend);
 				uni.request({
@@ -149,21 +165,28 @@
 					const dataToSend = {
 						title: this.title,
 						content: this.content,
-						appetite: this.appetite,
-						mood: this.mood,
-						sleep: this.sleep,
-						imageUrls: imageUrls, // 上传后的图片地址数组
-						// 其他需要发送的数据...
-						token: ""
+						mood_score: this.mood,
+						eat_score: this.appetite,
+						sleep_score: this.sleep,
+						images: imageUrls, // 上传后的图片地址数组
 					};
-
+					console.log(dataToSend);
 					// 发送数据给后端服务器
 					uni.request({
-						url: 'https://your-backend-api.com/saveData', // 后端接口地址
+						url: 'http://82.157.244.44:8000/api/v1/diary/', // 后端接口地址
 						method: 'POST', // POST 或者适合你的请求方式
+						header: {
+							'Authorization': `Bearer ${uni.getStorageSync('token')}`,
+							
+						},
 						data: dataToSend,
 						success: (res) => {
 							console.log('数据发送成功:', res.data);
+							
+							uni.redirectTo({
+								url:"/pages/diary/diary_index"
+							});
+							console.log(dataToSend);
 						},
 						fail: (err) => {
 							console.error('数据发送失败:', err);
@@ -182,14 +205,22 @@
 					// 循环上传图片
 					const promises = this.imageUrls.map((imageUrl) => {
 						return new Promise((resolve, reject) => {
+							console.log("上传图片地址",imageUrl);
+							
 							uni.uploadFile({
-								url: 'https://your-backend-api.com/upload', // 后端上传图片接口地址
+								url: 'http://82.157.244.44:8000/api/v1/diary/upload-image/', // 后端上传图片接口地址
+								method: 'POST',
 								filePath: imageUrl,
-								name: 'file',
+								name: 'image',
+								header: {
+									'Authorization': `Bearer ${uni.getStorageSync('token')}`,									
+								},
 								success: (uploadRes) => {
 									console.log('上传成功:', uploadRes.data);
-									uploadedImageUrls.push(uploadRes
-									.data); // 将上传后的图片地址保存到数组中
+									const imageFinalPath = "http://82.157.244.44:8000" + JSON.parse(uploadRes.data)["image"];
+									console.log(imageFinalPath);
+									uploadedImageUrls.push(imageFinalPath); // 将上传后的图片地址保存到数组中
+									console.log("a",);
 									resolve();
 								},
 								fail: (err) => {

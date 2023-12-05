@@ -131,7 +131,8 @@
 						tempFilePath: imageInfo[1].path,
 						success: async (saveRes) => {
 							const savedFilePath = saveRes.savedFilePath;
-
+							console.log(savedFilePath);
+							console.log("图片地址")
 							// Step 3: Upload the saved file to the server
 							uni.uploadFile({
 								url: 'http://82.157.244.44:8000/api/v1/user/upload-avatar/',

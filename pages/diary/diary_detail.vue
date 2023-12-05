@@ -23,6 +23,10 @@
 	        <p class="detail-value">{{ diary.sleep_score }}</p>
 	      </div>
 	    </div>
+		<view class="image-grid" v-if="diary.images.length > 0">
+			<image v-for="(imageUrl, index) in displayedImages" :key="index" :src="imageUrl" mode="aspectFit"
+				class="grid-item" @longpress="showDeleteButton(index)"></image>
+		</view>
 	  </view>
 </template>
 
@@ -38,6 +42,17 @@
 			console.log(diaryId);
 			this.fetchDiaryDetails(diaryId);
 		},
+		computed: {
+			displayedImages() {
+				// 显示的图片数量最多为9张
+				return this.diary.images.slice(0, 9);
+			},
+			remainingImageCount() {
+				// 剩余未显示的图片数量
+				return Math.max(0, this.diary.images.length - 9);
+			},
+		},
+		
 		methods: {
 			fetchDiaryDetails(diaryId) {
 				// 使用 diaryId 获取特定日记条目的详细信息
@@ -54,6 +69,7 @@
 						console.log(diaryId);
 						const diaries = res.data; // 将获取的日记信息存储到diaries数组中
 						this.diary = res.data.find(a => a.id === Number(diaryId));
+						console.log("这个日记的信息",this.diary);
 
 					},
 					fail: (err) => {
@@ -146,4 +162,14 @@
       background-color: #fff9e6;
       margin-right: 10px;
     }
+	.grid-item {
+		width: calc(33.33% - 10px);
+		/* 以三列排布，减去间隔 */
+		margin-bottom: 10px;
+		border: 2px solid #ccc;
+		/* 添加边框样式 */
+		box-sizing: border-box;
+		/* 边框不增加宽度 */
+		height: 200rpx
+	}
 </style>
