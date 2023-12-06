@@ -19,7 +19,7 @@
 		</view>
 
 		<!-- 提交按钮 -->
-		<button @click="submitPost">发布帖子</button>
+		<button @click="uploadData">发布帖子</button>
 	</view>
 </template>
 
@@ -35,6 +35,7 @@
 		},
 		methods: {
 			addImage() {
+				console.log(this.imageList);
 				if (this.imageList.length >= this.maxImages) {
 					uni.showToast({
 						title: '最多只能上传' + this.maxImages + '张图片',
@@ -45,12 +46,129 @@
 
 				uni.chooseImage({
 					count: this.maxImages - this.imageList.length,
+					sizeType: ['compressed'], // 压缩图片
 					success: (res) => {
 						const tempFilePaths = res.tempFilePaths;
-						this.imageList = this.imageList.concat(tempFilePaths);
+						tempFilePaths.forEach((item,index)=>{
+							wx.getFileSystemManager().saveFile({
+								tempFilePath: item,
+								success: async (saveRes) => {
+									const savedFilePath = saveRes.savedFilePath;
+									console.log(savedFilePath);
+									this.imageList = this.imageList.concat(savedFilePath); // 将选择的图片添加到数组中
+								},
+								fail: (saveErr) => {
+									console.error('Save file failed:', saveErr);
+									// Handle the save failure
+								},
+							});
+							
+						
+						});		
+					},
+					fail: (err) => {
+						console.log('选择图片失败:', err);
 					},
 				});
 			},
+			
+			
+			
+			uploadData() {
+				// 首先上传图片
+				this.uploadImages().then((imageUrls) => {
+					// 图片上传成功后，将图片地址和其他数据一起发送给后端
+					const img = imageUrls.toString();
+					const dataToSend = {
+						title: this.postTitle,
+						content: this.postContent,
+						images: img, // 上传后的图片地址数组
+					};
+					console.log(dataToSend);
+					// 发送数据给后端服务器
+					uni.request({
+						url: 'http://82.157.244.44:8000/api/v1/forum/posts/', // 后端接口地址
+						method: 'POST', // POST 或者适合你的请求方式
+						header: {
+							'Authorization': `Bearer ${uni.getStorageSync('token')}`,	
+						},
+						data: dataToSend,
+						success: (res) => {
+							console.log('数据发送成功:', res.data);
+							
+							uni.switchTab({
+								url:"/pages/msg/msg"
+							});
+							console.log(dataToSend);
+						},
+						fail: (err) => {
+							console.error('数据发送失败:', err);
+						}
+					});
+				}).catch((error) => {
+					console.error('上传图片失败:', error);
+				});
+			},
+			
+			
+			// 上传图片方法
+			uploadImages() {
+				return new Promise((resolve, reject) => {
+					const uploadedImageUrls = []; // 保存上传后的图片地址的数组
+			
+					// 循环上传图片
+					const promises = this.imageList.map((imageUrl) => {
+						return new Promise((resolve, reject) => {
+							console.log("上传图片地址",imageUrl);
+							
+							uni.uploadFile({
+								url: 'http://82.157.244.44:8000/api/v1/forum/upload-image/', // 后端上传图片接口地址
+								method: 'POST',
+								filePath: imageUrl,
+								name: 'image',
+								header: {
+									'Authorization': `Bearer ${uni.getStorageSync('token')}`,									
+								},
+								success: (uploadRes) => {
+									console.log('上传成功:', uploadRes.data);
+									const imageFinalPath = "http://82.157.244.44:8000" + JSON.parse(uploadRes.data)["image"];
+									console.log(imageFinalPath);
+									uploadedImageUrls.push(imageFinalPath); // 将上传后的图片地址保存到数组中
+									console.log("a",);
+									resolve();
+								},
+								fail: (err) => {
+									console.error('上传失败:', err);
+									reject(err);
+								}
+							});
+						});
+					});
+			
+					// 等待所有图片上传完成
+					Promise.all(promises)
+						.then(() => {
+							resolve(uploadedImageUrls); // 将上传后的图片地址数组返回
+						})
+						.catch((error) => {
+							reject(error);
+						});
+				});
+			},
+			
+			
+			
+			
+			
+			
+			
+			
+			
+			
+			
+			
+			
+			
 			previewImage(index) {
 				uni.previewImage({
 					urls: this.imageList,

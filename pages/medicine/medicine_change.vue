@@ -29,16 +29,16 @@
 			</uni-section>
 			<uni-section title="服药周期" type="line" padding>
 				<uni-datetime-picker v-model="range"  type="daterange"
-					@change="onDatetimeConfirm1"></uni-datetime-picker>
+					></uni-datetime-picker>
 			</uni-section>
 			
 			<uni-section title="下次取药时间" type="line" padding>
 				<uni-datetime-picker v-model="nextPickTime"  type="date"
-					@change="onDatetimeConfirm"></uni-datetime-picker>
+				></uni-datetime-picker> 
 			</uni-section>
 			
 			<uni-section title="服药备注" type="line" padding>
-				<uni-easyinput v-model="note" focus placeholder="请输入服药提醒事项"></uni-easyinput>
+				<uni-easyinput v-model="medicine.note" focus placeholder="请输入服药提醒事项"></uni-easyinput>
 			</uni-section>
 			
 			<button class="submit_medicine" @click="submitForm">保存修改</button>
@@ -51,6 +51,8 @@
 	export default {
 		data() {
 			return {
+				units: ['粒', '瓶', '毫升','毫克'], // 可选择的单位列表
+				range:[],
 				medicine:{},			
 			}
 		},
@@ -72,6 +74,9 @@
 						console.log('数据接收成功:', res.data);
 						this.medicine = res.data.find(a => a.id === Number(medicineId));
 						console.log(this.medicine);
+						this.range[0]=this.medicine.start_date;
+						this.range[1]=this.medicine.finish_date;
+						
 					},
 					fail: (err) => {
 						console.error('数据发送失败:', err);
@@ -85,48 +90,33 @@
 			},
 			unitSelected(event) {
 				const index = event.detail.value;
-				this.selectedUnit = this.units[index];
-			},
-			onDatetimeConfirm(e){
-				console.log(e);
-				
-				console.log(this.nextPickTime);
-				
+				this.medicine.unit = this.units[index];
 			},
 			deleteTime(index) {
 			      this.selectedTimes.splice(index, 1);
 			    },
 			submitForm(){
-				// const dataToSend = {
-				// 	name: this.medicineName,  //名称
-				// 	amount: this.quantity,      // 数量
-				// 	unit: this.selectedUnit,  //单位
-				// 	select_time: this.selectedTimes,  //时间         //周期
-				// 	start_date :this.range[0],
-				// 	finish_date :this.range[1],
-				// 	next_pick_date:this.nextPickTime,  // 取药时间
-				// 	note:this.note,   //用药备注					
-				// };
-				
-				// const requiredFields = ['name', 'amount', 'unit', 'select_time', "start_date"];
-				// const text = {
-				// 	name:"药物名称",
-				// 	amount: "剂量",
-				// 	unit:"单位",
-				// 	select_time:"用药时间",
-				// 	start_date:"用药周期"
+				const requiredFields = ['name', 'amount', 'unit', 'select_time', "start_date"];
+				const text = {
+					name:"药物名称",
+					amount: "剂量",
+					unit:"单位",
+					select_time:"用药时间",
+					start_date:"用药周期"
 					
-				// }
-				//  for (const field of requiredFields) {
-				//         if (!dataToSend[field]) {
-				//             uni.showToast({
-				//                 title: `请填写${text[field]}`,
-				//                 icon: 'none',
-				//                 duration: 2000
-				//             });
-				//             return; // 停止提交
-				//         }
-				//     }
+				}
+				 for (const field of requiredFields) {
+				        if (!this.medicine[field]) {
+				            uni.showToast({
+				                title: `请填写${text[field]}`,
+				                icon: 'none',
+				                duration: 2000
+				            });
+				            return; // 停止提交
+				        }
+				    }
+				this.medicine.start_date= this.range[0];
+				this.medicine.finish_date = this.range [1];
 				  
 				console.log(this.medicine);
 				uni.request({
@@ -139,6 +129,9 @@
 					success: (res) => {
 						console.log('数据发送成功:', res.data);
 						console.log(this.medicine);
+						uni.redirectTo({
+							url:"/pages/medicine/medicine_all",
+						});
 						
 						
 					},

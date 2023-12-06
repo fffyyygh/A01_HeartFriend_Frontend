@@ -122,41 +122,6 @@
 				}
 			},
 			
-			
-			
-			uploadData_withoutPic(){
-				const dataToSend = {
-					title: this.title,
-					content: this.content,
-					mood_score: this.mood,
-					eat_score: this.appetite,
-					sleep_score: this.sleep,
-					images:["a"]
-				};
-				console.log(dataToSend);
-				uni.request({
-					url: 'http://82.157.244.44:8000/api/v1/diary/',  // 后端接口地址
-					method: 'POST', 
-					header: {
-						'Authorization': `Bearer ${uni.getStorageSync('token')}`,
-						
-					},
-					data: dataToSend,
-					success: (res) => {
-						console.log('数据发送成功:', res.data);
-						uni.redirectTo({
-							url:"/pages/diary/diary_index"
-						})
-						// uni.navigateBack();
-					},
-					fail: (err) => {
-						console.error('数据发送失败:', err);
-					}
-				});
-			},
-			
-			
-			
 
 			uploadData() {
 				// 首先上传图片
