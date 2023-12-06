@@ -94,22 +94,27 @@
 		methods: {
 
 			canDeleteComment(comment) {
-				// 只有帖子作者和评论作者可以删除评论
-				return comment.author_uuid === this.user.uuid || this.post.author_uuid === this.user.uuid;
+				// 只有评论的作者可以删除评论
+				const userInfo = uni.getStorageSync('userInfo');
+				return comment.author_uuid === userInfo.uuid;
 			},
 
 			formatPostTime(time) {
-				const dateTime = new Date(time);
-				const year = dateTime.getFullYear();
-				const month = String(dateTime.getMonth() + 1).padStart(2, '0');
-				const day = String(dateTime.getDate()).padStart(2, '0');
-				const hours = String(dateTime.getHours()).padStart(2, '0');
-				const minutes = String(dateTime.getMinutes()).padStart(2, '0');
-				const seconds = String(dateTime.getSeconds()).padStart(2, '0');
+				// 检查 time 是否为 undefined 或者 null
+				if (time == null) {
+					return ''; // 或者你想要返回的默认时间字符串
+				}
 
-				const formattedTime = `${year}-${month}-${day} ${hours}:${minutes}:${seconds}`;
+				// 去掉毫秒部分和末尾的 "Z"
+				const timeWithoutMilliseconds = time.replace(/\.\d+Z$/, '');
+
+				// 将 "T" 替换为空格，确保日期字符串格式是 "yyyy-MM-dd HH:mm:ss"
+				const formattedTime = timeWithoutMilliseconds.replace('T', ' ');
+
 				return formattedTime;
 			},
+
+
 			toggleCommentInput() {
 				this.showCommentInput = !this.showCommentInput;
 			},

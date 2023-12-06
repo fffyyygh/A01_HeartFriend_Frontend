@@ -134,17 +134,20 @@
 			},
 			
 			formatPostTime(time) {
-			    const dateTime = new Date(time);
-			    const year = dateTime.getFullYear();
-			    const month = String(dateTime.getMonth() + 1).padStart(2, '0');
-			    const day = String(dateTime.getDate()).padStart(2, '0');
-			    const hours = String(dateTime.getHours()).padStart(2, '0');
-			    const minutes = String(dateTime.getMinutes()).padStart(2, '0');
-			    const seconds = String(dateTime.getSeconds()).padStart(2, '0');
-			
-			    const formattedTime = `${year}-${month}-${day} ${hours}:${minutes}:${seconds}`;
-			    return formattedTime;
+				// 检查 time 是否为 undefined 或者 null
+				if (time == null) {
+					return ''; // 或者你想要返回的默认时间字符串
+				}
+
+				// 去掉毫秒部分和末尾的 "Z"
+				const timeWithoutMilliseconds = time.replace(/\.\d+Z$/, '');
+
+				// 将 "T" 替换为空格，确保日期字符串格式是 "yyyy-MM-dd HH:mm:ss"
+				const formattedTime = timeWithoutMilliseconds.replace('T', ' ');
+
+				return formattedTime;
 			},
+			
 			// 模仿的点赞、点踩、评论操作
 			likePost(post) {
 				console.log('Liked post:', post);
