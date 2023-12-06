@@ -4,7 +4,7 @@
 			<!-- 用户信息 -->
 			<view class="user-info">
 				<!-- 头像 -->
-				<image class="user-avatar" :src="getUserAvatar(post.author_uuid)" mode="aspectFill"></image>
+				<image class="user-avatar" :src="users[index].avatar_url" mode="aspectFill"></image>
 				<!-- 用户名、发帖时间等信息 -->
 				<view>
 					<text class="user-name">{{ post.author }}</text>
@@ -17,7 +17,7 @@
 				<text class="post-title">{{ post.title }}</text>
 				<!-- 前三张图片 -->
 				<view class="post-images">
-					<image v-for="(image, imageIndex) in post.imagesArray.slice(0, 3)" :key="imageIndex" :src="image"
+					<image v-for="(image, imageIndex) in post.images.slice(0, 3)" :key="imageIndex" :src="image"
 						mode="aspectFill" class="post-image"></image>
 				</view>
 			</view>
@@ -46,64 +46,86 @@
 		data() {
 			return {
 				posts: [],
+				users:[],
+				
 			};
 		},
-		mounted() {
-			this.getPosts();
+		onLoad() {
+			this.get_all_post();
 		},
 		methods: {
-			async getPosts() {
-				try {
-					const response = await uni.request({
-						url: 'http://82.157.244.44:8000/api/v1/forum/posts/',
-						method: 'GET',
-						header: {
-							'Authorization': 'Bearer ' + uni.getStorageSync('token'),
-						},
-					});
-
-					if (Array.isArray(response) && response[1] && Array.isArray(response[1].data)) {
-						this.posts = response[1].data.map(post => ({
-							...post,
-							imagesArray: post.images.split(','),
-						}));
-					} else {
-						console.error('Invalid response format:', response);
-						console.log('response[1]:', response[1]);
+			
+			
+			makeRequest(url, method, header) {
+			  return new Promise((resolve, reject) => {
+			    uni.request({
+			      url: url,
+			      method: method,
+			      header: header,
+			      success: (res) => {
+			        resolve(res.data);
+			      },
+			      fail: (err) => {
+			        reject(err);
+			      },
+			    });
+			  });
+			},
+			
+			async getUsers() {
+			  try {
+			    for (const post of this.posts) {
+			      const response = await this.makeRequest(
+			        'http://82.157.244.44:8000/api/v1/user/query-info/?uuid=' + post.author_uuid,
+			        'GET',
+			        {
+			          'Authorization': `Bearer ${uni.getStorageSync('token')}`,
+			        }
+			      );
+			      
+			      console.log('数据接收成功:', response);
+			      const user = response;
+			      user.avatar_url = "http://82.157.244.44:8000" + user.avatar_url;
+			      this.users.push(user);
+			    }
+			  } catch (error) {
+			    console.error('数据发送失败:', error);
+			  }
+			},		
+			
+			get_all_post() {
+				uni.request({
+					url: 'http://82.157.244.44:8000/api/v1/forum/posts/', // 后端接口地址
+					method: 'GET',
+					header: {
+						'Authorization': `Bearer ${uni.getStorageSync('token')}`,
+					},
+					success: (res) => {
+						console.log('数据接收成功:', res.data);
+			
+						this.posts = res.data
+			
+						//this.post = res.data[7]; //
+						console.log(this.posts);
+						
+						this.posts.forEach((post,index)=>{
+							const image_addr = post.images;
+							console.log(image_addr);
+							post.images = image_addr.split(',');
+							console.log(post.images);
+							
+						})	
+						this.getUsers();
+			
+					},
+					fail: (err) => {
+						console.error('数据发送失败:', err);
 					}
-				} catch (error) {
-					console.error('Failed to fetch posts', error);
-				}
+				});
+			
+			
 			},
-			async getUserInfo(uuid) {
-				try {
-					const response = await uni.request({
-						url: `http://82.157.244.44:8000/api/v1/user/query-info/?uuid=${uuid}`,
-						method: 'GET',
-						header: {
-							'Authorization': 'Bearer ' + uni.getStorageSync('token'),
-						},
-					});
-
-					if (response[1] && response[1].data) {
-						return response[1].data;
-					} else {
-						console.error('Invalid user info response format:', response);
-						return null;
-					}
-				} catch (error) {
-					console.error('Failed to fetch user info', error);
-					return null;
-				}
-			},
-			async getUserAvatar(uuid) {
-				const userInfo = await this.getUserInfo(uuid);
-				console.log('userInfo:', userInfo);
-				this.avatarUrl = userInfo ? `http://82.157.244.44:8000${userInfo.avatar_url}` :
-					''; // Adjust the URL as needed
-				console.log('this.avatarUrl:', this.avatarUrl);
-				return this.avatarUrl;
-			},
+			
 			formatPostTime(time) {
 			    const dateTime = new Date(time);
 			    const year = dateTime.getFullYear();
