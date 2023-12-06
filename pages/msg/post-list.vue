@@ -37,20 +37,25 @@
 					<text class="action-count">{{ post.comments_count }}</text>
 				</view>
 			</view>
+			<!-- 发贴入口 -->
+			<add-post-tag></add-post-tag>
 		</view>
 	</view>
 </template>
 
 <script>
+	import addPostTag from '@/components/add-post-tag/add-post-tag.vue';
 	export default {
+		components: {
+			addPostTag
+		},
 		data() {
 			return {
 				posts: [],
 				users:[],
-				
 			};
 		},
-		onLoad() {
+		onShow() {
 			this.get_all_post();
 		},
 		methods: {

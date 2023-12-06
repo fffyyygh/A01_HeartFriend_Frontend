@@ -98,7 +98,7 @@
 							console.log('数据发送成功:', res.data);
 							
 							uni.switchTab({
-								url:"/pages/msg/msg"
+								url:"/pages/msg/post-list"
 							});
 							console.log(dataToSend);
 						},
@@ -179,22 +179,22 @@
 			deleteImage(index) {
 				this.imageList.splice(index, 1);
 			},
-			submitPost() {
-				// 在这里执行发布帖子的逻辑
-				// 可以将帖子的标题、内容、图片地址等数据提交到后端进行保存
+			// submitPost() {
+			// 	// 在这里执行发布帖子的逻辑
+			// 	// 可以将帖子的标题、内容、图片地址等数据提交到后端进行保存
 
-				// 发布成功后，可以跳转回列表页或其他需要的页面
-				uni.showToast({
-					title: '发布成功',
-					icon: 'success',
-					duration: 2000,
-					success: () => {
-						uni.navigateTo({
-							url: '/pages/msg/msg.vue', // 这里填写你的消息列表页的路径
-						});
-					},
-				});
-			},
+			// 	// 发布成功后，可以跳转回列表页或其他需要的页面
+			// 	uni.showToast({
+			// 		title: '发布成功',
+			// 		icon: 'success',
+			// 		duration: 2000,
+			// 		success: () => {
+			// 			uni.switchTab({
+			// 				url: '/pages/msg/post-list', // 这里填写你的消息列表页的路径
+			// 			});
+			// 		},
+			// 	});
+			// },
 		},
 	};
 </script>
