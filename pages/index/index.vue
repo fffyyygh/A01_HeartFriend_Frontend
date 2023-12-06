@@ -75,7 +75,7 @@
 					//正常code
 					const code = await this.getLoginCode();
 					// 注册测试用code
-					// const code = "test12051052";
+					// const code = "test12052128";
 					console.log(code);
 					// 发送登录请求
 					const loginRes = await uni.request({
