@@ -79,32 +79,7 @@ export default {
     this.$refs.share.close();
   },
   methods: {
-    __init(data) {
-      // 修改标题
-      uni.setNavigationBarTitle({
-        title: data.title,
-      });
-
-      // 请求API
-      this.info = {
-        ...data,
-        comments: [
-          {
-            username: "Alice",
-            userpic: "/static/img/userpic/1.jpeg",
-            content: "这是一条测试评论1",
-            date: "1天前",
-          },
-          {
-            username: "Bob",
-            userpic: "/static/img/userpic/2.jpeg",
-            content: "这是一条测试评论2",
-            date: "2天前",
-          },
-          // 可以添加更多的测试评论
-        ],
-      };
-    },
+	
     // 关注
     follow() {
       this.info.isFollow = true;
@@ -149,10 +124,6 @@ export default {
     // 点击评论
     doComment() {
       console.log("Commenting...");
-    },
-    // 点击分享
-    doShare() {
-      console.log("Sharing...");
     },
     // 预览图片
     preview(index) {

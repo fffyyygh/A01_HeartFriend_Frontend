@@ -79,6 +79,7 @@
 				this.uploadImages().then((imageUrls) => {
 					// 图片上传成功后，将图片地址和其他数据一起发送给后端
 					const img = imageUrls.toString();
+					
 					const dataToSend = {
 						title: this.postTitle,
 						content: this.postContent,

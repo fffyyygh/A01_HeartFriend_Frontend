@@ -139,6 +139,14 @@
 				"navigationBarTitleText" : "",
 				"enablePullDownRefresh" : false
 			}
+		},
+		{
+			"path" : "pages/msg/post_detail",
+			"style" : 
+			{
+				"navigationBarTitleText" : "",
+				"enablePullDownRefresh" : false
+			}
 		}
 
 	],

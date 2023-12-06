@@ -27,6 +27,7 @@
 					:custom-style="btnStyle">心情记录</u-button>
 			</view>
 		</view>
+		<button @click="test">详情</button>
 	</view>
 </template>
 
@@ -54,6 +55,13 @@
 			}
 		},
 		methods: {
+			
+			test(){
+				uni.navigateTo({
+					url:"/pages/msg/post_detail"
+				})
+			},
+			
 			async getLoginCode() {
 				return new Promise((resolve, reject) => {
 					uni.login({
