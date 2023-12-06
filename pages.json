@@ -147,6 +147,14 @@
 				"navigationBarTitleText" : "",
 				"enablePullDownRefresh" : false
 			}
+		},
+		{
+			"path" : "pages/msg/post-list",
+			"style" : 
+			{
+				"navigationBarTitleText" : "",
+				"enablePullDownRefresh" : false
+			}
 		}
 
 	],
@@ -177,7 +185,7 @@
 				"text": "用药"
 			},
 			{
-				"pagePath": "pages/msg/msg",
+				"pagePath": "pages/msg/post-list",
 				"iconPath": "static/tabBar/community.png",
 				"selectedIconPath": "static/tabBar/communityd.png",
 				"text": "社群"
