@@ -129,10 +129,11 @@
 					success: (res) => {
 						console.log('数据发送成功:', res.data);
 						console.log(this.medicine);
-						uni.redirectTo({
-							url:"/pages/medicine/medicine_all",
-						});
-						
+						uni.switchTab(
+							{
+								url:"/pages/medicine/medicine"
+							}
+						);
 						
 					},
 					fail: (err) => {

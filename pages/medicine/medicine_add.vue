@@ -122,7 +122,10 @@
 					success: (res) => {
 						console.log('数据发送成功:', res.data);
 						console.log(dataToSend);
-						//跳转不了 很奇怪  等后端开发好之后试一下
+						//跳转不了 很奇怪  等后端开发好之后试一下;
+						uni.switchTab({
+							url:"/pages/medicine/medicine"
+						})
 						
 						
 					},
