@@ -82,7 +82,7 @@ export default {
 				success: (res) => {
 					console.log('数据接收成功:', res.data);
 
-					this.post = res.data.find(a => a.id === postid);
+					this.post = res.data.find(a => a.id === Number(postid));
 
 					//this.post = res.data[7]; //
 					console.log(this.post);
