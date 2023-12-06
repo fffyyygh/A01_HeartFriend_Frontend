@@ -99,6 +99,8 @@
 			},		
 			
 			get_all_post() {
+				this.users=[];
+				this.posts=[];
 				uni.request({
 					url: 'http://82.157.244.44:8000/api/v1/forum/posts/', // 后端接口地址
 					method: 'GET',
