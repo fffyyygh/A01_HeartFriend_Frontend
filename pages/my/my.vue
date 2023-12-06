@@ -35,8 +35,8 @@
 					<view class="grid-text">关注</view>
 				</u-grid-item>
 				<u-grid-item @click="to_my_posts">
-					<text>{{ userInfo.postNum || 0 }}</text>
-					<view class="grid-text">帖子</view>
+					<text>{{ postNum }}</text>
+					<view class="grid-text" >帖子</view>
 				</u-grid-item>
 
 			</u-grid>
@@ -79,11 +79,16 @@
 		onShow() {
 			console.log('my.vue is shown');
 			this.userInfo = uni.getStorageSync('userInfo');
+			this.get_all_post();
+		
 		},
 		data() {
 			return {
 				userInfo: uni.getStorageSync('userInfo'),
-				has_login: true
+				has_login: true,
+				users:[],
+				posts:[],
+				postNum:""
 			};
 		},
 		methods: {
@@ -101,7 +106,88 @@
 				uni.navigateTo({
 					url:"/pages/my/my_posts"
 				})
-			}
+			},
+			
+			
+			makeRequest(url, method, header) {
+			  return new Promise((resolve, reject) => {
+			    uni.request({
+			      url: url,
+			      method: method,
+			      header: header,
+			      success: (res) => {
+			        resolve(res.data);
+			      },
+			      fail: (err) => {
+			        reject(err);
+			      },
+			    });
+			  });
+			},
+			
+			async getUsers() {
+			  try {
+			    for (const post of this.posts) {
+			      const response = await this.makeRequest(
+			        'http://82.157.244.44:8000/api/v1/user/query-info/?uuid=' + post.author_uuid,
+			        'GET',
+			        {
+			          'Authorization': `Bearer ${uni.getStorageSync('token')}`,
+			        }
+			      );
+			      
+			      console.log('数据接收成功:', response);
+			      const user = response;
+			      user.avatar_url = "http://82.157.244.44:8000" + user.avatar_url;
+			      this.users.push(user);
+			    }
+			  } catch (error) {
+			    console.error('数据发送失败:', error);
+			  }
+			},		
+			
+			get_all_post() {
+				this.users=[];
+				this.posts=[];
+				uni.request({
+					url: 'http://82.157.244.44:8000/api/v1/forum/posts/', // 后端接口地址
+					method: 'GET',
+					header: {
+						'Authorization': `Bearer ${uni.getStorageSync('token')}`,
+					},
+					success: (res) => {
+						console.log('数据接收成功:', res.data);	
+						const userInfo = uni.getStorageSync('userInfo');
+						const user_uuid = userInfo.uuid;
+						//this.post = res.data[7]; //
+						res.data.forEach((post,index)=>{								
+							if(post.author_uuid==user_uuid){
+								
+								this.posts.push(post);
+							}
+							
+							
+						});
+						
+						this.posts.forEach((post,index)=>{
+							const image_addr = post.images;
+							post.images = image_addr.split(',');
+							
+							
+						})	;
+						this.postNum = this.posts.length;
+						console.log("数量",this.postNum);
+						this.getUsers();
+			
+					},
+					fail: (err) => {
+						console.error('数据发送失败:', err);
+					}
+				});
+			
+			
+			},
+			
 		}
 	}
 </script>
