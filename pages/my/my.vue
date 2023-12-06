@@ -34,7 +34,7 @@
 					<text>{{ userInfo.follow || 0 }}</text>
 					<view class="grid-text">关注</view>
 				</u-grid-item>
-				<u-grid-item i>
+				<u-grid-item @click="to_my_posts">
 					<text>{{ userInfo.postNum || 0 }}</text>
 					<view class="grid-text">帖子</view>
 				</u-grid-item>
@@ -95,6 +95,11 @@
 			goUser() {
 				uni.navigateTo({
 					url: "/pages/login/register"
+				})
+			},
+			to_my_posts(){
+				uni.navigateTo({
+					url:"/pages/my/my_posts"
 				})
 			}
 		}

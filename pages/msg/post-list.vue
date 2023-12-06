@@ -108,7 +108,7 @@
 						'Authorization': `Bearer ${uni.getStorageSync('token')}`,
 					},
 					success: (res) => {
-						console.log('数据接收成功:', res.data);
+						//console.log('数据接收成功:', res.data);
 			
 						this.posts = res.data
 			
