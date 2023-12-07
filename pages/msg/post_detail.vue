@@ -26,11 +26,11 @@
 
 		<!-- 点赞、点踩、评论图标和数量 -->
 		<view class="post-actions">
-			<view class="action-item" @click="likePost(post)">
+			<view class="action-item" @click="likePost(post)" :class="{ 'active': isLiked }">
 				<text class="iconfont icon-dianzan"></text>
 				<text class="action-count">{{ post.likes_count }}</text>
 			</view>
-			<view class="action-item" @click="dislikePost(post)">
+			<view class="action-item" @click="dislikePost(post)" :class="{ 'active': isDisliked }">
 				<text class="iconfont icon-cai"></text>
 				<text class="action-count">{{ post.dislikes_count }}</text>
 			</view>
@@ -85,6 +85,8 @@
 				commentText: '',
 				comments: [],
 				commentAuthors: {}, // 保存评论作者的信息
+				isLiked: false, // 是否已点赞
+				isDisliked: false, // 是否已点踩
 			}
 		},
 		onLoad(query) {
@@ -92,6 +94,72 @@
 			this.get_all_post(id);
 		},
 		methods: {
+
+			async likePost(post) {
+				try {
+					// 发送点赞请求
+					const response = await uni.request({
+						url: `http://82.157.244.44:8000/api/v1/forum/posts/${post.id}/like/`,
+						method: 'POST',
+						header: {
+							'Authorization': `Bearer ${uni.getStorageSync('token')}`,
+						},
+					});
+
+					console.log('response内容', response);
+
+					// 根据后端返回的数据更新点赞状态
+					if (response[1].statusCode === 200) {
+						this.isLiked = !this.isLiked;
+						if (this.isLiked) {
+							post.likes_count += 1; // 增加点赞数量
+							// 如果之前点踩了，取消点踩状态
+							if (this.isDisliked) {
+								this.isDisliked = false;
+								post.dislikes_count -= 1; // 减少点踩数量
+							}
+						} else {
+							post.likes_count -= 1; // 减少点赞数量
+						}
+					} else {
+						console.error('点赞失败:', response[1].data);
+					}
+				} catch (error) {
+					console.error('点赞失败:', error);
+				}
+			},
+
+			async dislikePost(post) {
+				try {
+					// 发送点踩请求
+					const response = await uni.request({
+						url: `http://82.157.244.44:8000/api/v1/forum/posts/${post.id}/dislike/`,
+						method: 'POST',
+						header: {
+							'Authorization': `Bearer ${uni.getStorageSync('token')}`,
+						},
+					});
+
+					// 根据后端返回的数据更新点踩状态
+					if (response[1].statusCode === 200) {
+						this.isDisliked = !this.isDisliked;
+						if (this.isDisliked) {
+							post.dislikes_count += 1; // 增加点踩数量
+							// 如果之前点赞了，取消点赞状态
+							if (this.isLiked) {
+								this.isLiked = false;
+								post.likes_count -= 1; // 减少点赞数量
+							}
+						} else {
+							post.dislikes_count -= 1; // 减少点踩数量
+						}
+					} else {
+						console.error('点踩失败:', response[1].data);
+					}
+				} catch (error) {
+					console.error('点踩失败:', error);
+				}
+			},
 
 			canDeleteComment(comment) {
 				// 只有评论的作者可以删除评论
@@ -184,6 +252,10 @@
 						const image_addr = this.post.images;
 						this.post_image = image_addr.split(',');
 						console.log(this.post_image);
+
+						// 更新点赞和点踩状态
+						this.isLiked = this.post.is_liked; // 假设后端返回的字段为 is_liked
+						this.isDisliked = this.post.is_disliked; // 假设后端返回的字段为 is_disliked
 
 						// 获取评论列表
 						uni.request({
@@ -428,6 +500,11 @@
 		align-items: center;
 		margin-right: 20px;
 		cursor: pointer;
+	}
+
+	.action-item.active {
+		color: #ff6347;
+		/* 设置激活状态下的颜色，可以根据需要调整 */
 	}
 
 	.iconfont {
