@@ -24,17 +24,13 @@
 
 			<!-- 点赞、点踩、评论图标和数量 -->
 			<view class="post-actions">
-				<view class="action-item" @click="likePost(post, index)">
+				<view class="action-item" @click="likePost(post, index)" :class="{ 'liked': isLiked[index] }">
 					<text class="iconfont icon-dianzan"></text>
 					<text class="action-count">{{ post.likes_count }}</text>
 				</view>
-				<view class="action-item" @click="dislikePost(post, index)">
+				<view class="action-item" @click="dislikePost(post, index)" :class="{ 'disliked': isDisliked[index] }">
 					<text class="iconfont icon-cai"></text>
 					<text class="action-count">{{ post.dislikes_count }}</text>
-				</view>
-				<view class="action-item" @click="commentPost(post)">
-					<text class="iconfont icon-pinglun"></text>
-					<text class="action-count">{{ post.comments_count }}</text>
 				</view>
 			</view>
 		</view>
@@ -57,15 +53,10 @@
 				isDisliked: [],
 			};
 		},
-		// onShow() {
-		// 	this.get_all_post();
-		// 	this.getLikeDislikeStatus();
-		// },
+		
 		onShow() {
 			this.loadPostData();
 		},
-
-
 
 		methods: {
 			async loadPostData() {
@@ -98,7 +89,6 @@
 								'Authorization': `Bearer ${uni.getStorageSync('token')}`,
 							}
 						);
-
 						console.log('数据接收成功:', response);
 						const user = response;
 						user.avatar_url = "http://82.157.244.44:8000" + user.avatar_url;
@@ -155,34 +145,14 @@
 				return formattedTime;
 			},
 
-			// async getLikeDislikeStatus() {
-			// 	try {
-			// 		console.log('getLikeDislikeStatus is called');
-			// 		console.log('Posts in getLikeDislikeStatus:', this.posts);
-			// 		for (const post of this.posts) {
-			// 			console.log('every post::::',post);
-			// 			console.log('every post.isliked::::',post.is_liked);
-			// 			console.log('Fetching like and dislike status for post:', post.id);
-			// 			const likeStatus = await this.fetchLikeStatus(post.id);
-			// 			const dislikeStatus = await this.fetchDislikeStatus(post.id);
-			// 			console.log('Like status:', likeStatus);
-			// 			console.log('Dislike status:', dislikeStatus);
-			// 			this.isLiked.push(likeStatus.isLiked);
-			// 			this.isDisliked.push(dislikeStatus.isDisliked);
-			// 		}
-			// 	} catch (error) {
-			// 		console.error('Failed to fetch like/dislike status:', error);
-			// 	}
-			// },
-
 			async getLikeDislikeStatus() {
 				try {
 					console.log('getLikeDislikeStatus is called');
 					console.log('Posts in getLikeDislikeStatus:', this.posts);
 					for (const post of this.posts) {
-						console.log('every post::::',post);
-						console.log('every post.is_liked::::',post.is_liked);
-						console.log('every post.is_disliked::::',post.is_disliked);
+						console.log('every post::::', post);
+						console.log('every post.is_liked::::', post.is_liked);
+						console.log('every post.is_disliked::::', post.is_disliked);
 						this.isLiked.push(post.is_liked);
 						this.isDisliked.push(post.is_disliked);
 					}
@@ -190,56 +160,6 @@
 					console.error('Failed to fetch like/dislike status:', error);
 				}
 			},
-
-			// async fetchLikeStatus(postId) {
-			// 	const url = `http://82.157.244.44:8000/api/v1/forum/posts/${postId}`;
-			// 	const method = 'GET';
-			// 	const header = {
-			// 		'Authorization': `Bearer ${uni.getStorageSync('token')}`,
-			// 	};
-			// 	try {
-			// 		const response = await this.makeRequest(url, method, header);
-			// 		console.log('Fetched like status for post', postId, ':', response);
-			// 		console.log('response.is_liked', response.is_liked);
-			// 		return {
-			// 			postId: postId,
-			// 			isLiked: response.is_liked,
-			// 		};
-			// 	} catch (error) {
-			// 		console.error('Failed to fetch like status for post', postId, ':', error);
-			// 		return {
-			// 			postId: postId,
-			// 			isLiked: false,
-			// 		};
-			// 	}
-			// },
-
-			// async fetchDislikeStatus(postId) {
-			// 	const url = `http://82.157.244.44:8000/api/v1/forum/posts/${postId}`;
-			// 	const method = 'GET';
-			// 	const header = {
-			// 		'Authorization': `Bearer ${uni.getStorageSync('token')}`,
-			// 	};
-			// 	try {
-			// 		const response = await this.makeRequest(url, method, header);
-			// 		console.log('Fetched dislike status for post', postId, ':', response);
-			// 		return {
-			// 			postId: postId,
-			// 			isDisliked: response.is_disliked,
-			// 		};
-			// 	} catch (error) {
-			// 		console.error('Failed to fetch dislike status for post', postId, ':', error);
-			// 		return {
-			// 			postId: postId,
-			// 			isDisliked: false,
-			// 		};
-			// 	}
-			// },
-
-
-
-
-
 
 			async likePost(post, index) {
 				try {
@@ -314,19 +234,6 @@
 				}
 			},
 
-
-
-
-			// 模仿的点赞、点踩、评论操作
-			// likePost(post) {
-			// 	console.log('Liked post:', post);
-			// },
-			// dislikePost(post) {
-			// 	console.log('Disliked post:', post);
-			// },
-			commentPost(post) {
-				console.log('Commented on post:', post);
-			},
 			goToPostDetail(post) {
 				console.log('Navigating to post detail:', post);
 				console.log('传递的id:', post.id);
@@ -340,6 +247,16 @@
 </script>
 
 <style scoped>
+	.liked {
+		color: #ff6347;
+		/* 设置喜欢状态的图标颜色为红色 */
+	}
+
+	.disliked {
+		color: #ff6347;
+		/* 设置不喜欢状态的图标颜色为蓝色 */
+	}
+
 	.post-list {
 		padding: 20rpx;
 	}

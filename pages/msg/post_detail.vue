@@ -27,11 +27,11 @@
 
 		<!-- 点赞、点踩、评论图标和数量 -->
 		<view class="post-actions">
-			<view class="action-item" @click="likePost(post)" :class="{ 'active': isLiked }">
+			<view class="action-item" @click="likePost(post)" :class="{ 'likeactive': isLiked }">
 				<text class="iconfont icon-dianzan"></text>
 				<text class="action-count">{{ post.likes_count }}</text>
 			</view>
-			<view class="action-item" @click="dislikePost(post)" :class="{ 'active': isDisliked }">
+			<view class="action-item" @click="dislikePost(post)" :class="{ 'dislikeactive': isDisliked }">
 				<text class="iconfont icon-cai"></text>
 				<text class="action-count">{{ post.dislikes_count }}</text>
 			</view>
@@ -591,7 +591,12 @@
 		cursor: pointer;
 	}
 
-	.action-item.active {
+	.action-item.likeactive {
+		color: #ff6347;
+		/* 设置激活状态下的颜色，可以根据需要调整 */
+	}
+
+	.action-item.dislikeactive {
 		color: #ff6347;
 		/* 设置激活状态下的颜色，可以根据需要调整 */
 	}
