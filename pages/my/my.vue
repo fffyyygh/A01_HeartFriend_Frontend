@@ -25,13 +25,13 @@
 					<u-button type="default" shape="circle" @click="wxLogin" plain>登录</u-button>
 				</view>
 			</block>
-			<u-grid :col="3" :border="false" style="margin: 20rpx 0;" @click="toNav">
-				<u-grid-item>
-					<text>{{ userInfo.fans || 0}}</text>
+			<u-grid :col="3" :border="false" style="margin: 20rpx 0;" >
+				<u-grid-item @click="to_my_fans">
+					<text>{{ fansNum}}</text>
 					<view class="grid-text">粉丝</view>
 				</u-grid-item>
-				<u-grid-item>
-					<text>{{ userInfo.follow || 0 }}</text>
+				<u-grid-item @click="to_my_focus">
+					<text>{{ focusNum }}</text>
 					<view class="grid-text">关注</view>
 				</u-grid-item>
 				<u-grid-item @click="to_my_posts">
@@ -78,6 +78,8 @@
 			console.log('my.vue is shown');
 			this.userInfo = uni.getStorageSync('userInfo');
 			this.get_all_post();
+			this.get_all_focus();
+			this.get_all_fans();
 		
 		},
 		data() {
@@ -86,7 +88,9 @@
 				has_login: true,
 				users:[],
 				posts:[],
-				postNum:""
+				postNum:"",
+				focusNum: "",
+				fansNum :"",
 			};
 		},
 		methods: {
@@ -98,6 +102,19 @@
 			to_my_posts(){
 				uni.navigateTo({
 					url:"/pages/my/my_posts"
+				})
+			},
+			
+				
+			to_my_focus(){
+				uni.navigateTo({
+					url:"/pages/my/my_focus"
+				})
+			},
+			
+			to_my_fans(){
+				uni.navigateTo({
+					url:"/pages/my/my_fans"
 				})
 			},
 			
@@ -180,6 +197,48 @@
 			
 			
 			},
+			
+				
+			get_all_focus(){
+				uni.request({
+					url: 'http://82.157.244.44:8000/api/v1/user/following/', // 后端接口地址
+					method: 'GET',
+					header: {
+						'Authorization': `Bearer ${uni.getStorageSync('token')}`,
+					},
+					success: (res) => {
+						console.log('数据接收成功:', res.data);	
+						console.log(res.data);
+						this.focusNum = res.data.following.length;
+						console.log(this.focusNum);
+						
+							
+					},
+					fail: (err) => {
+						console.error('数据发送失败:', err);
+					}
+				});
+				
+			},
+			
+				
+			get_all_fans(){
+				uni.request({
+					url: 'http://82.157.244.44:8000/api/v1/user/followers/', // 后端接口地址
+					method: 'GET',
+					header: {
+						'Authorization': `Bearer ${uni.getStorageSync('token')}`,
+					},
+					success: (res) => {
+						console.log('数据接收成功:', res.data);	
+						this.fansNum = res.data.followers.length;		
+					},
+					fail: (err) => {
+						console.error('数据发送失败:', err);
+					}
+				});
+				
+			}
 			
 		}
 	}

@@ -12,7 +12,7 @@
 
 				</view>
 			</view>
-			<button class="follow-button">关注</button>
+			<button :class="{'followed-style': isFollowed, 'unfollowed-style': !isFollowed}" @click="follow_click">{{ isFollowed ? '已关注' : '关注' }}</button>
 		</view>
 		<view class="divider"></view>
 		<!-- 中间内容 -->
@@ -78,6 +78,7 @@
 	export default {
 		data() {
 			return {
+				my_follow: [],
 				user: {},
 				post: {},
 				post_image: [],
@@ -87,6 +88,8 @@
 				commentAuthors: {}, // 保存评论作者的信息
 				isLiked: false, // 是否已点赞
 				isDisliked: false, // 是否已点踩
+				isFollowed: false, //是否已关注
+				not_my_post: true, //是否是我发的贴子 用来决定是否显示关注按钮
 			}
 		},
 		onLoad(query) {
@@ -94,6 +97,63 @@
 			this.get_all_post(id);
 		},
 		methods: {
+			
+			if_my_post(){
+				const userInfo = uni.getStorageSync('userInfo');
+				const user_uuid = userInfo.uuid;
+				
+				if(this.user.uuid === user_uuid)
+					
+				{
+					this.not_my_post = false;
+				}
+				else
+				{
+					this.not_my_post = true;
+				}
+					
+				
+			},
+			
+			get_if_followed(){			
+				uni.request({
+					url:"http://82.157.244.44:8000/api/v1/user/following/",
+					method:"GET",
+					header: {
+						'Authorization': `Bearer ${uni.getStorageSync('token')}`,
+					},
+					success: (res) =>{
+						let follow = res.data.following;
+						let uuid= this.user.uuid;
+						this.isFollowed = follow.some(item => item.uuid === uuid);
+					},
+					fail: (err)=> {
+						console.log("a");
+					}
+				})
+			
+			},
+			
+			
+			follow_click(){
+				console.log("a");
+				
+				this.isFollowed = ! this.isFollowed;
+				uni.request({
+					url:"http://82.157.244.44:8000/api/v1/user/follow-unfollow/",
+					method:"POST",
+					header: {
+						'Authorization': `Bearer ${uni.getStorageSync('token')}`,
+					},
+					data:{
+						"uuid":this.user.uuid,
+					},
+					success: (res)=> {
+						console.log("关注成功", res.data);
+					}
+					
+				});
+			},
 
 			async likePost(post) {
 				try {
@@ -104,6 +164,7 @@
 						header: {
 							'Authorization': `Bearer ${uni.getStorageSync('token')}`,
 						},
+						
 					});
 
 					console.log('response内容', response);
@@ -299,6 +360,8 @@
 								this.user.avatar_url = "http://82.157.244.44:8000" + this.user
 									.avatar_url;
 								console.log(this.user.avatar_url);
+								this.get_if_followed();
+								this.if_my_post();
 							},
 							fail: (err) => {
 								console.error('数据发送失败:', err);
@@ -454,12 +517,23 @@
 		color: #999;
 	}
 
-	.follow-button {
+	.unfollowed-style {
 		padding: 8px 16px;
 		border: none;
 		border-radius: 15px;
 		background-color: #3498db;
 		color: #fff;
+		font-size: 12px;
+		height: 80rpx;
+		width: 200rpx;
+	}
+	
+	.followed-style {
+		padding: 8px 16px;
+		border: none;
+		border-radius: 15px;
+		background-color: #f5f5f5;
+		 color: red;
 		font-size: 12px;
 		height: 80rpx;
 		width: 200rpx;
