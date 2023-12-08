@@ -27,7 +27,8 @@
 					:custom-style="btnStyle">心情记录</u-button>
 			</view>
 		</view>
-		
+		<!-- 用于测试的按钮，点击后跳转到 user-home 页面 -->
+		<button @click="goToUserHome">跳转到用户主页</button>
 	</view>
 </template>
 
@@ -55,13 +56,15 @@
 			}
 		},
 		methods: {
-			
-			test(){
+			goToUserHome() {
+				const uuid = 'c0279e06-cdc8-431f-9284-ba8d44b44ef3';
+				// 跳转到 user-home 页面
 				uni.navigateTo({
-					url:"/pages/msg/post_detail"
-				})
+					// url: '/pages/user-home/?uuid=${uuid}',
+					url: `/pages/user-home/user-home?uuid=${uuid}`,
+				});
 			},
-			
+
 			async getLoginCode() {
 				return new Promise((resolve, reject) => {
 					uni.login({
@@ -143,15 +146,15 @@
 					// 修改为先判断本地存储中是否有userInfo，如果存在，则更新它，否则就存储新的 userInfo。
 					let storedUserInfo = uni.getStorageSync('userInfo');
 					if (storedUserInfo) {
-					    // 如果本地存储中已经有 userInfo，则更新它
-					    storedUserInfo = Object.assign({}, storedUserInfo, userInfo);
+						// 如果本地存储中已经有 userInfo，则更新它
+						storedUserInfo = Object.assign({}, storedUserInfo, userInfo);
 					} else {
-					    // 如果本地存储中没有 userInfo，则直接存储新的 userInfo
-					    storedUserInfo = userInfo;
+						// 如果本地存储中没有 userInfo，则直接存储新的 userInfo
+						storedUserInfo = userInfo;
 					}
 					// 存储 userInfo 到本地存储
 					uni.setStorageSync('userInfo', storedUserInfo);
-					
+
 					// 做任何其他关于用户信息的操作
 				} catch (error) {
 					console.error(error);
