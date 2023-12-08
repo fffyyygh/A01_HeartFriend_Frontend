@@ -68,8 +68,6 @@
 
 			</u-grid>
 		</view>
-
-		<button @click="exit">退出登陆</button>
 	</view>
 
 </template>
@@ -92,11 +90,6 @@
 			};
 		},
 		methods: {
-			exit() {
-				uni.navigateTo({
-					url: "/pages/login/login"
-				})
-			},
 			goUser() {
 				uni.navigateTo({
 					url: "/pages/login/register"

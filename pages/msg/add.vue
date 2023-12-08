@@ -4,7 +4,7 @@
 		<input v-model="postTitle" placeholder="输入标题" />
 
 		<!-- 帖子内容输入框 -->
-		<textarea v-model="postContent" placeholder="输入内容"></textarea>
+		<textarea v-model="postContent" placeholder="输入内容" maxlength="-1" auto-height="true" ></textarea>
 
 		<!-- 图片上传 -->
 		<view class="image-upload-container">

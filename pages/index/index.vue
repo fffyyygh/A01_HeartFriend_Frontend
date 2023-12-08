@@ -27,7 +27,7 @@
 					:custom-style="btnStyle">心情记录</u-button>
 			</view>
 		</view>
-		<button @click="test">详情</button>
+		
 	</view>
 </template>
 
