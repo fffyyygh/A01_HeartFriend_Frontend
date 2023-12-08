@@ -98,6 +98,9 @@
 			const id = query.id;
 			this.get_all_post(id);
 		},
+		onShow() {
+			this.get_if_followed();
+		},
 		methods: {
 			goToUserHome_post() {
 				const uuid = this.user.uuid;
