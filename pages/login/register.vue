@@ -19,11 +19,7 @@
 					<uni-data-checkbox v-model="userInfo.gender" :localdata="sexs" />
 				</uni-forms-item>
 				<uni-forms-item name="age" label="年龄" required>
-					<picker mode="selector" :range="ageRange" @change="onAgeChange">
-						<view class="picker">
-							{{ ageRange[userInfo.age] }}
-						</view>
-					</picker>
+					<uni-easyinput type="number" placeholder="请输入年龄" v-model="userInfo.age"></uni-easyinput>
 				</uni-forms-item>
 			</uni-group>
 			<u-button @click="register" :custom-style="btnStyle">提交</u-button>
@@ -40,9 +36,6 @@
 		},
 		data() {
 			return {
-				ageRange: Array.from({
-					length: 100
-				}, (_, i) => i.toString()), // 0 to 99
 				btnStyle: {
 					color: "#f9f8e5",
 					backgroundColor: '#ff8a89'
@@ -89,10 +82,6 @@
 			}
 		},
 		methods: {
-			onAgeChange(e) {
-				// 用户选择年龄后的处理逻辑
-				this.userInfo.age = parseInt(e.detail.value);
-			},
 			bindblur(e) {
 				console.log(e.detail.value);
 				this.userInfo.username = e.detail.value; // 获取微信昵称
@@ -149,7 +138,7 @@
 
 									// Step 4: Request user info after the upload is complete
 									this.requestUserInfo(uni.getStorageSync('token')).then(
-									() => {
+										() => {
 											this.avatar_url = uni.getStorageSync(
 												'userInfo').avatar_url;
 											console.log('更新后的this.avatar_url', this
