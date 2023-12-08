@@ -3,7 +3,7 @@
 		<!-- 头部 -->
 		<view class="post-header">
 			<view class="user-info">
-				<image class="avatar" :src="user.avatar_url" mode="aspectFill"></image>
+				<image class="avatar" :src="user.avatar_url" mode="aspectFill" @click="goToUserHome_post"></image>
 				<view class="user-details">
 					<text class="username">{{ post.author}}</text>
 
@@ -12,7 +12,8 @@
 
 				</view>
 			</view>
-			<button :class="{'followed-style': isFollowed, 'unfollowed-style': !isFollowed}" @click="follow_click">{{ isFollowed ? '已关注' : '关注' }}</button>
+			<button :class="{'followed-style': isFollowed, 'unfollowed-style': !isFollowed}"
+				@click="follow_click">{{ isFollowed ? '已关注' : '关注' }}</button>
 		</view>
 		<view class="divider"></view>
 		<!-- 中间内容 -->
@@ -51,7 +52,8 @@
 				<!-- 评论作者的头像和名称 -->
 				<view class="comment-author">
 					<image v-if="commentAuthors[comment.author_uuid]"
-						:src="commentAuthors[comment.author_uuid].avatar_url" mode="aspectFill" class="avatar"></image>
+						:src="commentAuthors[comment.author_uuid].avatar_url" mode="aspectFill" class="avatar"
+						@click="goToUserHome_comment(comment.author_uuid)"></image>
 					<view class="author-details">
 						<text class="author-name">{{ comment.author }}</text>
 						<!-- 评论创建时间 -->
@@ -97,61 +99,71 @@
 			this.get_all_post(id);
 		},
 		methods: {
-			
-			if_my_post(){
+			goToUserHome_post() {
+				const uuid = this.user.uuid;
+				// 跳转到 user-home 页面
+				uni.navigateTo({
+					url: `/pages/user-home/user-home?uuid=${uuid}`,
+				});
+			},
+			goToUserHome_comment(authorUuid) {
+				// 跳转到 user-home 页面，并传递评论作者的 uuid
+				uni.navigateTo({
+					url: `/pages/user-home/user-home?uuid=${authorUuid}`,
+				});
+			},
+			if_my_post() {
 				const userInfo = uni.getStorageSync('userInfo');
 				const user_uuid = userInfo.uuid;
-				
-				if(this.user.uuid === user_uuid)
-					
+
+				if (this.user.uuid === user_uuid)
+
 				{
 					this.not_my_post = false;
-				}
-				else
-				{
+				} else {
 					this.not_my_post = true;
 				}
-					
-				
+
+
 			},
-			
-			get_if_followed(){			
+
+			get_if_followed() {
 				uni.request({
-					url:"http://82.157.244.44:8000/api/v1/user/following/",
-					method:"GET",
+					url: "http://82.157.244.44:8000/api/v1/user/following/",
+					method: "GET",
 					header: {
 						'Authorization': `Bearer ${uni.getStorageSync('token')}`,
 					},
-					success: (res) =>{
+					success: (res) => {
 						let follow = res.data.following;
-						let uuid= this.user.uuid;
+						let uuid = this.user.uuid;
 						this.isFollowed = follow.some(item => item.uuid === uuid);
 					},
-					fail: (err)=> {
+					fail: (err) => {
 						console.log("a");
 					}
 				})
-			
+
 			},
-			
-			
-			follow_click(){
+
+
+			follow_click() {
 				console.log("a");
-				
-				this.isFollowed = ! this.isFollowed;
+
+				this.isFollowed = !this.isFollowed;
 				uni.request({
-					url:"http://82.157.244.44:8000/api/v1/user/follow-unfollow/",
-					method:"POST",
+					url: "http://82.157.244.44:8000/api/v1/user/follow-unfollow/",
+					method: "POST",
 					header: {
 						'Authorization': `Bearer ${uni.getStorageSync('token')}`,
 					},
-					data:{
-						"uuid":this.user.uuid,
+					data: {
+						"uuid": this.user.uuid,
 					},
-					success: (res)=> {
+					success: (res) => {
 						console.log("关注成功", res.data);
 					}
-					
+
 				});
 			},
 
@@ -164,7 +176,7 @@
 						header: {
 							'Authorization': `Bearer ${uni.getStorageSync('token')}`,
 						},
-						
+
 					});
 
 					console.log('response内容', response);
@@ -527,13 +539,13 @@
 		height: 80rpx;
 		width: 200rpx;
 	}
-	
+
 	.followed-style {
 		padding: 8px 16px;
 		border: none;
 		border-radius: 15px;
 		background-color: #f5f5f5;
-		 color: red;
+		color: red;
 		font-size: 12px;
 		height: 80rpx;
 		width: 200rpx;
