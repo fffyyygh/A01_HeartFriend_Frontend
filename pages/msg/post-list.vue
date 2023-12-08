@@ -1,5 +1,6 @@
 <template>
 	<view class="post-list">
+		<button class="change-button" @click="change_button"></button>
 		<view v-for="(post, index) in posts" :key="index" class="post-item">
 			<!-- 用户信息 -->
 			<view class="user-info" @click="goToPostDetail(post)">
@@ -59,6 +60,11 @@
 		},
 
 		methods: {
+			change_button() {
+			      this.posts = this.posts.slice().reverse();
+			      this.users = this.users.slice().reverse();
+			    },
+
 			async loadPostData() {
 				await this.get_all_post();
 				this.getLikeDislikeStatus();
@@ -114,6 +120,7 @@
 						},
 						success: (res) => {
 							this.posts = res.data;
+							this.posts = this.posts.slice().reverse();
 							this.posts.forEach((post, index) => {
 								const image_addr = post.images;
 								post.images = image_addr.split(',');
@@ -247,6 +254,16 @@
 </script>
 
 <style scoped>
+	.change-button {
+	  background-image: url("/static/转换.png");
+	  background-size: cover; /* 图片大小适应按钮 */
+	  width: 50rpx;
+	
+	  height: 50rpx;
+	  margin-left: 600rpx;
+	  margin-bottom: 20rpx;
+	  border: none;
+	}
 	.liked {
 		color: #ff6347;
 		/* 设置喜欢状态的图标颜色为红色 */
