@@ -9,7 +9,7 @@
 			<image v-else-if="userInfo.gender === 'other'" src="/static/my/other.png" class="gender-icon"></image>
 			<image v-else-if="userInfo.gender === 'secret'" src="/static/my/secret.png" class="gender-icon"></image>
 			<!-- 添加关注按钮 -->
-			<view class="follow-button" @click="followUser">关注</view>
+			<button :class="{'followed-style': isFollowed, 'unfollowed-style': !isFollowed}" @click="follow_click">{{ isFollowed ? '已关注' : '关注' }}</button>
 		</view>
 		<view class="info-section">
 			<view>
@@ -33,6 +33,7 @@
 			return {
 				userInfo: {},
 				uuid: '',
+				isFollowed: false,
 			};
 		},
 		onLoad(query) {
@@ -41,6 +42,46 @@
 			this.getUserInfo(this.uuid);
 		},
 		methods: {
+			follow_click(){
+				console.log("a");
+				
+				
+				uni.request({
+					url:"http://82.157.244.44:8000/api/v1/user/follow-unfollow/",
+					method:"POST",
+					header: {
+						'Authorization': `Bearer ${uni.getStorageSync('token')}`,
+					},
+					data:{
+						"uuid":this.uuid,
+					},
+					success: (res)=> {
+						console.log("关注成功", res.data);
+						this.isFollowed = ! this.isFollowed;
+					}
+					
+				});
+			},
+			
+			get_if_followed(){
+				uni.request({
+					url:"http://82.157.244.44:8000/api/v1/user/following/",
+					method:"GET",
+					header: {
+						'Authorization': `Bearer ${uni.getStorageSync('token')}`,
+					},
+					success: (res) =>{
+						let follow = res.data.following;
+						let uuid= this.userInfo.uuid;
+						this.isFollowed = follow.some(item => item.uuid === uuid);
+					},
+					fail: (err)=> {
+						console.log("a");
+					}
+				})
+			
+			},
+			
 			getUserInfo(uuid) {
 				uni.request({
 					url: `http://82.157.244.44:8000/api/v1/user/query-info/?uuid=${uuid}`,
@@ -51,6 +92,7 @@
 					success: (res) => {
 						console.log('用户信息请求成功:', res.data);
 						this.userInfo = res.data;
+						this.get_if_followed();
 					},
 					fail: (err) => {
 						console.error('用户信息请求失败:', err);
@@ -108,14 +150,29 @@
 		margin-left: 15rpx;
 	}
 
-	.follow-button {
+	.unfollowed-style{
 		margin-left: auto; // 将关注按钮推到右侧
 		background-color: #ff8a89;
 		color: #f9f8e5;
 		padding: 5px 10px;
-		border-radius: 5px;
+		border-radius: 15px;
+		cursor: pointer;
+		width: 160rpx;
+		font-size: 10;
+		text-align: center;
+	}
+	
+	.followed-style{
+		margin-left: auto; // 将关注按钮推到右侧
+		background-color: white;
+		color: #ff8a89;
+		padding: 5px 10px;
+		border-radius: 15px;
+		border:2px solid #ff8a89;
 		cursor: pointer;
 		width: 160rpx;
 		text-align: center;
 	}
+	
+	
 </style>
