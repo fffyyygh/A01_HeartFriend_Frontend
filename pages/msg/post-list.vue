@@ -66,6 +66,8 @@
 			    },
 
 			async loadPostData() {
+				this.isLiked = [];
+				this.isDisliked = [];
 				await this.get_all_post();
 				this.getLikeDislikeStatus();
 			},
@@ -154,6 +156,7 @@
 
 			async getLikeDislikeStatus() {
 				try {
+					
 					console.log('getLikeDislikeStatus is called');
 					console.log('Posts in getLikeDislikeStatus:', this.posts);
 					for (const post of this.posts) {
