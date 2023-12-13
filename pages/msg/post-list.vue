@@ -33,6 +33,10 @@
 					<text class="iconfont icon-cai"></text>
 					<text class="action-count">{{ post.dislikes_count }}</text>
 				</view>
+				<view class="action-item" @click="goToPostDetail(post)">
+					<text class="iconfont icon-pinglun"></text>
+					<text class="action-count">{{ post.comments_count }}</text>
+				</view>
 			</view>
 		</view>
 		<!-- 发贴入口 -->
@@ -54,16 +58,16 @@
 				isDisliked: [],
 			};
 		},
-		
+
 		onShow() {
 			this.loadPostData();
 		},
 
 		methods: {
 			change_button() {
-			      this.posts = this.posts.slice().reverse();
-			      this.users = this.users.slice().reverse();
-			    },
+				this.posts = this.posts.slice().reverse();
+				this.users = this.users.slice().reverse();
+			},
 
 			async loadPostData() {
 				this.isLiked = [];
@@ -145,18 +149,22 @@
 					return ''; // 或者你想要返回的默认时间字符串
 				}
 
-				// 去掉毫秒部分和末尾的 "Z"
-				const timeWithoutMilliseconds = time.replace(/\.\d+Z$/, '');
+				// 将时间字符串转换为 Date 对象
+				const dateObj = new Date(time);
 
-				// 将 "T" 替换为空格，确保日期字符串格式是 "yyyy-MM-dd HH:mm:ss"
-				const formattedTime = timeWithoutMilliseconds.replace('T', ' ');
+				// 添加8个小时
+				dateObj.setHours(dateObj.getHours() + 8);
+
+				// 获取格式化后的日期字符串
+				const formattedTime = dateObj.toISOString().replace('T', ' ').replace(/\.\d+Z$/, '');
 
 				return formattedTime;
 			},
 
+
 			async getLikeDislikeStatus() {
 				try {
-					
+
 					console.log('getLikeDislikeStatus is called');
 					console.log('Posts in getLikeDislikeStatus:', this.posts);
 					for (const post of this.posts) {
@@ -258,15 +266,17 @@
 
 <style scoped>
 	.change-button {
-	  background-image: url("/static/转换.png");
-	  background-size: cover; /* 图片大小适应按钮 */
-	  width: 50rpx;
-	
-	  height: 50rpx;
-	  margin-left: 600rpx;
-	  margin-bottom: 20rpx;
-	  border: none;
+		background-image: url("/static/转换.png");
+		background-size: cover;
+		/* 图片大小适应按钮 */
+		width: 50rpx;
+
+		height: 50rpx;
+		margin-left: 600rpx;
+		margin-bottom: 20rpx;
+		border: none;
 	}
+
 	.liked {
 		color: #ff6347;
 		/* 设置喜欢状态的图标颜色为红色 */
