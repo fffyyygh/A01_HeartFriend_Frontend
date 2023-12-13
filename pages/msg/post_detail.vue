@@ -249,11 +249,14 @@
 					return ''; // 或者你想要返回的默认时间字符串
 				}
 
-				// 去掉毫秒部分和末尾的 "Z"
-				const timeWithoutMilliseconds = time.replace(/\.\d+Z$/, '');
+				// 将时间字符串转换为 Date 对象
+				const dateObj = new Date(time);
 
-				// 将 "T" 替换为空格，确保日期字符串格式是 "yyyy-MM-dd HH:mm:ss"
-				const formattedTime = timeWithoutMilliseconds.replace('T', ' ');
+				// 添加8个小时
+				dateObj.setHours(dateObj.getHours() + 8);
+
+				// 获取格式化后的日期字符串
+				const formattedTime = dateObj.toISOString().replace('T', ' ').replace(/\.\d+Z$/, '');
 
 				return formattedTime;
 			},
