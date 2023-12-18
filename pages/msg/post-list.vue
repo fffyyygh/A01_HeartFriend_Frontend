@@ -133,7 +133,7 @@
 				// 包装 uni.request 在 Promise 中
 				return new Promise((resolve, reject) => {
 					uni.request({
-						url: 'http://82.157.244.44:8000/api/v1/forum/posts/',
+						url: 'http://82.157.244.44:8000/api/v1/forum/posts/?offset=0&limit=20',
 						method: 'GET',
 						header: {
 							'Authorization': `Bearer ${uni.getStorageSync('token')}`,
@@ -178,13 +178,7 @@
 
 			async getLikeDislikeStatus() {
 				try {
-
-					console.log('getLikeDislikeStatus is called');
-					console.log('Posts in getLikeDislikeStatus:', this.posts);
 					for (const post of this.posts) {
-						console.log('every post::::', post);
-						console.log('every post.is_liked::::', post.is_liked);
-						console.log('every post.is_disliked::::', post.is_disliked);
 						this.isLiked.push(post.is_liked);
 						this.isDisliked.push(post.is_disliked);
 					}

@@ -96,7 +96,7 @@
 		},
 		onLoad(query) {
 			const id = query.id;
-			this.get_all_post(id);
+			this.get_id_post(id);
 		},
 		onShow() {
 			this.get_if_followed();
@@ -302,7 +302,7 @@
 						this.showCommentInput = false;
 
 						// 重新加载帖子详情页，刷新整个页面
-						this.get_all_post(this.post.id);
+						this.get_id_post(this.post.id);
 					},
 					fail: (err) => {
 						console.error('评论提交失败:', err);
@@ -313,29 +313,28 @@
 				this.commentText = '';
 				this.showCommentInput = false;
 			},
-
-			get_all_post(postid) {
-				// 获取帖子信息
+			
+			get_id_post(id){
 				uni.request({
-					url: 'http://82.157.244.44:8000/api/v1/forum/posts/', // 后端接口地址
+					url: `http://82.157.244.44:8000/api/v1/forum/posts/${id}/`, // 后端接口地址
 					method: 'GET',
 					header: {
 						'Authorization': `Bearer ${uni.getStorageSync('token')}`,
 					},
 					success: (res) => {
 						console.log('数据接收成功:', res.data);
-
-						this.post = res.data.data.find(a => a.id === Number(postid));
-						console.log(this.post);
-
+						this.post = res.data;
+						//this.post = res.data.data.find(a => a.id === Number(postid));
+						// console.log(this.post);
+				
 						const image_addr = this.post.images;
 						this.post_image = image_addr.split(',');
-						console.log(this.post_image);
-
+						// console.log(this.post_image);
+				
 						// 更新点赞和点踩状态
 						this.isLiked = this.post.is_liked; // 假设后端返回的字段为 is_liked
 						this.isDisliked = this.post.is_disliked; // 假设后端返回的字段为 is_disliked
-
+				
 						// 获取评论列表
 						uni.request({
 							url: `http://82.157.244.44:8000/api/v1/forum/comments/?post_id=${this.post.id}`, // 根据帖子ID获取评论列表
@@ -346,7 +345,7 @@
 							success: (res) => {
 								console.log('评论数据接收成功:', res.data);
 								// 更新本地评论列表
-								this.comments = res.data.map(comment => ({
+								this.comments = res.data.data.map(comment => ({
 									id: comment.id,
 									post: comment.post,
 									content: comment.content,
@@ -354,7 +353,7 @@
 									author_uuid: comment.author_uuid,
 									created_at: comment.created_at,
 								}));
-
+				
 								// 获取评论用户信息
 								this.comments.forEach(comment => {
 									this.getCommentAuthorInfo(comment.author_uuid);
@@ -364,7 +363,7 @@
 								console.error('评论数据发送失败:', err);
 							}
 						});
-
+				
 						// 获取帖子作者信息
 						uni.request({
 							url: `http://82.157.244.44:8000/api/v1/user/query-info/?uuid=${this.post.author_uuid}`, // 后端接口地址
@@ -391,6 +390,84 @@
 					}
 				});
 			},
+
+			// get_all_post(postid) {
+			// 	// 获取帖子信息
+			// 	uni.request({
+			// 		url: 'http://82.157.244.44:8000/api/v1/forum/posts/', // 后端接口地址
+			// 		method: 'GET',
+			// 		header: {
+			// 			'Authorization': `Bearer ${uni.getStorageSync('token')}`,
+			// 		},
+			// 		success: (res) => {
+			// 			console.log('数据接收成功:', res.data);
+
+			// 			this.post = res.data.data.find(a => a.id === Number(postid));
+			// 			console.log(this.post);
+
+			// 			const image_addr = this.post.images;
+			// 			this.post_image = image_addr.split(',');
+			// 			console.log(this.post_image);
+
+			// 			// 更新点赞和点踩状态
+			// 			this.isLiked = this.post.is_liked; // 假设后端返回的字段为 is_liked
+			// 			this.isDisliked = this.post.is_disliked; // 假设后端返回的字段为 is_disliked
+
+			// 			// 获取评论列表
+			// 			uni.request({
+			// 				url: `http://82.157.244.44:8000/api/v1/forum/comments/?post_id=${this.post.id}`, // 根据帖子ID获取评论列表
+			// 				method: 'GET',
+			// 				header: {
+			// 					'Authorization': `Bearer ${uni.getStorageSync('token')}`,
+			// 				},
+			// 				success: (res) => {
+			// 					console.log('评论数据接收成功:', res.data);
+			// 					// 更新本地评论列表
+			// 					this.comments = res.data.map(comment => ({
+			// 						id: comment.id,
+			// 						post: comment.post,
+			// 						content: comment.content,
+			// 						author: comment.author,
+			// 						author_uuid: comment.author_uuid,
+			// 						created_at: comment.created_at,
+			// 					}));
+
+			// 					// 获取评论用户信息
+			// 					this.comments.forEach(comment => {
+			// 						this.getCommentAuthorInfo(comment.author_uuid);
+			// 					});
+			// 				},
+			// 				fail: (err) => {
+			// 					console.error('评论数据发送失败:', err);
+			// 				}
+			// 			});
+
+			// 			// 获取帖子作者信息
+			// 			uni.request({
+			// 				url: `http://82.157.244.44:8000/api/v1/user/query-info/?uuid=${this.post.author_uuid}`, // 后端接口地址
+			// 				method: 'GET',
+			// 				header: {
+			// 					'Authorization': `Bearer ${uni.getStorageSync('token')}`,
+			// 				},
+			// 				success: (res) => {
+			// 					console.log('数据接收成功:', res.data);
+			// 					this.user = res.data;
+			// 					this.user.avatar_url = "http://82.157.244.44:8000" + this.user
+			// 						.avatar_url;
+			// 					console.log(this.user.avatar_url);
+			// 					this.get_if_followed();
+			// 					this.if_my_post();
+			// 				},
+			// 				fail: (err) => {
+			// 					console.error('数据发送失败:', err);
+			// 				}
+			// 			});
+			// 		},
+			// 		fail: (err) => {
+			// 			console.error('数据发送失败:', err);
+			// 		}
+			// 	});
+			// },
 
 			// 获取评论用户信息
 			getCommentAuthorInfo(authorUuid) {
@@ -429,7 +506,7 @@
 						this.$delete(this.commentAuthors, authorUuid);
 
 						// 重新加载帖子详情页，刷新整个页面
-						this.get_all_post(this.post.id);
+						this.get_id_post(this.post.id);
 					},
 					fail: (err) => {
 						console.error('评论删除失败:', err);
