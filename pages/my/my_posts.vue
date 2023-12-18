@@ -4,7 +4,7 @@
 			<!-- 用户信息 -->
 			<view class="user-info" >
 				<!-- 头像 -->
-				<image class="user-avatar" :src="users[index].avatar_url" mode="aspectFill"></image>
+				<image class="user-avatar" :src="userInfo.avatar_url" mode="aspectFill"></image>
 				<!-- 用户名、发帖时间等信息 -->
 				<view>
 					<text class="user-name">{{ post.author }}</text>
@@ -52,12 +52,21 @@
 		},
 		data() {
 			return {
+				userInfo: uni.getStorageSync('userInfo'),
 				posts: [],
 				users:[],
+				newposts:[],
+				isLiked: [],
+				isDisliked: [],
 			};
 		},
 		onShow() {
-			this.get_all_post();
+			this.get_user_posts();
+			console.log(this.userInfo);
+		},
+		onReachBottom() {
+			this.get_other_post();
+		
 		},
 		methods: {
 			deletePost(index){
@@ -75,7 +84,7 @@
 						console.log('数据接收成功:', res.data);	
 						this.posts= [];
 						this.users=[];
-						this.get_all_post();
+						this.get_user_posts();
 							
 					},
 					fail: (err) => {
@@ -100,65 +109,33 @@
 			    });
 			  });
 			},
+			getFullAvatarUrl(relativeUrl) {
+				return `http://82.157.244.44:8000${relativeUrl}`;
+			},
 			
-			async getUsers() {
-			  try {
-			    for (const post of this.posts) {
-			      const response = await this.makeRequest(
-			        'http://82.157.244.44:8000/api/v1/user/query-info/?uuid=' + post.author_uuid,
-			        'GET',
-			        {
-			          'Authorization': `Bearer ${uni.getStorageSync('token')}`,
-			        }
-			      );
-			      
-			      console.log('数据接收成功:', response);
-			      const user = response;
-			      user.avatar_url = "http://82.157.244.44:8000" + user.avatar_url;
-			      this.users.push(user);
-			    }
-			  } catch (error) {
-			    console.error('数据发送失败:', error);
-			  }
-			},		
-			
-			get_all_post() {
-				this.users=[];
-				this.posts=[];
+			get_user_posts() {
+				this.posts = [];
+				this.users = [];
 				uni.request({
-					url: 'http://82.157.244.44:8000/api/v1/forum/posts/', // 后端接口地址
-					method: 'GET',
+					url: `http://82.157.244.44:8000/api/v1/forum/posts/getUserPosts/?offset=0&limit=20`,
+					method: "GET",
 					header: {
 						'Authorization': `Bearer ${uni.getStorageSync('token')}`,
 					},
+					data: {
+						"uuid": this.userInfo.uuid,
+					},
 					success: (res) => {
-						const userInfo = uni.getStorageSync('userInfo');
-						const user_uuid = userInfo.uuid;
-						//this.post = res.data[7]; //
-						res.data.data.forEach((post,index)=>{								
-							if(post.author_uuid==user_uuid){
-								
-								this.posts.push(post);
-							}
-							
-							
-						})
-						
-						this.posts.forEach((post,index)=>{
+						console.log("获取到了贴子列表", res.data);
+						this.posts = res.data.data;
+						this.posts.forEach((post, index) => {
 							const image_addr = post.images;
 							post.images = image_addr.split(',');
-							
-							
-						})	
-						this.getUsers();
-			
-					},
-					fail: (err) => {
-						console.error('数据发送失败:', err);
+						});
+						this.getLikeDislikeStatus();
 					}
+			
 				});
-			
-			
 			},
 			
 			formatPostTime(time) {
@@ -180,15 +157,7 @@
 			},
 			
 			// 模仿的点赞、点踩、评论操作
-			likePost(post) {
-				console.log('Liked post:', post);
-			},
-			dislikePost(post) {
-				console.log('Disliked post:', post);
-			},
-			commentPost(post) {
-				console.log('Commented on post:', post);
-			},
+		
 			goToPostDetail(post) {
 				console.log('Navigating to post detail:', post);
 				console.log('传递的id:', post.id);
@@ -197,6 +166,137 @@
 					url: '/pages/msg/post_detail?id=' + post.id,
 				});
 			},
+			
+			async getLikeDislikeStatus() {
+					try {
+						for (const post of this.posts) {
+							this.isLiked.push(post.is_liked);
+							this.isDisliked.push(post.is_disliked);
+						}
+					} catch (error) {
+						console.error('Failed to fetch like/dislike status:', error);
+					}
+				},
+			
+				async likePost(post, index) {
+					try {
+						// 发送点赞请求
+						const response = await uni.request({
+							url: `http://82.157.244.44:8000/api/v1/forum/posts/${post.id}/like/`,
+							method: 'POST',
+							header: {
+								'Authorization': `Bearer ${uni.getStorageSync('token')}`,
+							},
+						});
+			
+						console.log('response内容', response);
+			
+						// 根据后端返回的数据更新点赞状态
+						if (response[1].statusCode === 200) {
+							console.log('this.isLiked[index]:::', this.isLiked[index]);
+							if (!this.isLiked[index]) {
+								this.isLiked[index] = true;
+								post.likes_count += 1; // 增加点赞数量
+			
+								// 如果之前点踩了，取消点踩状态
+								if (this.isDisliked[index]) {
+									this.isDisliked[index] = false;
+									post.dislikes_count -= 1; // 减少点踩数量
+								}
+							} else {
+								// 如果之前点赞了，取消点赞状态
+								this.isLiked[index] = false;
+								post.likes_count -= 1; // 减少点赞数量
+							}
+						} else {
+							console.error('点赞失败:', response[1].data);
+						}
+					} catch (error) {
+						console.error('点赞失败:', error);
+					}
+				},
+			
+				async dislikePost(post, index) {
+					try {
+						// 发送点踩请求
+						const response = await uni.request({
+							url: `http://82.157.244.44:8000/api/v1/forum/posts/${post.id}/dislike/`,
+							method: 'POST',
+							header: {
+								'Authorization': `Bearer ${uni.getStorageSync('token')}`,
+							},
+						});
+			
+						// 根据后端返回的数据更新点踩状态
+						if (response[1].statusCode === 200) {
+							if (!this.isDisliked[index]) {
+								this.isDisliked[index] = true;
+								post.dislikes_count += 1; // 增加点踩数量
+			
+								// 如果之前点赞了，取消点赞状态
+								if (this.isLiked[index]) {
+									this.isLiked[index] = false;
+									post.likes_count -= 1; // 减少点赞数量
+								}
+							} else {
+								// 如果之前点踩了，取消点踩状态
+								this.isDisliked[index] = false;
+								post.dislikes_count -= 1; // 减少点踩数量
+							}
+						} else {
+							console.error('点踩失败:', response[1].data);
+						}
+					} catch (error) {
+						console.error('点踩失败:', error);
+					}
+				},
+			
+				async getNewLikeDislikeStatus() {
+					try {
+						for (const post of this.newposts) {
+							this.isLiked.push(post.is_liked);
+							this.isDisliked.push(post.is_disliked);
+						}
+					} catch (error) {
+						console.error('Failed to fetch like/dislike status:', error);
+					}
+				},
+			
+				async get_other_post() {
+					// 包装 uni.request 在 Promise 中
+					return new Promise((resolve, reject) => {
+						let a = this.posts.length;
+						console.log(a);
+						uni.request({
+							url: `http://82.157.244.44:8000/api/v1/forum/posts/getUserPosts/?offset=${a}&limit=20`,
+							method: 'GET',
+							header: {
+								'Authorization': `Bearer ${uni.getStorageSync('token')}`,
+							},
+							data: {
+								"uuid": this.userInfo.uuid,
+							},
+							success: (res) => {
+								this.newposts = res.data.data;
+								//this.posts = this.posts.slice().reverse();
+								this.newposts.forEach((post, index) => {
+									const image_addr = post.images;
+									post.images = image_addr.split(',');
+									this.posts.push(post);
+								});
+			
+								this.getNewLikeDislikeStatus();
+								resolve(); // 请求成功时调用 resolve
+							},
+							fail: (err) => {
+								console.error('数据发送失败:', err);
+								reject(err); // 请求失败时调用 reject
+							}
+						});
+					});
+				},
+			
+			
 		},
 	};
 </script>

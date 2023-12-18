@@ -179,6 +179,7 @@
 			async getLikeDislikeStatus() {
 				try {
 					for (const post of this.posts) {
+
 						this.isLiked.push(post.is_liked);
 						this.isDisliked.push(post.is_disliked);
 					}

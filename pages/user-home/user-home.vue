@@ -83,7 +83,7 @@
 			this.uuid = query.uuid;
 			console.log('this.uuid::::', this.uuid);
 			this.getUserInfo(this.uuid);
-			this.get_user_posts(this.uuid);
+			this.get_user_posts();
 		},
 		onShow() {},
 		onReachBottom() {
@@ -157,7 +157,7 @@
 				// 实现关注逻辑，你可以在这里调用后端接口等
 				console.log('关注用户');
 			},
-			get_user_posts(uuid) {
+			get_user_posts() {
 				uni.request({
 					url: `http://82.157.244.44:8000/api/v1/forum/posts/getUserPosts/?offset=0&limit=20`,
 					method: "GET",
