@@ -325,7 +325,7 @@
 					success: (res) => {
 						console.log('数据接收成功:', res.data);
 
-						this.post = res.data.find(a => a.id === Number(postid));
+						this.post = res.data.data.find(a => a.id === Number(postid));
 						console.log(this.post);
 
 						const image_addr = this.post.images;

@@ -56,11 +56,26 @@
 				users: [],
 				isLiked: [],
 				isDisliked: [],
+				newposts: [],
 			};
 		},
 
 		onShow() {
 			this.loadPostData();
+			wx.getSavedFileList({ // 获取文件列表
+				success(res) {
+					res.fileList.forEach((val, key) => { // 遍历文件列表里的数据
+						// 删除存储的垃圾数据
+						wx.removeSavedFile({
+							filePath: val.filePath
+						});
+					})
+				}
+			})
+		},
+		onReachBottom() {
+			this.get_other_post();
+			
 		},
 
 		methods: {
@@ -70,6 +85,7 @@
 			},
 
 			async loadPostData() {
+				
 				this.isLiked = [];
 				this.isDisliked = [];
 				await this.get_all_post();
@@ -101,7 +117,7 @@
 								'Authorization': `Bearer ${uni.getStorageSync('token')}`,
 							}
 						);
-						console.log('数据接收成功:', response);
+						//console.log('数据接收成功:', response);
 						const user = response;
 						user.avatar_url = "http://82.157.244.44:8000" + user.avatar_url;
 						this.users.push(user);
@@ -112,10 +128,8 @@
 			},
 
 			async get_all_post() {
-				console.log('get_all_post() is called');
 				this.users = [];
 				this.posts = [];
-
 				// 包装 uni.request 在 Promise 中
 				return new Promise((resolve, reject) => {
 					uni.request({
@@ -125,8 +139,8 @@
 							'Authorization': `Bearer ${uni.getStorageSync('token')}`,
 						},
 						success: (res) => {
-							this.posts = res.data;
-							this.posts = this.posts.slice().reverse();
+							this.posts = res.data.data;
+							//this.posts = this.posts.slice().reverse();
 							this.posts.forEach((post, index) => {
 								const image_addr = post.images;
 								post.images = image_addr.split(',');
@@ -260,6 +274,76 @@
 					url: '/pages/msg/post_detail?id=' + post.id,
 				});
 			},
+			
+			//以下是拉倒最底下更新贴子详情的部分
+			
+			async getNewUsers() {
+				try {
+					for (const post of this.newposts) {
+						const response = await this.makeRequest(
+							'http://82.157.244.44:8000/api/v1/user/query-info/?uuid=' + post.author_uuid,
+							'GET', {
+								'Authorization': `Bearer ${uni.getStorageSync('token')}`,
+							}
+						);
+						//console.log('数据接收成功:', response);
+						const user = response;
+						user.avatar_url = "http://82.157.244.44:8000" + user.avatar_url;
+						this.users.push(user);
+					}
+				} catch (error) {
+					console.error('数据发送失败:', error);
+				}
+			},
+			
+			async getNewLikeDislikeStatus() {
+				try {
+					for (const post of this.newposts) {
+						this.isLiked.push(post.is_liked);
+						this.isDisliked.push(post.is_disliked);
+					}
+				} catch (error) {
+					console.error('Failed to fetch like/dislike status:', error);
+				}
+			},
+			
+			async get_other_post() {
+				// 包装 uni.request 在 Promise 中
+				return new Promise((resolve, reject) => {
+					let a = this.posts.length;
+					console.log(a);
+					uni.request({
+						url: `http://82.157.244.44:8000/api/v1/forum/posts/?limit=20&offset=${a}`,
+						
+						method: 'GET',
+						header: {
+							'Authorization': `Bearer ${uni.getStorageSync('token')}`,
+						},
+						success: (res) => {
+							console.log(res.data);
+							this.newposts = res.data.data;
+												
+							//this.posts = this.posts.slice().reverse();
+							this.newposts.forEach((post, index) => {
+								const image_addr = post.images;
+								post.images = image_addr.split(',');
+								this.posts.push(post);
+							});
+							
+							this.getNewLikeDislikeStatus();
+							
+						
+							this.getNewUsers();
+							resolve(); // 请求成功时调用 resolve
+						},
+						fail: (err) => {
+							console.error('数据发送失败:', err);
+							reject(err); // 请求失败时调用 reject
+						}
+					});
+				});
+			},
+			
 		},
 	};
 </script>

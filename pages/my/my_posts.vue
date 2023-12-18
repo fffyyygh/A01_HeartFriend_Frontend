@@ -132,11 +132,10 @@
 						'Authorization': `Bearer ${uni.getStorageSync('token')}`,
 					},
 					success: (res) => {
-						console.log('数据接收成功:', res.data);	
 						const userInfo = uni.getStorageSync('userInfo');
 						const user_uuid = userInfo.uuid;
 						//this.post = res.data[7]; //
-						res.data.forEach((post,index)=>{								
+						res.data.data.forEach((post,index)=>{								
 							if(post.author_uuid==user_uuid){
 								
 								this.posts.push(post);
