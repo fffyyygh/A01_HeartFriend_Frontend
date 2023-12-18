@@ -28,7 +28,7 @@
 			</view>
 		</view>
 		<!-- 用于测试的按钮，点击后跳转到 user-home 页面 -->
-		<button @click="goToUserHome">跳转到用户主页</button>
+		<!-- <button @click="goToUserHome">跳转到用户主页</button> -->
 	</view>
 </template>
 
