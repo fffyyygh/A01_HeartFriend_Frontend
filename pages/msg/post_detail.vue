@@ -248,9 +248,9 @@
 				if (time == null) {
 					return ''; // 或者你想要返回的默认时间字符串
 				}
-
+				const newTime = time.replace(/\.\d+Z$/, '');
 				// 将时间字符串转换为 Date 对象
-				const dateObj = new Date(time);
+				const dateObj = new Date(newTime);
 
 				// 添加8个小时
 				dateObj.setHours(dateObj.getHours() + 8);
@@ -313,8 +313,8 @@
 				this.commentText = '';
 				this.showCommentInput = false;
 			},
-			
-			get_id_post(id){
+
+			get_id_post(id) {
 				uni.request({
 					url: `http://82.157.244.44:8000/api/v1/forum/posts/${id}/`, // 后端接口地址
 					method: 'GET',
@@ -326,15 +326,15 @@
 						this.post = res.data;
 						//this.post = res.data.data.find(a => a.id === Number(postid));
 						// console.log(this.post);
-				
+
 						const image_addr = this.post.images;
 						this.post_image = image_addr.split(',');
 						// console.log(this.post_image);
-				
+
 						// 更新点赞和点踩状态
 						this.isLiked = this.post.is_liked; // 假设后端返回的字段为 is_liked
 						this.isDisliked = this.post.is_disliked; // 假设后端返回的字段为 is_disliked
-				
+
 						// 获取评论列表
 						uni.request({
 							url: `http://82.157.244.44:8000/api/v1/forum/comments/?post_id=${this.post.id}`, // 根据帖子ID获取评论列表
@@ -353,7 +353,7 @@
 									author_uuid: comment.author_uuid,
 									created_at: comment.created_at,
 								}));
-				
+
 								// 获取评论用户信息
 								this.comments.forEach(comment => {
 									this.getCommentAuthorInfo(comment.author_uuid);
@@ -363,7 +363,7 @@
 								console.error('评论数据发送失败:', err);
 							}
 						});
-				
+
 						// 获取帖子作者信息
 						uni.request({
 							url: `http://82.157.244.44:8000/api/v1/user/query-info/?uuid=${this.post.author_uuid}`, // 后端接口地址

@@ -62,7 +62,7 @@
 
 		onShow() {
 			this.loadPostData();
-			wx.getSavedFileList({ // 获取文件列表
+			wx.getFileSystemManager().getSavedFileList({ // 获取文件列表
 				success(res) {
 					res.fileList.forEach((val, key) => { // 遍历文件列表里的数据
 						// 删除存储的垃圾数据
@@ -75,7 +75,7 @@
 		},
 		onReachBottom() {
 			this.get_other_post();
-			
+
 		},
 
 		methods: {
@@ -85,7 +85,7 @@
 			},
 
 			async loadPostData() {
-				
+
 				this.isLiked = [];
 				this.isDisliked = [];
 				await this.get_all_post();
@@ -156,15 +156,14 @@
 				});
 			},
 
-
 			formatPostTime(time) {
 				// 检查 time 是否为 undefined 或者 null
 				if (time == null) {
 					return ''; // 或者你想要返回的默认时间字符串
 				}
-
+				const newTime = time.replace(/\.\d+Z$/, '');
 				// 将时间字符串转换为 Date 对象
-				const dateObj = new Date(time);
+				const dateObj = new Date(newTime);
 
 				// 添加8个小时
 				dateObj.setHours(dateObj.getHours() + 8);
@@ -174,7 +173,6 @@
 
 				return formattedTime;
 			},
-
 
 			async getLikeDislikeStatus() {
 				try {
@@ -269,9 +267,9 @@
 					url: '/pages/msg/post_detail?id=' + post.id,
 				});
 			},
-			
+
 			//以下是拉倒最底下更新贴子详情的部分
-			
+
 			async getNewUsers() {
 				try {
 					for (const post of this.newposts) {
@@ -290,7 +288,7 @@
 					console.error('数据发送失败:', error);
 				}
 			},
-			
+
 			async getNewLikeDislikeStatus() {
 				try {
 					for (const post of this.newposts) {
@@ -301,7 +299,7 @@
 					console.error('Failed to fetch like/dislike status:', error);
 				}
 			},
-			
+
 			async get_other_post() {
 				// 包装 uni.request 在 Promise 中
 				return new Promise((resolve, reject) => {
@@ -309,7 +307,7 @@
 					console.log(a);
 					uni.request({
 						url: `http://82.157.244.44:8000/api/v1/forum/posts/?limit=20&offset=${a}`,
-						
+
 						method: 'GET',
 						header: {
 							'Authorization': `Bearer ${uni.getStorageSync('token')}`,
@@ -317,17 +315,17 @@
 						success: (res) => {
 							console.log(res.data);
 							this.newposts = res.data.data;
-												
+
 							//this.posts = this.posts.slice().reverse();
 							this.newposts.forEach((post, index) => {
 								const image_addr = post.images;
 								post.images = image_addr.split(',');
 								this.posts.push(post);
 							});
-							
+
 							this.getNewLikeDislikeStatus();
-							
-						
+
+
 							this.getNewUsers();
 							resolve(); // 请求成功时调用 resolve
 						},
@@ -338,7 +336,7 @@
 					});
 				});
 			},
-			
+
 		},
 	};
 </script>

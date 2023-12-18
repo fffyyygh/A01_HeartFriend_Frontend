@@ -184,9 +184,9 @@
 				if (time == null) {
 					return ''; // 或者你想要返回的默认时间字符串
 				}
-
+				const newTime = time.replace(/\.\d+Z$/, '');
 				// 将时间字符串转换为 Date 对象
-				const dateObj = new Date(time);
+				const dateObj = new Date(newTime);
 
 				// 添加8个小时
 				dateObj.setHours(dateObj.getHours() + 8);
