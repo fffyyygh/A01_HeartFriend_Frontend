@@ -23,14 +23,20 @@
 			</view>
 		</view>
 
-		<!-- TODO：加一个显示该用户发的所有帖子的列表 -->
+		<!-- Introduction for post list -->
+		<view class="post-list-intro">
+			<text class="intro-label">TA发布的帖子：</text>
+			<view class="separator"></view>
+		</view>
+
+		<!-- Post list -->
 		<view v-for="(post, index) in posts" :key="index" class="post-item">
 			<!-- 用户信息 -->
 			<view class="user-info" @click="goToPostDetail(post)">
 				<!-- 头像 -->
 				<image class="user-avatar" :src="getFullAvatarUrl(userInfo.avatar_url)" mode="aspectFill"></image>
 				<!-- 用户名、发帖时间等信息 -->
-				<view>
+				<view class="user-details">
 					<text class="user-name">{{ post.author }}</text>
 					<text class="post-time">{{ formatPostTime(post.created_at) }}</text>
 				</view>
@@ -190,10 +196,14 @@
 
 				// 添加8个小时
 				dateObj.setHours(dateObj.getHours() + 8);
-
+				// console.log('dateObj:::', dateObj);
+				// 使用 toLocaleString 来格式化日期，设置参数为24小时制
+				const options = {
+					hour12: false
+				};
 				// 获取格式化后的日期字符串
-				const formattedTime = dateObj.toISOString().replace('T', ' ').replace(/\.\d+Z$/, '');
-
+				const formattedTime = dateObj.toLocaleString(undefined, options).replace('T', ' ').replace(/\.\d+Z$/, '');
+				// console.log('formattedTime:::', formattedTime);
 				return formattedTime;
 			},
 			async getLikeDislikeStatus() {
@@ -362,6 +372,12 @@
 
 	.info-section {
 		margin-top: 20rpx;
+		border: 1px solid #ccc;
+		/* 添加一个边框 */
+		padding: 20rpx;
+		/* 添加内边距 */
+		border-radius: 10rpx;
+		/* 可选：添加边框圆角 */
 	}
 
 	.user-age,
@@ -378,29 +394,34 @@
 	}
 
 	.unfollowed-style {
-		margin-left: auto; // 将关注按钮推到右侧
-		background-color: #ff8a89;
-		color: #f9f8e5;
-		padding: 5px 10px;
-		border-radius: 15px;
-		cursor: pointer;
-		width: 160rpx;
-		font-size: 10;
-		text-align: center;
+		display: flex;
+		align-items: center;
+		justify-content: center;
+		align-self: flex-start;
+		padding: 8px 16px;
+		border: none;
+		background-color: steelblue;
+		color: #fff;
+		font-size: 30rpx;
+		height: 80rpx;
+		width: 200rpx;
+		margin-right: 20rpx;
 	}
 
 	.followed-style {
-		margin-left: auto; // 将关注按钮推到右侧
-		background-color: white;
-		color: #ff8a89;
-		padding: 5px 10px;
-		border-radius: 15px;
-		border: 2px solid #ff8a89;
-		cursor: pointer;
-		width: 160rpx;
-		text-align: center;
+		display: flex;
+		align-items: center;
+		justify-content: center;
+		align-self: flex-start;
+		padding: 8px 16px;
+		border: none;
+		background-color: darkgray;
+		color: white;
+		font-size: 30rpx;
+		height: 80rpx;
+		width: 200rpx;
+		margin-right: 20rpx;
 	}
-
 
 	.liked {
 		color: #ff6347;
@@ -416,6 +437,25 @@
 		padding: 20rpx;
 	}
 
+	.post-list-intro {
+		display: flex;
+		align-items: center;
+		margin-top: 20rpx;
+	}
+
+	.intro-label {
+		font-size: 16px;
+		font-weight: bold;
+		margin-right: 10rpx;
+	}
+
+	.separator {
+		flex-grow: 1;
+		height: 1px;
+		background-color: #ccc;
+		margin-top: 8rpx;
+	}
+
 	.post-item {
 		background-color: #fff;
 		margin-bottom: 20rpx;
@@ -427,13 +467,21 @@
 	.user-info {
 		display: flex;
 		align-items: center;
+		justify-content: space-between;
+		margin-bottom: 8rpx;
 	}
 
 	.user-avatar {
-		width: 40px;
-		height: 40px;
+		width: 80rpx;
+		height: 80rpx;
 		border-radius: 50%;
-		margin-right: 10px;
+		margin-right: 8rpx;
+	}
+
+	.user-details {
+		flex: 1;
+		display: flex;
+		flex-direction: column;
 	}
 
 	.user-name {

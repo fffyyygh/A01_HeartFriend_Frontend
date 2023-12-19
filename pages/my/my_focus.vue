@@ -197,29 +197,33 @@
 	}
 
 	.follow-button {
-		-webkit-border-radius: 27;
-		-moz-border-radius: 27;
-		border-radius: 15px;
-		font-family: Arial;
+		display: flex;
+		align-items: center;
+		justify-content: center;
+		align-self: flex-start;
+		padding: 8px 16px;
+		border: none;
+		background-color: darkgray;
 		color: white;
-		font-size: 10px;
-		background: #2e9d0d;
-		padding: 10px 20px 10px 20px;
-		border: solid #2b9608 2px;
-		text-decoration: none;
+		font-size: 30rpx;
+		height: 80rpx;
+		width: 200rpx;
+		margin-right: 20rpx;
 	}
 
 	.unfollowed-button {
-		-webkit-border-radius: 27;
-		-moz-border-radius: 27;
-		border-radius: 15px;
-		font-family: Arial;
-		color: darkgreen;
-		font-size: 10px;
-		background: white;
-		padding: 10px 20px 10px 20px;
-		border: solid #2b9608 2px;
-		text-decoration: none;
+		display: flex;
+		align-items: center;
+		justify-content: center;
+		align-self: flex-start;
+		padding: 8px 16px;
+		border: none;
+		background-color: steelblue;
+		color: #fff;
+		font-size: 30rpx;
+		height: 80rpx;
+		width: 200rpx;
+		margin-right: 20rpx;
 	}
 
 

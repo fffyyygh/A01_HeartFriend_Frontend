@@ -6,10 +6,7 @@
 				<image class="avatar" :src="user.avatar_url" mode="aspectFill" @click="goToUserHome_post"></image>
 				<view class="user-details">
 					<text class="username">{{ post.author}}</text>
-
-					<!-- <text class="post-time">{{ post.created_at }}</text> -->
 					<text class="post-time">{{ formatPostTime(post.created_at) }}</text>
-
 				</view>
 			</view>
 			<button :class="{'followed-style': isFollowed, 'unfollowed-style': !isFollowed}"
@@ -39,13 +36,13 @@
 				<text class="iconfont icon-pinglun"></text>
 				<text class="action-count">{{ post.comments_count }}</text>
 			</view>
-			
+
 			<!-- 设置用户是否可以评论 -->
-			
+
 			<picker class="action-item" mode="selector" :range="units" @change="unitSelected">
 				<view v-show="!not_my_post">. . .</view>
 			</picker>
-			
+
 			<picker class="action-item" mode="selector" :range="units2" @change="unitSelected2">
 				<view v-show="!not_my_post">是否可见</view>
 			</picker>
@@ -69,19 +66,19 @@
 						<!-- 评论创建时间 -->
 						<text class="comment-time">{{ formatPostTime(comment.created_at) }}</text>
 					</view>
+					<!-- 删除评论按钮 -->
+					<button v-if="canDeleteComment(comment)" class="delete-button"
+						@click="showDeleteConfirmation(comment)">删除</button>
 				</view>
+
 				<!-- 评论内容 -->
 				<view class="comment-details">
 					<text class="comment-content">{{ comment.content }}</text>
 				</view>
-				<!-- 删除评论按钮 -->
-				<button v-if="canDeleteComment(comment)" class="delete-button"
-					@click="deleteComment(comment.id, comment.author_uuid)">删除</button>
+				<!-- 分割线 -->
+				<view class="divider"></view>
 			</view>
 		</view>
-
-
-
 
 	</view>
 </template>
@@ -102,9 +99,9 @@
 				isDisliked: false, // 是否已点踩
 				isFollowed: false, //是否已关注
 				not_my_post: true, //是否是我发的贴子 用来决定是否显示关注按钮
-				units:["允许评论","禁止所有人评论","仅自己可评论"],
-				units2:["公开帖子","隐藏帖子"],
-				
+				units: ["允许评论", "禁止所有人评论", "仅自己可评论"],
+				units2: ["公开帖子", "隐藏帖子"],
+
 			}
 		},
 		onLoad(query) {
@@ -115,9 +112,20 @@
 			this.get_if_followed();
 		},
 		methods: {
-			unitSelected: function(event){
-				const index =event.detail.value;
-				if(index == 0){
+			showDeleteConfirmation(comment) {
+				uni.showModal({
+					title: '确认删除',
+					content: '确认删除该评论？',
+					success: (res) => {
+						if (res.confirm) {
+							this.deleteComment(comment.id, comment.author_uuid);
+						}
+					},
+				});
+			},
+			unitSelected: function(event) {
+				const index = event.detail.value;
+				if (index == 0) {
 					console.log("a");
 					uni.request({
 						url: `http://82.157.244.44:8000/api/v1/forum/posts/${this.post.id}/allowComment/`,
@@ -125,18 +133,125 @@
 						header: {
 							'Authorization': `Bearer ${uni.getStorageSync('token')}`,
 						},
-						data:{
-							allow_comment:"OP",
+						data: {
+							allow_comment: "OP",
 						},
 						success: (res) => {
-							this.showCommentInput = false ;
+							this.showCommentInput = false;
 							console.log("aaaaa");
 							uni.showToast({
 								title: '权限设置成功',
 								duration: 1000,
-								icon:"success",
+								icon: "success",
 							});
-							
+
+							this.get_id_post(this.post.id);
+
+						},
+						fail: (err) => {
+							console.log("a");
+						}
+					})
+				} else if (index == 1) {
+					uni.request({
+						url: `http://82.157.244.44:8000/api/v1/forum/posts/${this.post.id}/allowComment/`,
+						method: "POST",
+						header: {
+							'Authorization': `Bearer ${uni.getStorageSync('token')}`,
+						},
+						data: {
+							allow_comment: "CL",
+						},
+						success: (res) => {
+							this.showCommentInput = false;
+							uni.showToast({
+								title: '权限设置成功',
+								duration: 1000,
+								icon: "success",
+							});
+
+							this.get_id_post(this.post.id);
+						},
+						fail: (err) => {
+							console.log("a");
+						}
+					})
+				} else {
+					uni.request({
+						url: `http://82.157.244.44:8000/api/v1/forum/posts/${this.post.id}/allowComment/`,
+						method: "POST",
+						header: {
+							'Authorization': `Bearer ${uni.getStorageSync('token')}`,
+						},
+						data: {
+							allow_comment: "AU",
+						},
+						success: (res) => {
+							this.showCommentInput = false;
+							uni.showToast({
+								title: '权限设置成功',
+								duration: 1000,
+								icon: "success",
+							});
+
+							this.get_id_post(this.post.id);
+						},
+						fail: (err) => {
+							console.log("a");
+						}
+					})
+				}
+
+
+			},
+
+
+			unitSelected2: function(event) {
+				const index = event.detail.value;
+				if (index == 0) {
+					uni.request({
+						url: `http://82.157.244.44:8000/api/v1/forum/posts/${this.post.id}/setVisibility/`,
+						method: "POST",
+						header: {
+							'Authorization': `Bearer ${uni.getStorageSync('token')}`,
+						},
+						data: {
+							visibility: "PU",
+						},
+						success: (res) => {
+							console.log("aaaaa");
+							uni.showToast({
+								title: '公开设置成功',
+								duration: 1000,
+								icon: "success",
+							});
+
+							this.get_id_post(this.post.id);
+
+						},
+						fail: (err) => {
+							console.log("a");
+						}
+					})
+				} else {
+					uni.request({
+						url: `http://82.157.244.44:8000/api/v1/forum/posts/${this.post.id}/setVisibility/`,
+						method: "POST",
+						header: {
+							'Authorization': `Bearer ${uni.getStorageSync('token')}`,
+						},
+						data: {
+							visibility: "PR",
+						},
+						success: (res) => {
+
+							console.log("aaaaa");
+							uni.showToast({
+								title: '隐藏设置成功',
+								duration: 1000,
+								icon: "success",
+							});
+
 							this.get_id_post(this.post.id);
 
 						},
@@ -145,122 +260,10 @@
 						}
 					})
 				}
-				else if(index == 1)
-				{
-					uni.request({
-						url: `http://82.157.244.44:8000/api/v1/forum/posts/${this.post.id}/allowComment/`,
-						method: "POST",
-						header: {
-							'Authorization': `Bearer ${uni.getStorageSync('token')}`,
-						},
-						data:{
-							allow_comment:"CL",
-						},
-						success: (res) => {
-							this.showCommentInput = false;
-							uni.showToast({
-								title: '权限设置成功',
-								duration: 1000,
-								icon:"success",
-							});
-							
-							this.get_id_post(this.post.id);
-						},
-						fail: (err) => {
-							console.log("a");
-						}
-					})
-				}
-					
-				else {
-					uni.request({
-						url: `http://82.157.244.44:8000/api/v1/forum/posts/${this.post.id}/allowComment/`,
-						method: "POST",
-						header: {
-							'Authorization': `Bearer ${uni.getStorageSync('token')}`,
-						},
-						data:{
-							allow_comment:"AU",
-						},
-						success: (res) => {
-							this.showCommentInput = false ;
-							uni.showToast({
-								title: '权限设置成功',
-								duration: 1000,
-								icon:"success",
-							});
-							
-							this.get_id_post(this.post.id);
-						},
-						fail: (err) => {
-							console.log("a");
-						}
-					})
-				}
-				
-				
+
+
 			},
-			
-			
-			unitSelected2: function(event){
-				const index =event.detail.value;
-				if(index == 0){
-					uni.request({
-						url: `http://82.157.244.44:8000/api/v1/forum/posts/${this.post.id}/setVisibility/`,
-						method: "POST",
-						header: {
-							'Authorization': `Bearer ${uni.getStorageSync('token')}`,
-						},
-						data:{
-							visibility:"PU",
-						},
-						success: (res) => {
-							console.log("aaaaa");
-							uni.showToast({
-								title: '公开设置成功',
-								duration: 1000,
-								icon:"success",
-							});
-							
-							this.get_id_post(this.post.id);
-			
-						},
-						fail: (err) => {
-							console.log("a");
-						}
-					})
-				}				
-				else {
-					uni.request({
-						url: `http://82.157.244.44:8000/api/v1/forum/posts/${this.post.id}/setVisibility/`,
-						method: "POST",
-						header: {
-							'Authorization': `Bearer ${uni.getStorageSync('token')}`,
-						},
-						data:{
-							visibility:"PR",
-						},
-						success: (res) => {
-							
-							console.log("aaaaa");
-							uni.showToast({
-								title: '隐藏设置成功',
-								duration: 1000,
-								icon:"success",
-							});
-							
-							this.get_id_post(this.post.id);
-								
-						},
-						fail: (err) => {
-							console.log("a");
-						}
-					})
-				}
-				
-				
-			},
-			
+
 			goToUserHome_post() {
 				const uuid = this.user.uuid;
 				// 跳转到 user-home 页面
@@ -398,7 +401,7 @@
 			canDeleteComment(comment) {
 				// 只有评论的作者可以删除评论
 				const userInfo = uni.getStorageSync('userInfo');
-				return comment.author_uuid === userInfo.uuid || this.not_my_post === false ;
+				return comment.author_uuid === userInfo.uuid || this.not_my_post === false;
 			},
 
 			formatPostTime(time) {
@@ -412,47 +415,47 @@
 
 				// 添加8个小时
 				dateObj.setHours(dateObj.getHours() + 8);
-
+				// console.log('dateObj:::', dateObj);
+				// 使用 toLocaleString 来格式化日期，设置参数为24小时制
+				const options = {
+					hour12: false
+				};
 				// 获取格式化后的日期字符串
-				const formattedTime = dateObj.toISOString().replace('T', ' ').replace(/\.\d+Z$/, '');
-
+				const formattedTime = dateObj.toLocaleString(undefined, options).replace('T', ' ').replace(/\.\d+Z$/, '');
+				// console.log('formattedTime:::', formattedTime);
 				return formattedTime;
 			},
 
 
 			toggleCommentInput() {
 				console.log(this.post.allowed_comment);
-				if(this.post.allowed_comment === "OP")
-				{
+				if (this.post.allowed_comment === "OP") {
 					this.showCommentInput = !this.showCommentInput;
-				}
-				else if(this.post.allowed_comment === "CL")
-					
+				} else if (this.post.allowed_comment === "CL")
+
 				{
 					uni.showToast({
 						title: '用户已禁止评论',
 						duration: 1000,
-						icon:"error",
+						icon: "error",
 					});
-				}
-				else {
-					if(this.not_my_post){
+				} else {
+					if (this.not_my_post) {
 						uni.showToast({
 							title: '用户已禁止评论',
 							duration: 1000,
-							icon:"error",
+							icon: "error",
 						});
-					}
-					else{
+					} else {
 						this.showCommentInput = !this.showCommentInput;
 					}
-					
+
 				}
-				
-				
-				
-				
-				
+
+
+
+
+
 			},
 			submitComment() {
 				// 处理提交评论的逻辑，可以在这里发送评论内容到后端或者做其他处理
@@ -641,51 +644,64 @@
 <style scoped>
 	.comment {
 		display: flex;
-		margin-bottom: 10px;
+		flex-direction: column;
+		padding: 10rpx;
 	}
 
 	.comment-author {
 		display: flex;
 		align-items: center;
-		margin-right: 10px;
+		justify-content: space-between;
+		margin-bottom: 8rpx;
 	}
 
 	.avatar {
-		width: 30px;
-		height: 30px;
+		width: 80rpx;
+		height: 80rpx;
 		border-radius: 50%;
-		margin-right: 5px;
+		margin-right: 8rpx;
 	}
 
 	.author-details {
+		flex: 1;
 		display: flex;
 		flex-direction: column;
 	}
 
 	.author-name {
-		font-size: 14px;
+		/* font-size: 14px; */
 		font-weight: bold;
 	}
 
 	.comment-details {
-		flex-grow: 1;
+		/* flex-grow: 1; */
+		margin-bottom: 8rpx;
 	}
 
 	.comment-content {
-		font-size: 14px;
-		margin-bottom: 5px;
+		/* font-size: 14px; */
+		/* margin-bottom: 5px; */
 	}
 
 	.comment-time {
-		font-size: 12px;
-		color: #999;
+		color: #888;
 	}
 
 	.delete-button {
 		align-self: flex-start;
 		/* 设置按钮在垂直方向上靠上显示 */
+		margin-left: 8rpx;
+		color: black;
+		height: 60rpx;
+		width: 120rpx;
+		font-size: 25rpx;
 	}
 
+	.divider {
+		height: 1px;
+		background-color: #eee;
+		margin: 8rpx 0;
+	}
 
 	/* 样式可以根据需要进行修改 */
 	.post-detail {
@@ -702,48 +718,52 @@
 	.user-info {
 		display: flex;
 		align-items: center;
-	}
-
-	.avatar {
-		width: 50px;
-		height: 50px;
-		border-radius: 50%;
+		justify-content: space-between;
+		margin-bottom: 8rpx;
 	}
 
 	.user-details {
-		margin-left: 10px;
+		flex: 1;
+		display: flex;
+		flex-direction: column;
 	}
 
 	.username {
-		font-size: 20px;
 		font-weight: bold;
 	}
 
 	.post-time {
-		font-size: 16px;
-		color: #999;
+		color: #888;
 	}
 
 	.unfollowed-style {
+		display: flex;
+		align-items: center;
+		justify-content: center;
+		align-self: flex-start;
 		padding: 8px 16px;
 		border: none;
-		border-radius: 15px;
-		background-color: #3498db;
+		background-color: steelblue;
 		color: #fff;
-		font-size: 12px;
+		font-size: 30rpx;
 		height: 80rpx;
 		width: 200rpx;
+		margin-right: 20rpx;
 	}
 
 	.followed-style {
+		display: flex;
+		align-items: center;
+		justify-content: center;
+		align-self: flex-start;
 		padding: 8px 16px;
 		border: none;
-		border-radius: 15px;
-		background-color: #f5f5f5;
-		color: red;
-		font-size: 12px;
+		background-color: darkgray;
+		color: white;
+		font-size: 30rpx;
 		height: 80rpx;
 		width: 200rpx;
+		margin-right: 20rpx;
 	}
 
 	.divider {
@@ -766,8 +786,6 @@
 		height: 100px;
 		margin-right: 10px;
 	}
-
-
 
 	.post-actions {
 		/* Add styles for post actions section */

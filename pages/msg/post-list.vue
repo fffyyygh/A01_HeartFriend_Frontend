@@ -7,7 +7,7 @@
 				<!-- 头像 -->
 				<image class="user-avatar" :src="users[index].avatar_url" mode="aspectFill"></image>
 				<!-- 用户名、发帖时间等信息 -->
-				<view>
+				<view class="user-details">
 					<text class="user-name">{{ post.author }}</text>
 					<text class="post-time">{{ formatPostTime(post.created_at) }}</text>
 				</view>
@@ -167,10 +167,14 @@
 
 				// 添加8个小时
 				dateObj.setHours(dateObj.getHours() + 8);
-
+				// console.log('dateObj:::', dateObj);
+				// 使用 toLocaleString 来格式化日期，设置参数为24小时制
+				const options = {
+					hour12: false
+				};
 				// 获取格式化后的日期字符串
-				const formattedTime = dateObj.toISOString().replace('T', ' ').replace(/\.\d+Z$/, '');
-
+				const formattedTime = dateObj.toLocaleString(undefined, options).replace('T', ' ').replace(/\.\d+Z$/, '');
+				// console.log('formattedTime:::', formattedTime);
 				return formattedTime;
 			},
 
@@ -379,13 +383,21 @@
 	.user-info {
 		display: flex;
 		align-items: center;
+		justify-content: space-between;
+		margin-bottom: 8rpx;
 	}
 
 	.user-avatar {
-		width: 40px;
-		height: 40px;
+		width: 80rpx;
+		height: 80rpx;
 		border-radius: 50%;
-		margin-right: 10px;
+		margin-right: 8rpx;
+	}
+
+	.user-details {
+		flex: 1;
+		display: flex;
+		flex-direction: column;
 	}
 
 	.user-name {

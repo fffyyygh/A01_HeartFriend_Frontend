@@ -6,11 +6,11 @@
 				<!-- 头像 -->
 				<image class="user-avatar" :src="userInfo.avatar_url" mode="aspectFill"></image>
 				<!-- 用户名、发帖时间等信息 -->
-				<view>
+				<view class="user-details">
 					<text class="user-name">{{ post.author }}</text>
 					<text class="post-time">{{ formatPostTime(post.created_at) }}</text>
 				</view>
-				<button @click="deletePost(index)">删除</button>
+				<button class="delete-button" @click="showDeleteConfirmation(index)">删除</button>
 			</view>
 
 			<!-- 帖子内容 -->
@@ -69,6 +69,23 @@
 
 		},
 		methods: {
+			showDeleteConfirmation(index) {
+				const that = this; // Store the reference to the component
+
+				uni.showModal({
+					title: '确认删除',
+					content: '确认删除本条帖子？',
+					success(res) {
+						if (res.confirm) {
+							// User clicked the confirm button
+							that.deletePost(index); // Call the deletePost method if confirmed
+						} else if (res.cancel) {
+							// User clicked the cancel button
+							console.log('用户点击取消');
+						}
+					}
+				});
+			},
 			deletePost(index) {
 				console.log("a");
 				const post = this.posts[index];
@@ -149,10 +166,14 @@
 
 				// 添加8个小时
 				dateObj.setHours(dateObj.getHours() + 8);
-
+				// console.log('dateObj:::', dateObj);
+				// 使用 toLocaleString 来格式化日期，设置参数为24小时制
+				const options = {
+					hour12: false
+				};
 				// 获取格式化后的日期字符串
-				const formattedTime = dateObj.toISOString().replace('T', ' ').replace(/\.\d+Z$/, '');
-
+				const formattedTime = dateObj.toLocaleString(undefined, options).replace('T', ' ').replace(/\.\d+Z$/, '');
+				// console.log('formattedTime:::', formattedTime);
 				return formattedTime;
 			},
 
@@ -302,6 +323,16 @@
 </script>
 
 <style scoped>
+	.delete-button {
+		align-self: flex-start;
+		/* 设置按钮在垂直方向上靠上显示 */
+		margin-left: 8rpx;
+		color: black;
+		height: 60rpx;
+		width: 120rpx;
+		font-size: 25rpx;
+		margin-right: 20rpx;
+	}
 	.post-list {
 		padding: 20rpx;
 	}
@@ -317,15 +348,23 @@
 	.user-info {
 		display: flex;
 		align-items: center;
+		justify-content: space-between;
+		margin-bottom: 8rpx;
 	}
 
 	.user-avatar {
-		width: 40px;
-		height: 40px;
+		width: 80rpx;
+		height: 80rpx;
 		border-radius: 50%;
-		margin-right: 10px;
+		margin-right: 8rpx;
 	}
 
+	.user-details {
+		flex: 1;
+		display: flex;
+		flex-direction: column;
+	}
+	
 	.user-name {
 		font-weight: bold;
 	}
