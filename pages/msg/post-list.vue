@@ -1,6 +1,13 @@
 <template>
 	<view class="post-list">
-		<button class="change-button" @click="change_button"></button>
+		<view class="tab">
+			<text :class="currentTab === 'all' ? 'active' : ''" @tap="switchTab('all')" @click="all_tab_click">全部</text>
+			<text :class="currentTab === 'follow' ? 'active' : ''" @tap="switchTab('follow')"
+				@click="focus_tab_click">关注</text>
+			<picker class="changesort" mode="selector" :range="sortType" @change="sortTypeChanged">
+				<view>排序：{{ currentSortType }}</view>
+			</picker>
+		</view>
 		<view v-for="(post, index) in posts" :key="index" class="post-item">
 			<!-- 用户信息 -->
 			<view class="user-info" @click="goToPostDetail(post)">
@@ -57,10 +64,16 @@
 				isLiked: [],
 				isDisliked: [],
 				newposts: [],
+				currentTab: "all",
+				sortType: ["最新发布", "最新评论", "最多点赞"],
+				currentSortType: "最新发布",
+				sort: "created_at",
+
 			};
 		},
 
 		onShow() {
+			this.currentTab = "all";
 			this.loadPostData();
 			wx.getFileSystemManager().getSavedFileList({ // 获取文件列表
 				success(res) {
@@ -74,11 +87,168 @@
 			})
 		},
 		onReachBottom() {
-			this.get_other_post();
+			if (this.currentTab === "all")
+
+			{
+				this.get_other_post();
+			} else {
+				this.get_other_focus_post();
+			}
 
 		},
 
 		methods: {
+			sortTypeChanged: function(e) {
+				const index = e.detail.value;
+				this.currentSortType = this.sortType[index]; {
+					console.log(index);
+				}
+
+				if (index == 0)
+
+				{
+					this.sort = "created_at";
+					if (this.currentTab === "all")
+
+					{
+						this.loadPostData();
+					} else {
+						this.loadFocusPostData();
+					}
+
+				} else if (index == 1)
+
+				{
+					this.sort = "updated_at";
+					if (this.currentTab === "all")
+
+					{
+						this.loadPostData();
+					} else {
+						this.loadFocusPostData();
+					}
+				} else {
+
+					this.sort = "likes";
+					if (this.currentTab === "all")
+
+					{
+						this.loadPostData();
+					} else {
+						this.loadFocusPostData();
+					}
+				}
+			},
+
+
+			switchTab(tab) {
+				this.currentTab = tab; // 点击切换选项卡
+			},
+
+			all_tab_click() {
+				this.loadPostData();
+			},
+			focus_tab_click() {
+				this.loadFocusPostData();
+			},
+
+			async get_focus_post() {
+				this.users = [];
+				this.posts = [];
+				// 包装 uni.request 在 Promise 中
+				return new Promise((resolve, reject) => {
+					uni.request({
+						url: `http://82.157.244.44:8000/api/v1/forum/posts/getFollowingPosts/?sort_by=${this.sort}&offset=0&limit=20`,
+						method: 'GET',
+						header: {
+							'Authorization': `Bearer ${uni.getStorageSync('token')}`,
+						},
+						success: (res) => {
+							this.posts = res.data.data;
+							//this.posts = this.posts.slice().reverse();
+							this.posts.forEach((post, index) => {
+								const image_addr = post.images;
+								post.images = image_addr.split(',');
+							});
+							this.getUsers();
+							resolve(); // 请求成功时调用 resolve
+						},
+						fail: (err) => {
+							console.error('数据发送失败:', err);
+							reject(err); // 请求失败时调用 reject
+						}
+					});
+				});
+			},
+
+			async get_all_post() {
+				this.users = [];
+				this.posts = [];
+				// 包装 uni.request 在 Promise 中
+				return new Promise((resolve, reject) => {
+					uni.request({
+						url: `http://82.157.244.44:8000/api/v1/forum/posts/?sort_by=${this.sort}&offset=0&limit=20`,
+						method: 'GET',
+						header: {
+							'Authorization': `Bearer ${uni.getStorageSync('token')}`,
+						},
+						success: (res) => {
+							this.posts = res.data.data;
+							//this.posts = this.posts.slice().reverse();
+							this.posts.forEach((post, index) => {
+								const image_addr = post.images;
+								post.images = image_addr.split(',');
+							});
+							this.getUsers();
+							resolve(); // 请求成功时调用 resolve
+						},
+						fail: (err) => {
+							console.error('数据发送失败:', err);
+							reject(err); // 请求失败时调用 reject
+						}
+					});
+				});
+			},
+
+			async get_other_focus_post() {
+				// 包装 uni.request 在 Promise 中
+				return new Promise((resolve, reject) => {
+					let a = this.posts.length;
+
+					uni.request({
+						url: `http://82.157.244.44:8000/api/v1/forum/posts/getFollowingPosts/?sort_by=${this.sort}&limit=20&offset=${a}`,
+
+						method: 'GET',
+						header: {
+							'Authorization': `Bearer ${uni.getStorageSync('token')}`,
+						},
+						success: (res) => {
+							this.newposts = res.data.data;
+
+							//this.posts = this.posts.slice().reverse();
+							this.newposts.forEach((post, index) => {
+								const image_addr = post.images;
+								post.images = image_addr.split(',');
+								this.posts.push(post);
+							});
+
+							this.getNewLikeDislikeStatus();
+							this.getNewUsers();
+							resolve(); // 请求成功时调用 resolve
+						},
+						fail: (err) => {
+							console.error('数据发送失败:', err);
+							reject(err); // 请求失败时调用 reject
+						}
+					});
+				});
+			},
+
+
+
+
+			// 上面的是
+			//获取关注的贴子列表和获取全部的贴子列表的切换
 			change_button() {
 				this.posts = this.posts.slice().reverse();
 				this.users = this.users.slice().reverse();
@@ -91,6 +261,16 @@
 				await this.get_all_post();
 				this.getLikeDislikeStatus();
 			},
+
+			async loadFocusPostData() {
+
+				this.isLiked = [];
+				this.isDisliked = [];
+				await this.get_focus_post();
+				this.getLikeDislikeStatus();
+			},
+
+
 
 			makeRequest(url, method, header) {
 				return new Promise((resolve, reject) => {
@@ -127,34 +307,7 @@
 				}
 			},
 
-			async get_all_post() {
-				this.users = [];
-				this.posts = [];
-				// 包装 uni.request 在 Promise 中
-				return new Promise((resolve, reject) => {
-					uni.request({
-						url: 'http://82.157.244.44:8000/api/v1/forum/posts/?offset=0&limit=20',
-						method: 'GET',
-						header: {
-							'Authorization': `Bearer ${uni.getStorageSync('token')}`,
-						},
-						success: (res) => {
-							this.posts = res.data.data;
-							//this.posts = this.posts.slice().reverse();
-							this.posts.forEach((post, index) => {
-								const image_addr = post.images;
-								post.images = image_addr.split(',');
-							});
-							this.getUsers();
-							resolve(); // 请求成功时调用 resolve
-						},
-						fail: (err) => {
-							console.error('数据发送失败:', err);
-							reject(err); // 请求失败时调用 reject
-						}
-					});
-				});
-			},
+
 
 			formatPostTime(time) {
 				// 检查 time 是否为 undefined 或者 null
@@ -308,18 +461,16 @@
 				// 包装 uni.request 在 Promise 中
 				return new Promise((resolve, reject) => {
 					let a = this.posts.length;
-					console.log(a);
+
 					uni.request({
-						url: `http://82.157.244.44:8000/api/v1/forum/posts/?limit=20&offset=${a}`,
+						url: `http://82.157.244.44:8000/api/v1/forum/posts/?sort_by=${this.sort}&limit=20&offset=${a}`,
 
 						method: 'GET',
 						header: {
 							'Authorization': `Bearer ${uni.getStorageSync('token')}`,
 						},
 						success: (res) => {
-							console.log(res.data);
 							this.newposts = res.data.data;
-
 							//this.posts = this.posts.slice().reverse();
 							this.newposts.forEach((post, index) => {
 								const image_addr = post.images;
@@ -363,18 +514,28 @@
 		/* 设置喜欢状态的图标颜色为红色 */
 	}
 
+	body,
+	html {
+		margin: 0;
+		padding: 0;
+	}
+
 	.disliked {
 		color: #ff6347;
 		/* 设置不喜欢状态的图标颜色为蓝色 */
 	}
 
 	.post-list {
+		margin-top: -1;
 		padding: 20rpx;
+		position: relative;
+		width: 100%;
 	}
 
 	.post-item {
 		background-color: #fff;
-		margin-bottom: 20rpx;
+		margin-bottom: 10rpx;
+		margin-top: 15rpx;
 		padding: 20rpx;
 		border-radius: 10rpx;
 		box-shadow: 0 2rpx 4rpx rgba(0, 0, 0, 0.1);
@@ -455,5 +616,40 @@
 	.action-count {
 		/* Style for action count (likes, dislikes, comments) */
 		color: #888;
+	}
+
+	/* 定义选项卡的样式 */
+	.tab {
+		position: fixed;
+		top: 0;
+		left: 0;
+		width: 100%;
+		background-color: #fff;
+		/* 如果需要背景色，可以在这里设置 */
+		z-index: 999;
+		/* 可以使固定元素在其他内容上层显示 */
+		margin-bottom: 5rpx;
+
+		display: flex;
+
+
+	}
+
+	/* 定义选项卡文字的样式 */
+	.tab text {
+		margin-left: 20px;
+		margin-right: 20px;
+		cursor: pointer;
+		font-size: 30rpx;
+	}
+
+	/* 定义选中状态的样式 */
+	.active {
+		color: red;
+		/* 这里可以改为你想要的红色 */
+	}
+
+	.changesort {
+		margin-left: 250rpx;
 	}
 </style>
