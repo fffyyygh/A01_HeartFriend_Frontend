@@ -26,7 +26,7 @@
 			return {
 				postID: null,
 				reportType: 0, // 默认选择第一个类型
-				details: 'this is the detail',
+				details: '',
 				reportTypes: ['spam', 'abuse', 'offensive', 'false_info', 'illegal_info', 'other'],
 				reportTypeszh: ['垃圾信息', '滥用或骚扰', '冒犯性内容', '虚假信息', '违法活动', '其他'],
 			};
@@ -45,6 +45,16 @@
 				this.reportType = event.mp.detail.value;
 			},
 			async submitReport() {
+				// 检查举报详情是否为空
+				if (!this.details.trim()) {
+					uni.showToast({
+						title: '举报信息不能为空',
+						icon: 'none',
+						duration: 2000,
+					});
+					return; // 阻止继续执行后续的提交逻辑
+				}
+
 				try {
 					const response = await uni.request({
 						url: 'http://82.157.244.44:8000/api/v1/forum/reports/',
