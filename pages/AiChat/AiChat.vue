@@ -2,20 +2,32 @@
 	<view>
 		<view class="chat-container">
 			<scroll-view class="chat-messages" scroll-y>
+				<view class="received">
+					<block>
+						<!-- 使用 v-for 遍历文本行 -->
+						<view
+							v-for="(line, lineIndex) in formatMessage('1. 夕阳西下的那一刻，天空被染上了一抹金黄。\n2. 春天来了，万物复苏，大地披上了绿色的新装。\n3. 夜晚的星空下，繁星点点，静谧而美丽。')"
+							:key="lineIndex">
+							{{ line }}
+							<br />
+						</view>
+					</block>
+				</view>
 				<view v-for="(message, index) in messages" :key="index" class="message">
-					<!-- <view :class="message.type === 'sent' ? 'sent' : 'received'">
-						{{ message.content }}
-					</view> -->
 					<view :class="message.type === 'sent' ? 'sent' : 'received'">
 						<block v-if="message.type === 'received'">
-							<!-- 使用v-if和v-else来处理换行 -->
-							<view v-for="(line, lineIndex) in formatMessage(message)" :key="lineIndex">{{line}}</view>
+							<!-- 使用 v-for 遍历文本行 -->
+							<view v-for="(line, lineIndex) in formatMessage(String(message.content))" :key="lineIndex">
+								{{ line }}
+								<br />
+							</view>
 						</block>
 						<block v-else>
-							{{message.content}}
+							{{ message.content }}
 						</block>
 					</view>
 				</view>
+
 			</scroll-view>
 
 			<view class="input-container">
@@ -36,9 +48,13 @@
 		},
 		methods: {
 			formatMessage(message) {
-				// 将 "\n\n" 替换为数组，以实现换行效果
-				return message.content.split('\n\n');
+				const contentString = typeof message === 'string' ? message : String(message);
+				console.log('message:::', contentString);
+				const lines = contentString.split('\n');
+				console.log('Split Result:::', lines);
+				return lines;
 			},
+
 			async sendMessage() {
 				if (this.newMessage.trim() !== '') {
 					// Add the user's message to the chat history
@@ -63,10 +79,12 @@
 						});
 						console.log("response:::", response);
 						// Update the chat history with the assistant's response
-						this.messages.push({
-							content: response[1].data.content,
+						const assistantResponse = {
+							content: response[1].data.content.replace(/^"(.+)"$/,
+								'$1'), // Remove surrounding quotes
 							type: 'received'
-						});
+						};
+						this.messages.push(assistantResponse);
 					} catch (error) {
 						console.error('Error sending message:', error);
 						// Handle the error as needed
@@ -105,6 +123,7 @@
 	}
 
 	.received {
+		white-space: pre-line;
 		background-color: #E5E5EA;
 		align-self: flex-start;
 		border-radius: 5px;
@@ -112,6 +131,7 @@
 	}
 
 	.input-container {
+		box-sizing: border-box;
 		display: flex;
 		align-items: center;
 		justify-content: space-between;
@@ -127,7 +147,6 @@
 	}
 
 	button {
-		padding: 8px 15px;
 		border-radius: 5px;
 		background-color: #007AFF;
 		color: white;
