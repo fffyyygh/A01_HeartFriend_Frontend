@@ -222,6 +222,7 @@
 				"navigationBarTitleText" : "",
 				"enablePullDownRefresh" : false
 			}
+
 		},
 		{
 			"path" : "pages/my/post_like",
@@ -238,6 +239,16 @@
 				"navigationBarTitleText" : "",
 				"enablePullDownRefresh" : false
 			}
+
+		},
+		{
+			"path" : "pages/my/report_detail",
+			"style" : 
+			{
+				"navigationBarTitleText" : "",
+				"enablePullDownRefresh" : false
+			}
+
 		}
 
 	],
