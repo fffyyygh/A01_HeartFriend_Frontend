@@ -85,8 +85,6 @@
 			return {
 				userInfo: uni.getStorageSync('userInfo'),
 				has_login: true,
-				users:[],
-				posts:[],
 				postNum:"",
 				focusNum: "",
 				fansNum :"",
@@ -118,74 +116,20 @@
 			},
 			
 			
-			makeRequest(url, method, header) {
-			  return new Promise((resolve, reject) => {
-			    uni.request({
-			      url: url,
-			      method: method,
-			      header: header,
-			      success: (res) => {
-			        resolve(res.data);
-			      },
-			      fail: (err) => {
-			        reject(err);
-			      },
-			    });
-			  });
-			},
-			
-			async getUsers() {
-			  try {
-			    for (const post of this.posts) {
-			      const response = await this.makeRequest(
-			        'http://82.157.244.44:8000/api/v1/user/query-info/?uuid=' + post.author_uuid,
-			        'GET',
-			        {
-			          'Authorization': `Bearer ${uni.getStorageSync('token')}`,
-			        }
-			      );
-			      
-			      //console.log('数据接收成功:', response);
-			      const user = response;
-			      user.avatar_url = "http://82.157.244.44:8000" + user.avatar_url;
-			      this.users.push(user);
-			    }
-			  } catch (error) {
-			    console.error('数据发送失败:', error);
-			  }
-			},		
 			
 			get_all_post() {
-				this.users=[];
-				this.posts=[];
 				uni.request({
-					url: 'http://82.157.244.44:8000/api/v1/forum/posts/', // 后端接口地址
+					url: `http://82.157.244.44:8000/api/v1/forum/posts/getUserPosts/?offset=0&limit=20`, // 后端接口地址
 					method: 'GET',
 					header: {
 						'Authorization': `Bearer ${uni.getStorageSync('token')}`,
 					},
+					data: {
+						"uuid": this.userInfo.uuid,
+					},
+					
 					success: (res) => {
-						const userInfo = uni.getStorageSync('userInfo');
-						const user_uuid = userInfo.uuid;
-						res.data.data.forEach((post,index)=>{								
-							if(post.author_uuid==user_uuid){
-								
-								this.posts.push(post);
-							}
-							
-							
-						});
-						
-						this.posts.forEach((post,index)=>{
-							const image_addr = post.images;
-							post.images = image_addr.split(',');
-							
-							
-						})	;
-						this.postNum = this.posts.length;
-						//console.log("数量",this.postNum);
-						this.getUsers();
-			
+						this.postNum = res.data.count;		
 					},
 					fail: (err) => {
 						console.error('数据发送失败:', err);
@@ -204,12 +148,7 @@
 						'Authorization': `Bearer ${uni.getStorageSync('token')}`,
 					},
 					success: (res) => {
-						//console.log('数据接收成功:', res.data);	
-						//console.log(res.data);
-						this.focusNum = res.data.following.length;
-						//console.log(this.focusNum);
-						
-							
+						this.focusNum = res.data.following.length;	
 					},
 					fail: (err) => {
 						console.error('数据发送失败:', err);
