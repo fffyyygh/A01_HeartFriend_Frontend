@@ -45,14 +45,14 @@
 			<view class="block-title">我的服务</view>
 			<u-grid :col="1" :border="false" style="margin: 20rpx 0;">
 
-				<u-grid-item index="/pages/my/post?type=2">
-					<image class="gn-icon"></image>
-					<view class="grid-text">我的帖子</view>
-				</u-grid-item>
-
-				<u-grid-item index="/pages/my/post?type=1">
+				<u-grid-item @click="goLike">
 					<image class="gn-icon"></image>
 					<view class="grid-text">我的点赞</view>
+				</u-grid-item>
+
+				<u-grid-item @click="goDislike">
+					<image class="gn-icon"></image>
+					<view class="grid-text">我的点踩</view>
 				</u-grid-item>
 
 				<u-grid-item index="/pages/my/user?type=1">
@@ -208,7 +208,17 @@
 				uni.navigateTo({
 					url:"/pages/my/admin",
 				})
-			}
+			},
+			goLike(){
+				uni.navigateTo({
+					url:"/pages/my/post_like",
+				})
+			},
+			goDislike(){
+				uni.navigateTo({
+					url:"/pages/my/post_dislike",
+				})
+			},
 			
 		}
 	}

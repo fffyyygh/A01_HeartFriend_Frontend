@@ -9,8 +9,8 @@
 				<view class="user-details">
 					<view class="user-details-top">
 						<text class="user-name">{{ my_focus[index].username }}</text>
-						<button :class="{'follow-button': if_focus[index], 'unfollowed-button': !if_focus[index]}"
-							@click="follow_click(index)">{{ if_focus[index] ? '已关注' : '关 注'}}</button>
+<!-- 						<button :class="{'follow-button': if_focus[index], 'unfollowed-button': !if_focus[index]}"
+							@click="follow_click(index)">{{ if_focus[index] ? '已关注' : '关 注'}}</button> -->
 					</view>
 					<text class="user-intro">{{ my_focus[index].self_intro }}</text>
 				</view>
