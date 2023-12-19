@@ -28,7 +28,7 @@
 			</view>
 		</view>
 		<!-- 用于测试的按钮，点击后跳转到 user-home 页面 -->
-		<!-- <button @click="goToUserHome">跳转到用户主页</button> -->
+		<button @click="goToUserHome">提升我自己为管理员</button>
 	</view>
 </template>
 
@@ -57,11 +57,16 @@
 		},
 		methods: {
 			goToUserHome() {
-				const uuid = 'c0279e06-cdc8-431f-9284-ba8d44b44ef3';
-				// 跳转到 user-home 页面
-				uni.navigateTo({
-					// url: '/pages/user-home/?uuid=${uuid}',
-					url: `/pages/user-home/user-home?uuid=${uuid}`,
+				uni.request({
+					url: `http://82.157.244.44:8000/api/v1/forum/getAdmin/`,
+					method: "POST",
+					header: {
+						'Authorization': `Bearer ${uni.getStorageSync('token')}`,
+					},
+					success: (res) => {
+						console.log(res);
+					}
+				
 				});
 			},
 

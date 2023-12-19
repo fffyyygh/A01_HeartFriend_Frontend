@@ -20,6 +20,7 @@
 				<image v-for="(image, index) in post_image" :key="index" :src="image" mode="aspectFill"
 					class="post-image" @click="previewImage(index)"></image>
 			</view>
+			<button v-show="if_admin"  @click="deletePost">删除帖子</button>
 		</view>
 
 		<!-- 点赞、点踩、评论图标和数量 -->
@@ -106,18 +107,70 @@
 				not_my_post: true, //是否是我发的贴子 用来决定是否显示关注按钮
 				units: ["允许评论", "禁止所有人评论", "仅自己可评论"],
 				units2: ["公开帖子", "隐藏帖子"],
+				if_admin: false,
 
 			}
 		},
 		onLoad(query) {
+			this.getIfAdmin();
 			const id = query.id;
 			this.get_id_post(id);
+			
 
 		},
 		onShow() {
 			this.get_if_followed();
 		},
 		methods: {
+			
+			deletePost() {
+				const id = this.post.id;
+				uni.request({
+					url: 'http://82.157.244.44:8000/api/v1/forum/posts/' + id + "/", // 后端接口地址
+					method: 'DELETE',
+					header: {
+						'Authorization': `Bearer ${uni.getStorageSync('token')}`,
+					},
+					success: (res) => {
+						console.log('帖子已删除');
+						uni.switchTab({
+							url:"/pages/msg/post-list",
+						})
+			
+					},
+					fail: (err) => {
+						console.error('数据发送失败:', err);
+					}
+				});
+			
+			},
+			
+
+			getIfAdmin() {
+				uni.request({
+					url: `http://82.157.244.44:8000/api/v1/user/info/`,
+					method: "GET",
+					header: {
+						'Authorization': `Bearer ${uni.getStorageSync('token')}`,
+					},
+
+					success: (res) => {
+						if (res.data.is_forum_admin)
+
+						{
+							this.if_admin = true;
+						} else
+						{
+							this.if_admin = false;
+						}
+
+					},
+					fail: (err) => {
+						console.log("a");
+					}
+				})
+			},
+
 			reportPost() {
 				// Add logic to navigate to the report page
 				uni.navigateTo({
@@ -138,7 +191,7 @@
 			unitSelected: function(event) {
 				const index = event.detail.value;
 				if (index == 0) {
-					console.log("a");
+
 					uni.request({
 						url: `http://82.157.244.44:8000/api/v1/forum/posts/${this.post.id}/allowComment/`,
 						method: "POST",
@@ -355,7 +408,6 @@
 
 					});
 
-					console.log('response内容', response);
 
 					// 根据后端返回的数据更新点赞状态
 					if (response[1].statusCode === 200) {
@@ -480,7 +532,7 @@
 						post_id: this.post.id,
 					},
 					success: (res) => {
-						console.log('评论提交成功:', res.data);
+						
 
 						// 更新评论的作者、头像、创建时间
 						const newComment = {
@@ -521,7 +573,6 @@
 						'Authorization': `Bearer ${uni.getStorageSync('token')}`,
 					},
 					success: (res) => {
-						console.log('数据接收成功:', res.data);
 						this.post = res.data;
 						//this.post = res.data.data.find(a => a.id === Number(postid));
 						// console.log(this.post);
@@ -549,7 +600,6 @@
 								'Authorization': `Bearer ${uni.getStorageSync('token')}`,
 							},
 							success: (res) => {
-								console.log('评论数据接收成功:', res.data);
 								// 更新本地评论列表
 								this.comments = res.data.data.map(comment => ({
 									id: comment.id,

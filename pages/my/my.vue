@@ -43,7 +43,7 @@
 		</view>
 		<view class="block-wrap">
 			<view class="block-title">我的服务</view>
-			<u-grid :col="1" :border="false" style="margin: 20rpx 0;" @click="toNav">
+			<u-grid :col="1" :border="false" style="margin: 20rpx 0;">
 
 				<u-grid-item index="/pages/my/post?type=2">
 					<image class="gn-icon"></image>
@@ -60,13 +60,14 @@
 					<view class="grid-text">我的关注</view>
 				</u-grid-item>
 
-				<u-grid-item index="/pages/my/user?type=2">
+				<u-grid-item  v-show="if_admin" @click="goAdmin">
 					<image class="gn-icon"></image>
-					<view class="grid-text">我的设置</view>
+					<view class="grid-text">管理论坛</view>
 				</u-grid-item>
 
 
 			</u-grid>
+			
 		</view>
 	</view>
 
@@ -76,6 +77,7 @@
 	export default {
 		onShow() {
 			this.userInfo = uni.getStorageSync('userInfo');
+			this.getIfAdmin();
 			this.get_all_post();
 			this.get_all_focus();
 			this.get_all_fans();
@@ -88,9 +90,36 @@
 				postNum:"",
 				focusNum: "",
 				fansNum :"",
+				if_admin : false ,
 			};
 		},
 		methods: {
+			
+			getIfAdmin() {
+				uni.request({
+					url: `http://82.157.244.44:8000/api/v1/user/info/`,
+					method: "GET",
+					header: {
+						'Authorization': `Bearer ${uni.getStorageSync('token')}`,
+					},
+			
+					success: (res) => {
+						if (res.data.is_forum_admin)
+			
+						{
+							this.if_admin = true;
+						} else
+						{
+							this.if_admin = false;
+						}
+			
+					},
+					fail: (err) => {
+						console.log("a");
+					}
+				})
+			},
+			
 			goUser() {
 				uni.navigateTo({
 					url: "/pages/login/register"
@@ -174,6 +203,11 @@
 					}
 				});
 				
+			},
+			goAdmin(){
+				uni.navigateTo({
+					url:"/pages/my/admin",
+				})
 			}
 			
 		}
