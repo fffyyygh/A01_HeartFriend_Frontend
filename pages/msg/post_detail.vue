@@ -40,12 +40,15 @@
 			<!-- 设置用户是否可以评论 -->
 
 			<picker class="action-item" mode="selector" :range="units" @change="unitSelected">
-				<view v-show="!not_my_post">. . .</view>
+				<view v-show="!not_my_post">设置</view>
 			</picker>
 
 			<picker class="action-item" mode="selector" :range="units2" @change="unitSelected2">
-				<view v-show="!not_my_post">是否可见</view>
+				<view v-show="!not_my_post">{{ visibilityText }}</view>
 			</picker>
+
+			<!-- 举报按钮 -->
+			<button class="report-button" @click="reportPost">举报</button>
 		</view>
 
 		<view v-if="showCommentInput" class="comment-input">
@@ -87,6 +90,8 @@
 	export default {
 		data() {
 			return {
+				units2: ["公开帖子", "隐藏帖子"],
+				visibilityText: "公开",
 				my_follow: [],
 				user: {},
 				post: {},
@@ -107,11 +112,18 @@
 		onLoad(query) {
 			const id = query.id;
 			this.get_id_post(id);
+
 		},
 		onShow() {
 			this.get_if_followed();
 		},
 		methods: {
+			reportPost() {
+				// Add logic to navigate to the report page
+				uni.navigateTo({
+					url: '/pages/msg/report?id=' + this.post.id,
+				});
+			},
 			showDeleteConfirmation(comment) {
 				uni.showModal({
 					title: '确认删除',
@@ -227,7 +239,7 @@
 							});
 
 							this.get_id_post(this.post.id);
-
+							this.visibilityText = "公开";
 						},
 						fail: (err) => {
 							console.log("a");
@@ -253,7 +265,7 @@
 							});
 
 							this.get_id_post(this.post.id);
-
+							this.visibilityText = "隐藏";
 						},
 						fail: (err) => {
 							console.log("a");
@@ -451,11 +463,6 @@
 					}
 
 				}
-
-
-
-
-
 			},
 			submitComment() {
 				// 处理提交评论的逻辑，可以在这里发送评论内容到后端或者做其他处理
@@ -526,6 +533,13 @@
 						// 更新点赞和点踩状态
 						this.isLiked = this.post.is_liked; // 假设后端返回的字段为 is_liked
 						this.isDisliked = this.post.is_disliked; // 假设后端返回的字段为 is_disliked
+
+
+						// 获取公开状态
+
+						if (this.post.visibility === "PR") {
+							this.visibilityText = "隐藏";
+						}
 
 						// 获取评论列表
 						uni.request({
@@ -642,6 +656,15 @@
 
 
 <style scoped>
+	.report-button {
+		align-self: center;
+		margin-left: 8rpx;
+		color: black;
+		height: 60rpx;
+		width: 120rpx;
+		font-size: 25rpx;
+	}
+
 	.comment {
 		display: flex;
 		flex-direction: column;

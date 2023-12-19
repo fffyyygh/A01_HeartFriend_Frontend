@@ -182,6 +182,14 @@
 				"enablePullDownRefresh" : false,
 				"onReachBottomDistance": 50
 			}
+		},
+		{
+			"path" : "pages/msg/report",
+			"style" : 
+			{
+				"navigationBarTitleText" : "",
+				"enablePullDownRefresh" : false
+			}
 		}
 
 	],
