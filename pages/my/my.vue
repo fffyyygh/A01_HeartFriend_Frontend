@@ -75,7 +75,6 @@
 <script>
 	export default {
 		onShow() {
-			console.log('my.vue is shown');
 			this.userInfo = uni.getStorageSync('userInfo');
 			this.get_all_post();
 			this.get_all_focus();
@@ -146,7 +145,7 @@
 			        }
 			      );
 			      
-			      console.log('数据接收成功:', response);
+			      //console.log('数据接收成功:', response);
 			      const user = response;
 			      user.avatar_url = "http://82.157.244.44:8000" + user.avatar_url;
 			      this.users.push(user);
@@ -184,7 +183,7 @@
 							
 						})	;
 						this.postNum = this.posts.length;
-						console.log("数量",this.postNum);
+						//console.log("数量",this.postNum);
 						this.getUsers();
 			
 					},
@@ -205,10 +204,10 @@
 						'Authorization': `Bearer ${uni.getStorageSync('token')}`,
 					},
 					success: (res) => {
-						console.log('数据接收成功:', res.data);	
-						console.log(res.data);
+						//console.log('数据接收成功:', res.data);	
+						//console.log(res.data);
 						this.focusNum = res.data.following.length;
-						console.log(this.focusNum);
+						//console.log(this.focusNum);
 						
 							
 					},
@@ -228,7 +227,7 @@
 						'Authorization': `Bearer ${uni.getStorageSync('token')}`,
 					},
 					success: (res) => {
-						console.log('数据接收成功:', res.data);	
+						//console.log('数据接收成功:', res.data);	
 						this.fansNum = res.data.followers.length;		
 					},
 					fail: (err) => {

@@ -66,7 +66,7 @@
 				success(res) {
 					res.fileList.forEach((val, key) => { // 遍历文件列表里的数据
 						// 删除存储的垃圾数据
-						wx.removeSavedFile({
+						wx.getFileSystemManager().removeSavedFile({
 							filePath: val.filePath
 						});
 					})

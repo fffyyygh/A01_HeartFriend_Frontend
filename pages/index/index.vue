@@ -138,9 +138,9 @@
 							'Authorization': `Bearer ${token}`,
 						},
 					});
-					console.log(userInfoRes[1].data);
+					//console.log(userInfoRes[1].data);
 					const userInfo = userInfoRes[1].data;
-					console.log(userInfo);
+					//console.log(userInfo);
 					// 在获取用户信息后，将其存储在本地存储中以备将来使用
 					// uni.setStorageSync('userInfo', userInfo);
 					// 修改为先判断本地存储中是否有userInfo，如果存在，则更新它，否则就存储新的 userInfo。

@@ -39,6 +39,16 @@
 				<text class="iconfont icon-pinglun"></text>
 				<text class="action-count">{{ post.comments_count }}</text>
 			</view>
+			
+			<!-- 设置用户是否可以评论 -->
+			
+			<picker class="action-item" mode="selector" :range="units" @change="unitSelected">
+				<view v-show="!not_my_post">. . .</view>
+			</picker>
+			
+			<picker class="action-item" mode="selector" :range="units2" @change="unitSelected2">
+				<view v-show="!not_my_post">是否可见</view>
+			</picker>
 		</view>
 
 		<view v-if="showCommentInput" class="comment-input">
@@ -92,6 +102,9 @@
 				isDisliked: false, // 是否已点踩
 				isFollowed: false, //是否已关注
 				not_my_post: true, //是否是我发的贴子 用来决定是否显示关注按钮
+				units:["允许评论","禁止所有人评论","仅自己可评论"],
+				units2:["公开帖子","隐藏帖子"],
+				
 			}
 		},
 		onLoad(query) {
@@ -102,6 +115,152 @@
 			this.get_if_followed();
 		},
 		methods: {
+			unitSelected: function(event){
+				const index =event.detail.value;
+				if(index == 0){
+					console.log("a");
+					uni.request({
+						url: `http://82.157.244.44:8000/api/v1/forum/posts/${this.post.id}/allowComment/`,
+						method: "POST",
+						header: {
+							'Authorization': `Bearer ${uni.getStorageSync('token')}`,
+						},
+						data:{
+							allow_comment:"OP",
+						},
+						success: (res) => {
+							this.showCommentInput = false ;
+							console.log("aaaaa");
+							uni.showToast({
+								title: '权限设置成功',
+								duration: 1000,
+								icon:"success",
+							});
+							
+							this.get_id_post(this.post.id);
+
+						},
+						fail: (err) => {
+							console.log("a");
+						}
+					})
+				}
+				else if(index == 1)
+				{
+					uni.request({
+						url: `http://82.157.244.44:8000/api/v1/forum/posts/${this.post.id}/allowComment/`,
+						method: "POST",
+						header: {
+							'Authorization': `Bearer ${uni.getStorageSync('token')}`,
+						},
+						data:{
+							allow_comment:"CL",
+						},
+						success: (res) => {
+							this.showCommentInput = false;
+							uni.showToast({
+								title: '权限设置成功',
+								duration: 1000,
+								icon:"success",
+							});
+							
+							this.get_id_post(this.post.id);
+						},
+						fail: (err) => {
+							console.log("a");
+						}
+					})
+				}
+					
+				else {
+					uni.request({
+						url: `http://82.157.244.44:8000/api/v1/forum/posts/${this.post.id}/allowComment/`,
+						method: "POST",
+						header: {
+							'Authorization': `Bearer ${uni.getStorageSync('token')}`,
+						},
+						data:{
+							allow_comment:"AU",
+						},
+						success: (res) => {
+							this.showCommentInput = false ;
+							uni.showToast({
+								title: '权限设置成功',
+								duration: 1000,
+								icon:"success",
+							});
+							
+							this.get_id_post(this.post.id);
+						},
+						fail: (err) => {
+							console.log("a");
+						}
+					})
+				}
+				
+				
+			},
+			
+			
+			unitSelected2: function(event){
+				const index =event.detail.value;
+				if(index == 0){
+					uni.request({
+						url: `http://82.157.244.44:8000/api/v1/forum/posts/${this.post.id}/setVisibility/`,
+						method: "POST",
+						header: {
+							'Authorization': `Bearer ${uni.getStorageSync('token')}`,
+						},
+						data:{
+							visibility:"PU",
+						},
+						success: (res) => {
+							console.log("aaaaa");
+							uni.showToast({
+								title: '公开设置成功',
+								duration: 1000,
+								icon:"success",
+							});
+							
+							this.get_id_post(this.post.id);
+			
+						},
+						fail: (err) => {
+							console.log("a");
+						}
+					})
+				}				
+				else {
+					uni.request({
+						url: `http://82.157.244.44:8000/api/v1/forum/posts/${this.post.id}/setVisibility/`,
+						method: "POST",
+						header: {
+							'Authorization': `Bearer ${uni.getStorageSync('token')}`,
+						},
+						data:{
+							visibility:"PR",
+						},
+						success: (res) => {
+							
+							console.log("aaaaa");
+							uni.showToast({
+								title: '隐藏设置成功',
+								duration: 1000,
+								icon:"success",
+							});
+							
+							this.get_id_post(this.post.id);
+								
+						},
+						fail: (err) => {
+							console.log("a");
+						}
+					})
+				}
+				
+				
+			},
+			
 			goToUserHome_post() {
 				const uuid = this.user.uuid;
 				// 跳转到 user-home 页面
@@ -126,7 +285,6 @@
 				} else {
 					this.not_my_post = true;
 				}
-
 
 			},
 
@@ -240,7 +398,7 @@
 			canDeleteComment(comment) {
 				// 只有评论的作者可以删除评论
 				const userInfo = uni.getStorageSync('userInfo');
-				return comment.author_uuid === userInfo.uuid;
+				return comment.author_uuid === userInfo.uuid || this.not_my_post === false ;
 			},
 
 			formatPostTime(time) {
@@ -263,7 +421,38 @@
 
 
 			toggleCommentInput() {
-				this.showCommentInput = !this.showCommentInput;
+				console.log(this.post.allowed_comment);
+				if(this.post.allowed_comment === "OP")
+				{
+					this.showCommentInput = !this.showCommentInput;
+				}
+				else if(this.post.allowed_comment === "CL")
+					
+				{
+					uni.showToast({
+						title: '用户已禁止评论',
+						duration: 1000,
+						icon:"error",
+					});
+				}
+				else {
+					if(this.not_my_post){
+						uni.showToast({
+							title: '用户已禁止评论',
+							duration: 1000,
+							icon:"error",
+						});
+					}
+					else{
+						this.showCommentInput = !this.showCommentInput;
+					}
+					
+				}
+				
+				
+				
+				
+				
 			},
 			submitComment() {
 				// 处理提交评论的逻辑，可以在这里发送评论内容到后端或者做其他处理
@@ -391,83 +580,6 @@
 				});
 			},
 
-			// get_all_post(postid) {
-			// 	// 获取帖子信息
-			// 	uni.request({
-			// 		url: 'http://82.157.244.44:8000/api/v1/forum/posts/', // 后端接口地址
-			// 		method: 'GET',
-			// 		header: {
-			// 			'Authorization': `Bearer ${uni.getStorageSync('token')}`,
-			// 		},
-			// 		success: (res) => {
-			// 			console.log('数据接收成功:', res.data);
-
-			// 			this.post = res.data.data.find(a => a.id === Number(postid));
-			// 			console.log(this.post);
-
-			// 			const image_addr = this.post.images;
-			// 			this.post_image = image_addr.split(',');
-			// 			console.log(this.post_image);
-
-			// 			// 更新点赞和点踩状态
-			// 			this.isLiked = this.post.is_liked; // 假设后端返回的字段为 is_liked
-			// 			this.isDisliked = this.post.is_disliked; // 假设后端返回的字段为 is_disliked
-
-			// 			// 获取评论列表
-			// 			uni.request({
-			// 				url: `http://82.157.244.44:8000/api/v1/forum/comments/?post_id=${this.post.id}`, // 根据帖子ID获取评论列表
-			// 				method: 'GET',
-			// 				header: {
-			// 					'Authorization': `Bearer ${uni.getStorageSync('token')}`,
-			// 				},
-			// 				success: (res) => {
-			// 					console.log('评论数据接收成功:', res.data);
-			// 					// 更新本地评论列表
-			// 					this.comments = res.data.map(comment => ({
-			// 						id: comment.id,
-			// 						post: comment.post,
-			// 						content: comment.content,
-			// 						author: comment.author,
-			// 						author_uuid: comment.author_uuid,
-			// 						created_at: comment.created_at,
-			// 					}));
-
-			// 					// 获取评论用户信息
-			// 					this.comments.forEach(comment => {
-			// 						this.getCommentAuthorInfo(comment.author_uuid);
-			// 					});
-			// 				},
-			// 				fail: (err) => {
-			// 					console.error('评论数据发送失败:', err);
-			// 				}
-			// 			});
-
-			// 			// 获取帖子作者信息
-			// 			uni.request({
-			// 				url: `http://82.157.244.44:8000/api/v1/user/query-info/?uuid=${this.post.author_uuid}`, // 后端接口地址
-			// 				method: 'GET',
-			// 				header: {
-			// 					'Authorization': `Bearer ${uni.getStorageSync('token')}`,
-			// 				},
-			// 				success: (res) => {
-			// 					console.log('数据接收成功:', res.data);
-			// 					this.user = res.data;
-			// 					this.user.avatar_url = "http://82.157.244.44:8000" + this.user
-			// 						.avatar_url;
-			// 					console.log(this.user.avatar_url);
-			// 					this.get_if_followed();
-			// 					this.if_my_post();
-			// 				},
-			// 				fail: (err) => {
-			// 					console.error('数据发送失败:', err);
-			// 				}
-			// 			});
-			// 		},
-			// 		fail: (err) => {
-			// 			console.error('数据发送失败:', err);
-			// 		}
-			// 	});
-			// },
 
 			// 获取评论用户信息
 			getCommentAuthorInfo(authorUuid) {
@@ -478,7 +590,7 @@
 						'Authorization': `Bearer ${uni.getStorageSync('token')}`,
 					},
 					success: (res) => {
-						console.log('评论用户信息接收成功:', res.data);
+						//console.log('评论用户信息接收成功:', res.data);
 						// 将评论用户的头像信息保存到commentAuthors对象中
 						this.$set(this.commentAuthors, authorUuid, {
 							avatar_url: "http://82.157.244.44:8000" + res.data.avatar_url,
