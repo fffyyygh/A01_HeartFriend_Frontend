@@ -9,12 +9,12 @@
 		
 		<button @click="handel_report">
 		<view class="button-content">
-		       <text>未处理举报</text>
+		       <text>已处理举报</text>
 		</view></button>
 		
 		<button @click="not_handel_report">
 		<view class="button-content">
-		       <text>已处理举报</text>
+		       <text>未处理举报</text>
 		</view></button>
 		</view>
 		

@@ -86,21 +86,30 @@
 </script>
 
 <style>
-	.report-item {
-		display: flex;
-		justify-content: space-between;
-		align-items: center;
-		padding: 10px;
-		border-bottom: 1px solid #ccc;
-		cursor: pointer;
-	}
+.report-item {
+  border-radius: 8px; /* Rounded corners */
+  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1); /* Shadow effect */
+  padding: 15px;
+  margin-bottom: 15px; /* Spacing between items */
+  background-color: #ffffff; /* Background color */
+  transition: transform 0.3s ease-in-out; /* Smooth transition */
+  margin-left: 10px;
+  margin-right: 10px;
+}
 
-	.item-title {
-		font-size: 16px;
-	}
+.report-item:hover {
+  transform: translateY(-3px); /* Hover effect: Slightly lift the box on hover */
+}
 
-	.item-status {
-		font-size: 14px;
-		color: #888;
-	}
+.item-title {
+  font-size: 16px;
+  color: #333; /* Text color */
+}
+
+.item-status {
+	margin-left: 30px;
+  font-size: 14px;
+  color: #888;
+}
+
 </style>
