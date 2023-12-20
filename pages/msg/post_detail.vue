@@ -1,5 +1,5 @@
 <template>
-	<view class="post-detail">
+	<view class="post-detail"  v-show="deleted">
 		<!-- 头部 -->
 		<view class="post-header">
 			<view class="user-info">
@@ -91,6 +91,7 @@
 	export default {
 		data() {
 			return {
+				deleted: false,
 				units2: ["公开帖子", "隐藏帖子"],
 				visibilityText: "公开",
 				my_follow: [],
@@ -114,7 +115,21 @@
 		onLoad(query) {
 			this.getIfAdmin();
 			const id = query.id;
-			this.get_id_post(id);
+			if( id=== "null" ){
+				
+				
+				console.log("aaaaaaa");
+				uni.redirectTo({
+					url:"/pages/msg/post_empty",
+				})
+			}
+			
+			else
+			{
+				this.deleted = true
+				this.get_id_post(id);
+			}
+			
 
 
 		},
@@ -564,7 +579,7 @@
 				this.showCommentInput = false;
 			},
 
-			get_id_post(id) {
+			get_id_post(id) {	
 				uni.request({
 					url: `http://82.157.244.44:8000/api/v1/forum/posts/${id}/`, // 后端接口地址
 					method: 'GET',

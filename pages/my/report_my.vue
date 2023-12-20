@@ -78,7 +78,7 @@
 			goToDetailPage(reportId) {
 				console.log('reportId:', reportId);
 				uni.navigateTo({
-					url: `/pages/my/report_detail?reportId=${reportId}`,
+					url: `/pages/my/report_detail_user?reportId=${reportId}`,
 				});
 			},
 		},

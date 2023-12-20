@@ -17,6 +17,15 @@
 				<text class="item-title">举报类型：</text>
 				<text>{{ report.report_type }}</text>
 			</view>
+			<view class="report-item" v-show="!canHandleReport">
+				<text class="item-title">处理详情：</text>
+				<text>{{ report.resolution_details }}</text>
+			</view>
+			
+			<view class="report-item"  v-show="!canHandleReport">
+				<text class="item-title">处理时间：</text>
+				<text>{{ formatReportTime(report.resolved_at) }}</text>
+			</view>
 			<picker v-if="canHandleReport" v-model="selectedStatus" :range="reportStatusOptions"
 				@change="handleStatusChange">
 				<view class="picker">
@@ -85,14 +94,14 @@
 			},
 			get_report() {
 				uni.request({
-					url: 'http://82.157.244.44:8000/api/v1/forum/reports/manage/all/',
+					url: `http://82.157.244.44:8000/api/v1/forum/reports/${this.report_id}/`,
 					method: 'GET',
 					header: {
 						'Authorization': `Bearer ${uni.getStorageSync('token')}`,
 					},
 					success: (res) => {
 						console.log('res:::', res);
-						this.report = res.data.data[1];
+						this.report = res.data;
 						console.log('this.report:::', this.report);
 						this.canHandleReport = this.report.report_status === "pending";
 						this.reportLoaded = true; // 数据加载完成后设置为 true
