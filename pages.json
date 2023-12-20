@@ -272,6 +272,30 @@
 				"navigationBarBackgroundColor": "#FFcc99"
 			}
 
+		},
+		{
+			"path" : "pages/my/report_my",
+			"style" : 
+			{
+				"navigationBarTitleText" : "",
+				"enablePullDownRefresh" : false
+			}
+		},
+		{
+			"path" : "pages/my/report_detail_user",
+			"style" : 
+			{
+				"navigationBarTitleText" : "",
+				"enablePullDownRefresh" : false
+			}
+		},
+		{
+			"path" : "pages/msg/post_empty",
+			"style" : 
+			{
+				"navigationBarTitleText" : "",
+				"enablePullDownRefresh" : false
+			}
 		}
 
 	],

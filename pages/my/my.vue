@@ -55,9 +55,9 @@
 					<view class="grid-text">我的点踩</view>
 				</u-grid-item>
 
-				<u-grid-item index="/pages/my/user?type=1">
+				<u-grid-item @click="goReport">
 					<image class="gn-icon"></image>
-					<view class="grid-text">我的关注</view>
+					<view class="grid-text">我的举报</view>
 				</u-grid-item>
 
 				<u-grid-item  v-show="if_admin" @click="goAdmin">
@@ -219,6 +219,11 @@
 					url:"/pages/my/post_dislike",
 				})
 			},
+			goReport(){
+				uni.navigateTo({
+					url:"/pages/my/report_my",
+				})
+			}
 			
 		}
 	}
