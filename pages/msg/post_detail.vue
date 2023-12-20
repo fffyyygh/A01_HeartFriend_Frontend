@@ -20,7 +20,7 @@
 				<image v-for="(image, index) in post_image" :key="index" :src="image" mode="aspectFill"
 					class="post-image" @click="previewImage(index)"></image>
 			</view>
-			<button v-show="if_admin"  @click="deletePost">删除帖子</button>
+			<button v-show="if_admin" @click="deletePost">删除帖子</button>
 		</view>
 
 		<!-- 点赞、点踩、评论图标和数量 -->
@@ -115,14 +115,14 @@
 			this.getIfAdmin();
 			const id = query.id;
 			this.get_id_post(id);
-			
+
 
 		},
 		onShow() {
 			this.get_if_followed();
 		},
 		methods: {
-			
+
 			deletePost() {
 				const id = this.post.id;
 				uni.request({
@@ -133,18 +133,18 @@
 					},
 					success: (res) => {
 						console.log('帖子已删除');
-						uni.switchTab({
-							url:"/pages/msg/post-list",
-						})
-			
+						uni.navigateBack({
+							delta: 1, // 返回的页面数，1表示返回上一页，依此类推
+						});
+
 					},
 					fail: (err) => {
 						console.error('数据发送失败:', err);
 					}
 				});
-			
+
 			},
-			
+
 
 			getIfAdmin() {
 				uni.request({
@@ -159,8 +159,7 @@
 
 						{
 							this.if_admin = true;
-						} else
-						{
+						} else {
 							this.if_admin = false;
 						}
 
@@ -532,7 +531,7 @@
 						post_id: this.post.id,
 					},
 					success: (res) => {
-						
+
 
 						// 更新评论的作者、头像、创建时间
 						const newComment = {

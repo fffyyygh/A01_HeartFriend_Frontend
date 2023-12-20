@@ -15,15 +15,15 @@
 			"path": "pages/login/register",
 			"style": {
 				"navigationBarTitleText": "编辑个人信息",
-				"navigationBarBackgroundColor": "#FFcc99",
-				"backgroundColor": "#ff9"
+				"navigationBarBackgroundColor": "#FFcc99"
 			}
 		},
 		{
 			"path": "pages/consult/consult",
 			"style": {
 				"navigationBarTitleText": "HeartFriend",
-				"enablePullDownRefresh": false
+				"enablePullDownRefresh": false,
+				"navigationBarBackgroundColor": "#FFcc99"
 			}
 		},
 		{
@@ -39,6 +39,7 @@
 			"style": {
 				"navigationBarTitleText": "HeartFriend",
 				"navigationBarBackgroundColor": "#FFcc99",
+				"backgroundColor": "#ffe838",
 
 				"enablePullDownRefresh": false
 			}
@@ -47,13 +48,15 @@
 			"path": "pages/AiChat/AiChat",
 			"style": {
 				"navigationBarTitleText": "ai聊天",
+				"navigationBarBackgroundColor": "#FFcc99",
 				"enablePullDownRefresh": false
 			}
 		},
 		{
 			"path": "pages/diary/diary",
 			"style": {
-				"navigationBarTitleText": "日记"
+				"navigationBarTitleText": "日记",
+				"navigationBarBackgroundColor": "#FFcc99"
 			}
 		},
 		{
@@ -69,8 +72,8 @@
 			{
 				"navigationBarTitleText" : "心情记录",
 				"enablePullDownRefresh" : false,
-				"backgroundColor": "#C1FFC1",
-				"navigationBarBackgroundColor": "#C1FFC1"
+				"backgroundColor": "#FFcc99",
+				"navigationBarBackgroundColor": "#FFcc99"
 			}
 		},
 		{
@@ -79,8 +82,8 @@
 			{
 				"navigationBarTitleText" : "",
 				"enablePullDownRefresh" : false,
-				"backgroundColor": "#C1FFC1",
-				"navigationBarBackgroundColor": "#C1FFC1"
+				"backgroundColor": "#FFcc99",
+				"navigationBarBackgroundColor": "#FFcc99"
 			}
 		},
 		{
@@ -88,7 +91,8 @@
 			"style" : 
 			{
 				"navigationBarTitleText" : "",
-				"enablePullDownRefresh" : false
+				"enablePullDownRefresh" : false,
+				"navigationBarBackgroundColor": "#FFcc99"
 			}
 		},
 		{
@@ -96,7 +100,8 @@
 			"style" : 
 			{
 				"navigationBarTitleText" : "",
-				"enablePullDownRefresh" : false
+				"enablePullDownRefresh" : false,
+				"navigationBarBackgroundColor": "#FFcc99"
 			}
 		},
 		{
@@ -104,7 +109,8 @@
 			"style" : 
 			{
 				"navigationBarTitleText" : "",
-				"enablePullDownRefresh" : false
+				"enablePullDownRefresh" : false,
+				"navigationBarBackgroundColor": "#FFcc99"
 			}
 		},
 		
@@ -113,7 +119,8 @@
 			"style" : 
 			{
 				"navigationBarTitleText" : "",
-				"enablePullDownRefresh" : false
+				"enablePullDownRefresh" : false,
+				"navigationBarBackgroundColor": "#FFcc99"
 			}
 		},
 		{
@@ -121,7 +128,8 @@
 			"style" : 
 			{
 				"navigationBarTitleText" : "",
-				"enablePullDownRefresh" : false
+				"enablePullDownRefresh" : false,
+				"navigationBarBackgroundColor": "#FFcc99"
 			}
 		},
 	
@@ -130,7 +138,8 @@
 			"style" : 
 			{
 				"navigationBarTitleText" : "",
-				"enablePullDownRefresh" : false
+				"enablePullDownRefresh" : false,
+				"navigationBarBackgroundColor": "#FFcc99"
 			}
 		},
 		{
@@ -138,7 +147,8 @@
 			"style" : 
 			{
 				"navigationBarTitleText" : "",
-				"enablePullDownRefresh" : false
+				"enablePullDownRefresh" : false,
+				"navigationBarBackgroundColor": "#FFcc99"
 			}
 		},
 		{
@@ -147,7 +157,8 @@
 			{
 				"navigationBarTitleText" : "",
 				"enablePullDownRefresh" : false,
-				"onReachBottomDistance": 50
+				"onReachBottomDistance": 50,
+				"navigationBarBackgroundColor": "#FFcc99"
 			}
 		},
 		{
@@ -155,7 +166,8 @@
 			"style" : 
 			{
 				"navigationBarTitleText" : "",
-				"enablePullDownRefresh" : false
+				"enablePullDownRefresh" : false,
+				"navigationBarBackgroundColor": "#FFcc99"
 			}
 		},
 		{
@@ -163,7 +175,8 @@
 			"style" : 
 			{
 				"navigationBarTitleText" : "",
-				"enablePullDownRefresh" : false
+				"enablePullDownRefresh" : false,
+				"navigationBarBackgroundColor": "#FFcc99"
 			}
 		},
 		{
@@ -171,7 +184,8 @@
 			"style" : 
 			{
 				"navigationBarTitleText" : "",
-				"enablePullDownRefresh" : false
+				"enablePullDownRefresh" : false,
+				"navigationBarBackgroundColor": "#FFcc99"
 			}
 		},
 		{
@@ -180,7 +194,8 @@
 			{
 				"navigationBarTitleText" : "",
 				"enablePullDownRefresh" : false,
-				"onReachBottomDistance": 50
+				"onReachBottomDistance": 50,
+				"navigationBarBackgroundColor": "#FFcc99"
 			}
 		},
 		{
@@ -188,7 +203,8 @@
 			"style" : 
 			{
 				"navigationBarTitleText" : "",
-				"enablePullDownRefresh" : false
+				"enablePullDownRefresh" : false,
+				"navigationBarBackgroundColor": "#FFcc99"
 			}
 		},
 		{
@@ -196,7 +212,8 @@
 			"style" : 
 			{
 				"navigationBarTitleText" : "",
-				"enablePullDownRefresh" : false
+				"enablePullDownRefresh" : false,
+				"navigationBarBackgroundColor": "#FFcc99"
 			}
 		},
 		{
@@ -204,7 +221,8 @@
 			"style" : 
 			{
 				"navigationBarTitleText" : "",
-				"enablePullDownRefresh" : false
+				"enablePullDownRefresh" : false,
+				"navigationBarBackgroundColor": "#FFcc99"
 			}
 		},
 		{
@@ -212,7 +230,8 @@
 			"style" : 
 			{
 				"navigationBarTitleText" : "",
-				"enablePullDownRefresh" : false
+				"enablePullDownRefresh" : false,
+				"navigationBarBackgroundColor": "#FFcc99"
 			}
 		},
 		{
@@ -220,7 +239,8 @@
 			"style" : 
 			{
 				"navigationBarTitleText" : "",
-				"enablePullDownRefresh" : false
+				"enablePullDownRefresh" : false,
+				"navigationBarBackgroundColor": "#FFcc99"
 			}
 
 		},
@@ -229,7 +249,8 @@
 			"style" : 
 			{
 				"navigationBarTitleText" : "",
-				"enablePullDownRefresh" : false
+				"enablePullDownRefresh" : false,
+				"navigationBarBackgroundColor": "#FFcc99"
 			}
 		},
 		{
@@ -237,7 +258,8 @@
 			"style" : 
 			{
 				"navigationBarTitleText" : "",
-				"enablePullDownRefresh" : false
+				"enablePullDownRefresh" : false,
+				"navigationBarBackgroundColor": "#FFcc99"
 			}
 
 		},
@@ -246,7 +268,8 @@
 			"style" : 
 			{
 				"navigationBarTitleText" : "",
-				"enablePullDownRefresh" : false
+				"enablePullDownRefresh" : false,
+				"navigationBarBackgroundColor": "#FFcc99"
 			}
 
 		}

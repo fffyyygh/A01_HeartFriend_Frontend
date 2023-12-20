@@ -1,6 +1,6 @@
 <template>
 	<view>
-		<swiper class="swiper" :indicator-dots="true" :autoplay="true" :interval="3000" :duration="1000">
+		<!-- <swiper class="swiper" :indicator-dots="true" :autoplay="true" :interval="3000" :duration="1000">
 			<swiper-item class="swiper-item">
 				<image class="swiper-image" mode="aspectFill" src="../../static/index-swiper/cat1.jpg"></image>
 			</swiper-item>
@@ -10,7 +10,7 @@
 			<swiper-item class="swiper-item">
 				<image class="swiper-image" mode="aspectFill" src="../../static/index-swiper/cat3.jpg"></image>
 			</swiper-item>
-		</swiper>
+		</swiper> -->
 		<view class="container">
 			<view class="box">
 				<image class="box-image" mode="aspectFit" src="../../static/index/robot.png"></image>
