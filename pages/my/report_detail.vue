@@ -21,8 +21,7 @@
 				<text class="item-title">处理详情：</text>
 				<text>{{ report.resolution_details }}</text>
 			</view>
-			
-			<view class="report-item"  v-show="!canHandleReport">
+			<view class="report-item" v-show="!canHandleReport">
 				<text class="item-title">处理时间：</text>
 				<text>{{ formatReportTime(report.resolved_at) }}</text>
 			</view>
@@ -32,11 +31,11 @@
 					{{ selectedStatus }}
 				</view>
 			</picker>
-			<input v-if="canHandleReport" v-model="resolutionDetails" placeholder="处理详情" />
-			<button v-if="canHandleReport" @click="handleReport">处理举报</button>
+			<textarea v-if="canHandleReport" v-model="resolutionDetails" placeholder="处理详情"
+				class="resolution-input"></textarea>
+			<button class="post-btn" @click="toPost">查看被举报贴子详情</button>
+			<button class="handle-btn" v-if="canHandleReport" @click="handleReport">处理举报</button>
 		</view>
-
-		<button class="post-btn" @click="toPost">查看被举报贴子详情</button>
 	</view>
 </template>
 
@@ -150,6 +149,34 @@
 </script>
 
 <style>
+	.picker {
+		border-radius: 8px;
+		box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+		margin-left: 10px;
+		margin-right: 10px;
+		border: 1px solid #ccc;
+		border-radius: 5px;
+		padding: 12px;
+		box-sizing: border-box;
+		font-size: 16px;
+	}
+
+	.resolution-input {
+		border-radius: 8px;
+		box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+		margin-left: 10px;
+		margin-right: 10px;
+		width: calc(100% - 20px);
+		height: 200rpx;
+		padding: 12px;
+		margin-top: 10px;
+		border: 1px solid #ccc;
+		border-radius: 5px;
+		box-sizing: border-box;
+		font-size: 16px;
+		resize: none;
+	}
+
 	.report-item {
 		border-radius: 8px;
 		/* Rounded corners */
@@ -204,7 +231,26 @@
 
 	.post-btn {
 		display: block;
-		width: 100%;
+		width: calc(100% - 20px);
+		/* 调整为所需的宽度值，确保左右边距一致 */
+		max-width: 300px;
+		margin-top: 30rpx;
+		padding: 12px 20px;
+		border-radius: 5px;
+		background-color: #3498db;
+		color: #fff;
+		text-align: center;
+		font-size: 16px;
+		font-weight: bold;
+		text-decoration: none;
+		box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
+		transition: transform 0.3s ease, background-color 0.3s ease, box-shadow 0.3s ease;
+	}
+
+	.handle-btn {
+		display: block;
+		width: calc(100% - 20px);
+		/* 调整为所需的宽度值，确保左右边距一致 */
 		max-width: 300px;
 		margin: 20px auto;
 		padding: 12px 20px;

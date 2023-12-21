@@ -25,7 +25,7 @@
 					<u-button type="default" shape="circle" @click="wxLogin" plain>登录</u-button>
 				</view>
 			</block>
-			<u-grid :col="3" :border="false" style="margin: 20rpx 0;" >
+			<u-grid :col="3" :border="false" style="margin: 20rpx 0;">
 				<u-grid-item @click="to_my_fans">
 					<text>{{ fansNum}}</text>
 					<view class="grid-text">粉丝</view>
@@ -36,7 +36,7 @@
 				</u-grid-item>
 				<u-grid-item @click="to_my_posts">
 					<text>{{ postNum }}</text>
-					<view class="grid-text" >帖子</view>
+					<view class="grid-text">帖子</view>
 				</u-grid-item>
 
 			</u-grid>
@@ -45,30 +45,28 @@
 			<view class="block-title">我的服务</view>
 			<u-grid :col="1" :border="false" style="margin: 20rpx 0;">
 
-				<u-grid-item @click="goLike">
-					<image class="gn-icon"></image>
+				<u-grid-item @click="goLike" class="service-item">
+					<image class="gn-icon" src="/static/my/like-icon.png"></image>
 					<view class="grid-text">我的点赞</view>
 				</u-grid-item>
 
-				<u-grid-item @click="goDislike">
-					<image class="gn-icon"></image>
+				<u-grid-item @click="goDislike" class="service-item">
+					<image class="gn-icon" src="/static/my/dislike-icon.png"></image>
 					<view class="grid-text">我的点踩</view>
 				</u-grid-item>
 
-				<u-grid-item @click="goReport">
-					<image class="gn-icon"></image>
+				<u-grid-item @click="goReport" class="service-item">
+					<image class="gn-icon" src="/static/my/report-icon.png"></image>
 					<view class="grid-text">我的举报</view>
 				</u-grid-item>
 
-				<u-grid-item  v-show="if_admin" @click="goAdmin">
-					<image class="gn-icon"></image>
+				<u-grid-item v-show="if_admin" @click="goAdmin" class="service-item">
+					<image class="gn-icon" src="/static/my/admin-icon.png"></image>
 					<view class="grid-text">管理论坛</view>
 				</u-grid-item>
-
-
 			</u-grid>
-			
 		</view>
+
 	</view>
 
 </template>
@@ -81,20 +79,20 @@
 			this.get_all_post();
 			this.get_all_focus();
 			this.get_all_fans();
-		
+
 		},
 		data() {
 			return {
 				userInfo: uni.getStorageSync('userInfo'),
 				has_login: true,
-				postNum:"",
+				postNum: "",
 				focusNum: "",
-				fansNum :"",
-				if_admin : false ,
+				fansNum: "",
+				if_admin: false,
 			};
 		},
 		methods: {
-			
+
 			getIfAdmin() {
 				uni.request({
 					url: `http://82.157.244.44:8000/api/v1/user/info/`,
@@ -102,50 +100,49 @@
 					header: {
 						'Authorization': `Bearer ${uni.getStorageSync('token')}`,
 					},
-			
+
 					success: (res) => {
 						if (res.data.is_forum_admin)
-			
+
 						{
 							this.if_admin = true;
-						} else
-						{
+						} else {
 							this.if_admin = false;
 						}
-			
+
 					},
 					fail: (err) => {
 						console.log("a");
 					}
 				})
 			},
-			
+
 			goUser() {
 				uni.navigateTo({
 					url: "/pages/login/register"
 				})
 			},
-			to_my_posts(){
+			to_my_posts() {
 				uni.navigateTo({
-					url:"/pages/my/my_posts"
+					url: "/pages/my/my_posts"
 				})
 			},
-			
-				
-			to_my_focus(){
+
+
+			to_my_focus() {
 				uni.navigateTo({
-					url:"/pages/my/my_focus"
+					url: "/pages/my/my_focus"
 				})
 			},
-			
-			to_my_fans(){
+
+			to_my_fans() {
 				uni.navigateTo({
-					url:"/pages/my/my_fans"
+					url: "/pages/my/my_fans"
 				})
 			},
-			
-			
-			
+
+
+
 			get_all_post() {
 				uni.request({
 					url: `http://82.157.244.44:8000/api/v1/forum/posts/getUserPosts/?offset=0&limit=20`, // 后端接口地址
@@ -156,20 +153,20 @@
 					data: {
 						"uuid": this.userInfo.uuid,
 					},
-					
+
 					success: (res) => {
-						this.postNum = res.data.count;		
+						this.postNum = res.data.count;
 					},
 					fail: (err) => {
 						console.error('数据发送失败:', err);
 					}
 				});
-			
-			
+
+
 			},
-			
-				
-			get_all_focus(){
+
+
+			get_all_focus() {
 				uni.request({
 					url: 'http://82.157.244.44:8000/api/v1/user/following/', // 后端接口地址
 					method: 'GET',
@@ -177,17 +174,17 @@
 						'Authorization': `Bearer ${uni.getStorageSync('token')}`,
 					},
 					success: (res) => {
-						this.focusNum = res.data.following.length;	
+						this.focusNum = res.data.following.length;
 					},
 					fail: (err) => {
 						console.error('数据发送失败:', err);
 					}
 				});
-				
+
 			},
-			
-				
-			get_all_fans(){
+
+
+			get_all_fans() {
 				uni.request({
 					url: 'http://82.157.244.44:8000/api/v1/user/followers/', // 后端接口地址
 					method: 'GET',
@@ -196,35 +193,35 @@
 					},
 					success: (res) => {
 						//console.log('数据接收成功:', res.data);	
-						this.fansNum = res.data.followers.length;		
+						this.fansNum = res.data.followers.length;
 					},
 					fail: (err) => {
 						console.error('数据发送失败:', err);
 					}
 				});
-				
+
 			},
-			goAdmin(){
+			goAdmin() {
 				uni.navigateTo({
-					url:"/pages/my/admin",
+					url: "/pages/my/admin",
 				})
 			},
-			goLike(){
+			goLike() {
 				uni.navigateTo({
-					url:"/pages/my/post_like",
+					url: "/pages/my/post_like",
 				})
 			},
-			goDislike(){
+			goDislike() {
 				uni.navigateTo({
-					url:"/pages/my/post_dislike",
+					url: "/pages/my/post_dislike",
 				})
 			},
-			goReport(){
+			goReport() {
 				uni.navigateTo({
-					url:"/pages/my/report_my",
+					url: "/pages/my/report_my",
 				})
 			}
-			
+
 		}
 	}
 </script>
@@ -325,6 +322,26 @@
 		.block-title {
 			background-color: #fff;
 			padding: 20rpx;
+		}
+
+		.service-item {
+			display: flex;
+			align-items: center;
+			justify-content: space-between;
+			padding: 20rpx;
+			border-bottom: 1px solid #ccc; // Add border between items
+
+			.gn-icon {
+				width: 60rpx;
+				height: 60rpx;
+				margin-right: 20rpx; // Adjust spacing between icon and text
+			}
+
+			.grid-text {
+				flex-grow: 1; // Allow text to take remaining space
+				color: #999;
+				font-size: 26rpx; // Adjust font size as needed
+			}
 		}
 	}
 
