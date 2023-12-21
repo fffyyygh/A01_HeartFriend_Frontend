@@ -202,7 +202,7 @@
 		margin: 20px auto;
 		padding: 12px 20px;
 		border-radius: 5px;
-		background-color: #3498db;
+		background-color: #527853;
 		color: #fff;
 		text-align: center;
 		font-size: 16px;

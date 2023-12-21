@@ -20,7 +20,7 @@
 				<image v-for="(image, index) in post_image" :key="index" :src="image" mode="aspectFill"
 					class="post-image" @click="previewImage(index)"></image>
 			</view>
-			<button v-show="if_admin" @click="deletePost">删除帖子</button>
+			<button v-show="if_admin" @click="showDeleteConfirmation_post">删除帖子</button>
 		</view>
 
 		<!-- 点赞、点踩、评论图标和数量 -->
@@ -137,6 +137,17 @@
 			this.get_if_followed();
 		},
 		methods: {
+			showDeleteConfirmation_post() {
+			        uni.showModal({
+			            title: '确认删除',
+			            content: '确认删除本条帖子？',
+			            success: (res) => {
+			                if (res.confirm) {
+			                    this.deletePost(); // Call deletePost if user confirms
+			                }
+			            },
+			        });
+			    },
 
 			deletePost() {
 				const id = this.post.id;
@@ -148,9 +159,9 @@
 					},
 					success: (res) => {
 						console.log('帖子已删除');
-						uni.navigateBack({
-							delta: 1, // 返回的页面数，1表示返回上一页，依此类推
-						});
+						uni.redirectTo({
+							url:"/pages/msg/post_empty",
+						})
 
 					},
 					fail: (err) => {
@@ -830,7 +841,7 @@
 		align-self: flex-start;
 		padding: 8px 16px;
 		border: none;
-		background-color: steelblue;
+		background-color: #527853;
 		color: #fff;
 		font-size: 30rpx;
 		height: 80rpx;
@@ -889,12 +900,12 @@
 	}
 
 	.action-item.likeactive {
-		color: #ff6347;
+		color: #EF4040;
 		/* 设置激活状态下的颜色，可以根据需要调整 */
 	}
 
 	.action-item.dislikeactive {
-		color: #ff6347;
+		color: #527853;
 		/* 设置激活状态下的颜色，可以根据需要调整 */
 	}
 
@@ -913,7 +924,7 @@
 		padding: 8px 16px;
 		border: none;
 		border-radius: 20px;
-		background-color: #3498db;
+		background-color: #527853;
 		color: #fff;
 		font-size: 14px;
 		margin-top: 20px;
@@ -936,7 +947,7 @@
 		padding: 8px 16px;
 		border: none;
 		border-radius: 20px;
-		background-color: #3498db;
+		background-color: #527853;
 		color: #fff;
 		font-size: 14px;
 	}

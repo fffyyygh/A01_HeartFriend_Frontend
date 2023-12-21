@@ -218,7 +218,7 @@
 		align-self: flex-start;
 		padding: 8px 16px;
 		border: none;
-		background-color: steelblue;
+		background-color: #527853;
 		color: #fff;
 		font-size: 30rpx;
 		height: 80rpx;

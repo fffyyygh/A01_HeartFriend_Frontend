@@ -38,7 +38,7 @@
 			return {
 				btnStyle: {
 					color: "#f9f8e5",
-					backgroundColor: '#ff8a89'
+					backgroundColor: '#527853'
 				},
 				avatar_url: uni.getStorageSync('userInfo').avatar_url,
 				// 单选数据源

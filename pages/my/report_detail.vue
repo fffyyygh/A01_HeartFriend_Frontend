@@ -159,6 +159,7 @@
 		padding: 12px;
 		box-sizing: border-box;
 		font-size: 16px;
+		color: forestgreen;
 	}
 
 	.resolution-input {
@@ -237,7 +238,7 @@
 		margin-top: 30rpx;
 		padding: 12px 20px;
 		border-radius: 5px;
-		background-color: #3498db;
+		background-color: #527853;
 		color: #fff;
 		text-align: center;
 		font-size: 16px;
@@ -255,7 +256,7 @@
 		margin: 20px auto;
 		padding: 12px 20px;
 		border-radius: 5px;
-		background-color: #3498db;
+		background-color: #527853;
 		color: #fff;
 		text-align: center;
 		font-size: 16px;

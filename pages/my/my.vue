@@ -229,7 +229,7 @@
 <style lang="scss" scoped>
 	.head {
 		padding: 20rpx;
-		background-color: #ffe838;
+		background-color: #F9E8D9;
 
 		.sub-txt {
 			font-size: 24rpx;

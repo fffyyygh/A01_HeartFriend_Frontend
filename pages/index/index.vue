@@ -13,17 +13,17 @@
 		</swiper> -->
 		<view class="container">
 			<view class="box">
-				<image class="box-image" mode="aspectFit" src="../../static/index/robot.png"></image>
+				<image class="box-image" mode="aspectFit" src="../../static/index/robot1.png"></image>
 				<text
 					class="encouragement-text">在这段疗愈之旅中，你并非孤身一人。勇敢尝试与AI展开对话，它可以成为你的倾诉伙伴，帮你理清思绪，缓解心情。科技的力量已经证明在心理治疗领域发挥着积极的作用。给予自己这个宝贵的机会，让对话成为你治愈过程中不可或缺的一环。</text>
-				<u-button @click="go_chat" hair-line="false" :ripple="true" ripple-bg-color="#e86158"
+				<u-button @click="go_chat" hair-line="false" :ripple="true" ripple-bg-color="#5C8374"
 					:custom-style="btnStyle">聊一聊</u-button>
 			</view>
 			<view class="box">
-				<image class="box-image" mode="aspectFit" src="../../static/index/diary.png"></image>
+				<image class="box-image" mode="aspectFit" src="../../static/index/diary1.png"></image>
 				<text
 					class="encouragement-text">每天都是新的开始，而记录下你的感受是迈向康复的一步。尝试将情绪、想法和反应写在日记中，这不仅有助于更好地了解自己，还有助于追踪变化。就像有人说的那样，文字是治愈的良药。日记是你独特的故事，每一页都是自我关爱的表现。</text>
-				<u-button @click="go_diary" hair-line="false" :ripple="true" ripple-bg-color="#e86158"
+				<u-button @click="go_diary" hair-line="false" :ripple="true" ripple-bg-color="#5C8374"
 					:custom-style="btnStyle">心情记录</u-button>
 			</view>
 		</view>
@@ -50,7 +50,7 @@
 			return {
 				btnStyle: {
 					color: "#f9f8e5",
-					backgroundColor: '#ff8a89',
+					backgroundColor: '#527853',
 					marginTop: '20rpx',
 				},
 			}

@@ -400,7 +400,7 @@
 		align-self: flex-start;
 		padding: 8px 16px;
 		border: none;
-		background-color: steelblue;
+		background-color: #527853;
 		color: #fff;
 		font-size: 30rpx;
 		height: 80rpx;
@@ -424,12 +424,12 @@
 	}
 
 	.liked {
-		color: #ff6347;
+		color: #EF4040;
 		/* 设置喜欢状态的图标颜色为红色 */
 	}
 
 	.disliked {
-		color: #ff6347;
+		color: #527853;
 		/* 设置不喜欢状态的图标颜色为蓝色 */
 	}
 
