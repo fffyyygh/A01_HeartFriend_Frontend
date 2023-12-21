@@ -107,7 +107,7 @@
 }
 
 .item-status {
-	margin-left: 30px;
+  margin-left: 30rpx;
   font-size: 14px;
   color: #888;
 }

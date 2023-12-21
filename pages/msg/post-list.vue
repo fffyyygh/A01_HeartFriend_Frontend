@@ -5,7 +5,7 @@
 			<text :class="currentTab === 'follow' ? 'active' : ''" @tap="switchTab('follow')"
 				@click="focus_tab_click">关注</text>
 			<picker class="changesort" mode="selector" :range="sortType" @change="sortTypeChanged">
-				<view>排序：{{ currentSortType }}</view>
+				<view class="sorttype">{{ currentSortType }}</view>
 			</picker>
 		</view>
 		<view v-for="(post, index) in posts" :key="index" class="post-item">
@@ -629,7 +629,6 @@
 		z-index: 999;
 		/* 可以使固定元素在其他内容上层显示 */
 		margin-bottom: 5rpx;
-
 		display: flex;
 
 
@@ -640,7 +639,7 @@
 		margin-left: 20px;
 		margin-right: 20px;
 		cursor: pointer;
-		font-size: 30rpx;
+		font-size: 35rpx;
 	}
 
 	/* 定义选中状态的样式 */
@@ -651,5 +650,9 @@
 
 	.changesort {
 		margin-left: 250rpx;
+	}
+	
+	.sorttype{
+		font-size: 33rpx;
 	}
 </style>

@@ -94,10 +94,10 @@
 	}
 
 	.diary-item {
-		border: 1px solid #ccc;
+		border: 1px solid #D9F9D9;
 		padding: 10px;
 		margin-bottom: 10px;
-		background-color: azure;
+		background-color: #D9F9D9;
 	}
 
 	.item-row {
@@ -120,14 +120,10 @@
 	button {
 		margin-top: 20px;
 		padding: 10px 20px;
-		background-color: #007bff;
+		background-color: #406B43;
 		color: white;
 		border: none;
 		border-radius: 5px;
 		cursor: pointer;
-	}
-
-	button:hover {
-		background-color: #0056b3;
 	}
 </style>
