@@ -1,13 +1,14 @@
 <template>
 	<view>
 		<div v-for="(medicine, index) in medicines" :key="index" class="diary-item">
-			<div @click="showMedicineContent(medicine)" class="diary-content" @longpress="showDeleteMedicineButton(medicine)">
+			<div @click="showMedicineContent(medicine)" class="diary-content"
+				@longpress="showDeleteMedicineButton(medicine)">
 				<p class="diary-title">{{ medicine.name }}</p>
 				<p class="diary-date">服药周期：{{ medicine.start_date }}---{{ medicine.finish_date }}</p>
 				<p class="diary-date">取药时间：{{ medicine.next_pick_date }}</p>
 			</div>
 		</div>
-		
+
 		<uni-popup ref="popup" type="bottom">
 			<view class="popup-content">
 				<button class="delete-button" @tap="deleteMedicine">删除这条提醒</button>
@@ -23,12 +24,12 @@
 		},
 		data() {
 			return {
-				deleteMedicineId:"",
-				medicines:[],
+				deleteMedicineId: "",
+				medicines: [],
 			}
 		},
 		methods: {
-			
+
 			get_all_medicine() {
 				uni.request({
 					url: 'http://82.157.244.44:8000/api/v1/medicine/', // 后端接口地址
@@ -45,19 +46,20 @@
 						console.error('数据发送失败:', err);
 					}
 				});
-			 
-			
+
+
 			},
-			
+
 			showDeleteMedicineButton(medicine) {
 				this.deleteMedicineId = medicine.id;
-				this.$refs.popup.open();				
+				this.$refs.popup.open();
 			},
-			deleteMedicine(){
+			deleteMedicine() {
 				if (this.deleteDiaryId !== null) {
-					
+
 					uni.request({
-						url: 'http://82.157.244.44:8000/api/v1/medicine/' + String(this.deleteMedicineId), // 后端接口地址
+						url: 'http://82.157.244.44:8000/api/v1/medicine/' + String(this
+						.deleteMedicineId), // 后端接口地址
 						method: 'DELETE',
 						header: {
 							'Authorization': `Bearer ${uni.getStorageSync('token')}`,
@@ -69,62 +71,53 @@
 						fail: (err) => {
 							console.error('数据发送失败:', err);
 						}
-					});					
+					});
 					this.deleteDiaryId = null; // 重置删除索引
 					this.$refs.popup.close();
-				}		
+				}
 			},
 			showMedicineContent(medicine) {
 				uni.navigateTo({
 					url: `/pages/medicine/medicine_detail?medicineId=${medicine.id}`,
 				});
 			},
-			
-			
+
+
 		}
 	}
 </script>
 
 <style>
-.diary-item {
-		margin-bottom: 20px;
+	.diary-item {
+		margin-top: 30rpx;
 		margin-left: 10rpx;
 		margin-right: 10rpx;
-		/* 添加间距，使日记组件之间有一定的空隙 */
-		border-radius: 44px;
-		background: linear-gradient(145deg, #f0f0f0, #cacaca);
-		box-shadow:  5px 5px 5px #797979,
-		             -5px -5px 5px #ffffff;
+		border-radius: 10px;
+		/* Rounded corners for a softer look */
+		background: #fff;
+		/* White background */
+		box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+		/* Subtle box shadow for depth */
 	}
 
 	.diary-content {
-		border: 1px solid #ccc;
-		/* 边框样式 */
-		padding: 10px;
-		/* 内边距，增加内容与边框之间的间隔 */
-		border-radius: 5px;
-		/* 边框圆角 */
-		cursor: pointer;
-		/* 鼠标指针样式为指示可点击 */
-		background-color: #F0FFFF;
+		padding: 16px;
+		/* Increase padding for better spacing */
+		border-radius: 10px;
+		background-color: #fefbe0;
+		transition: background-color 0.3s ease;
+		/* Add a smooth transition effect */
 	}
 
-
-
 	.diary-title {
-		font-size: 15px;
-		/* 标题字体大小 */
+		font-size: 18px;
 		font-weight: bold;
-		/* 标题粗体 */
-		margin-bottom: 5px;
-		/* 标题与日期之间的间距 */
+		margin-bottom: 8px;
+		/* Adjust the spacing between title and date */
 	}
 
 	.diary-date {
-		color: #666;
-		/* 日期文字颜色 */
+		color: #888;
 		font-size: 14px;
-		/* 日期字体大小 */
 	}
-
 </style>

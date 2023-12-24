@@ -1,14 +1,15 @@
 <template>
 	<view class="diary_index">
-		<button class="write_button" @click="write_diary">写个日记</button>
-
+		<!-- 写日记入口 -->
+		<add-diary-tag></add-diary-tag>
+		
 		<div v-for="(diary, index) in diaries" :key="index" class="diary-item">
 			<div @click="showDiaryContent(diary)" class="diary-content" @longpress="showDeleteDiaryButton(diary)">
-				<p class="diary-title">{{ diary.title }}</p>
 				<p class="diary-date">{{ diary.create_time }}</p>
+				<p class="diary-title">{{ diary.title }}</p>
 			</div>
 		</div>
-		
+
 		<uni-popup ref="popup" type="bottom">
 			<view class="popup-content">
 				<button class="delete-button" @tap="deleteDiary">删除日记</button>
@@ -18,139 +19,117 @@
 </template>
 
 <script>
-export default {
-	onLoad() {
-		this.get_all_diary();
-	},
-	data() {
-		return {
-			diaries: [] ,//存储所有的日记
-			deleteDiaryId:null
-		}
-	},
-	methods: {
-		write_diary() {
-			uni.redirectTo({
-				url: "/pages/diary/diary"
-			})
+	import addDiaryTag from '@/components/add-diary-tag/add-diary-tag.vue';
+	export default {
+		components: {
+			addDiaryTag
 		},
-		get_all_diary() {
-			uni.request({
-				url: 'http://82.157.244.44:8000/api/v1/diary/', // 后端接口地址
-				method: 'GET',
-				header: {
-					'Authorization': `Bearer ${uni.getStorageSync('token')}`,
-				},
-				success: (res) => {
-					console.log('数据接收成功:', res.data);
-					this.diaries = res.data; // 将获取的日记信息存储到diaries数组中
-				},
-				fail: (err) => {
-					console.error('数据发送失败:', err);
-				}
-			});
-
-
+		onLoad() {
+			this.get_all_diary();
 		},
-		showDiaryContent(diary) {
-
-			console.log(diary);
-			uni.navigateTo({
-				url: `/pages/diary/diary_detail?diaryId=${diary.id}`,
-			});
+		data() {
+			return {
+				diaries: [], //存储所有的日记
+				deleteDiaryId: null
+			}
 		},
-		
-		showDeleteDiaryButton(diary) {
-			// 点击图片时展示删除按钮
-			console.log("s");
-			this.deleteDiaryId = diary.id;
-			this.$refs.popup.open();
-			console.log(this.deleteDiaryId);
-	
-		},
-		deleteDiary(){
-			
-			if (this.deleteDiaryId !== null) {
-				
+		methods: {
+			get_all_diary() {
 				uni.request({
-					url: 'http://82.157.244.44:8000/api/v1/diary/' + String(this.deleteDiaryId), // 后端接口地址
-					method: 'DELETE',
+					url: 'http://82.157.244.44:8000/api/v1/diary/', // 后端接口地址
+					method: 'GET',
 					header: {
 						'Authorization': `Bearer ${uni.getStorageSync('token')}`,
 					},
 					success: (res) => {
-						console.log("删除成功");
-						this.get_all_diary();
+						console.log('数据接收成功:', res.data);
+						this.diaries = res.data; // 将获取的日记信息存储到diaries数组中
 					},
 					fail: (err) => {
 						console.error('数据发送失败:', err);
 					}
 				});
-				
-				
-				this.deleteDiaryId = null; // 重置删除索引
-				this.$refs.popup.close();
+
+
+			},
+			showDiaryContent(diary) {
+
+				console.log(diary);
+				uni.navigateTo({
+					url: `/pages/diary/diary_detail?diaryId=${diary.id}`,
+				});
+			},
+
+			showDeleteDiaryButton(diary) {
+				// 点击图片时展示删除按钮
+				console.log("s");
+				this.deleteDiaryId = diary.id;
+				this.$refs.popup.open();
+				console.log(this.deleteDiaryId);
+
+			},
+			deleteDiary() {
+
+				if (this.deleteDiaryId !== null) {
+
+					uni.request({
+						url: 'http://82.157.244.44:8000/api/v1/diary/' + String(this.deleteDiaryId), // 后端接口地址
+						method: 'DELETE',
+						header: {
+							'Authorization': `Bearer ${uni.getStorageSync('token')}`,
+						},
+						success: (res) => {
+							console.log("删除成功");
+							this.get_all_diary();
+						},
+						fail: (err) => {
+							console.error('数据发送失败:', err);
+						}
+					});
+
+
+					this.deleteDiaryId = null; // 重置删除索引
+					this.$refs.popup.close();
+				}
+
+
 			}
-			
-			
+
 		}
-		
 	}
-}
 </script>
 
-<style>
-	
-	.write_button{
-	
-		margin: 20rpx;
-		font-size: 18px;
-		/* 标题字体大小 */
-		font-weight: bold;
-		/* 标题粗体 */
-		border-radius: 8px;
-		background-color: #008CBA;
-		box-shadow: 0 8px 16px 0 rgba(0,0,0,0.2), 0 6px 20px 0 rgba(0,0,0,0.19);
-		height: 110rpx;
-	}
+<style scoped>
 	.diary-item {
-		margin-bottom: 20px;
+		margin-top: 30rpx;
 		margin-left: 10rpx;
 		margin-right: 10rpx;
-		/* 添加间距，使日记组件之间有一定的空隙 */
-		border-radius: 44px;
-		background: linear-gradient(145deg, #f0f0f0, #cacaca);
-		box-shadow:  5px 5px 5px #797979,
-		             -5px -5px 5px #ffffff;
+		border-radius: 10px;
+		/* Rounded corners for a softer look */
+		background: #fff;
+		/* White background */
+		box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+		/* Subtle box shadow for depth */
 	}
 
 	.diary-content {
-		border: 1px solid #ccc;
-		/* 边框样式 */
-		padding: 10px;
-		/* 内边距，增加内容与边框之间的间隔 */
-		border-radius: 5px;
-		/* 边框圆角 */
-		cursor: pointer;
-		/* 鼠标指针样式为指示可点击 */
-		background-color: #F0FFFF;
+		padding: 16px;
+		/* Increase padding for better spacing */
+		border-radius: 10px;
+		background-color: #fefbe0;
+		transition: background-color 0.3s ease;
+		/* Add a smooth transition effect */
 	}
-
-
 
 	.diary-title {
 		font-size: 18px;
-		/* 标题字体大小 */
 		font-weight: bold;
-		/* 标题粗体 */
-		margin-bottom: 5px;
-		/* 标题与日期之间的间距 */
+		margin-bottom: 8px;
+		/* Adjust the spacing between title and date */
 	}
 
 	.diary-date {
-		color: #666;
-		/* 日期文字颜色 */
+		color: #888;
 		font-size: 14px;
-		/* 日期字体大小 */
 	}
 </style>

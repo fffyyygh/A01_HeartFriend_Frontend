@@ -40,66 +40,6 @@
 	import commonList from '@/components/common/common-list.vue';
 	import loadMore from '@/components/common/load-more.vue';
 	import addPostTag from '@/components/add-post-tag/add-post-tag.vue';
-	// const test_data = [{
-	// 		username: "Carol",
-	// 		userpic: "/static/img/userpic/1.jpeg",
-	// 		newstime: "2021-01-24 上午11:30",
-	// 		isFollow: false,
-	// 		title: "绿意 希望 光",
-	// 		titlepic: "/static/img/datapic/1.jpeg",
-	// 		support: {
-	// 			type: "support", // 顶
-	// 			support_count: 1,
-	// 			unsupport_count: 2
-	// 		},
-	// 		comment_count: 2,
-	// 		share_count: 2
-	// 	},
-	// 	{
-	// 		username: "Bob",
-	// 		userpic: "/static/img/userpic/2.jpeg",
-	// 		newstime: "2021-01-24 下午14:00",
-	// 		isFollow: false,
-	// 		title: "一哭就停不下来，甚至需要伤害自己才可以冷静，这是为什么？",
-	// 		support: {
-	// 			type: "unsupport", // 踩
-	// 			support_count: 2,
-	// 			unsupport_count: 3
-	// 		},
-	// 		comment_count: 5,
-	// 		share_count: 1
-	// 	},
-	// 	{
-	// 		username: "Alice",
-	// 		userpic: "/static/img/userpic/3.jpeg",
-	// 		newstime: "2021-01-24 下午14:44",
-	// 		isFollow: true,
-	// 		title: "或许明天会更好，我只需一步一步地前进，直到再次看到阳光。",
-	// 		titlepic: "/static/img/datapic/3.jpeg",
-	// 		support: {
-	// 			type: "", // 未操作
-	// 			support_count: 2,
-	// 			unsupport_count: 7
-	// 		},
-	// 		comment_count: 0,
-	// 		share_count: 2
-	// 	},
-	// 	{
-	// 		username: "Dave",
-	// 		userpic: "/static/img/userpic/4.jpeg",
-	// 		newstime: "2021-01-24 下午18:20",
-	// 		isFollow: true,
-	// 		title: "好困不想起床不想起床不想起床不想起床不想起床",
-	// 		titlepic: "/static/img/datapic/4.jpeg",
-	// 		support: {
-	// 			type: "support",
-	// 			support_count: 5,
-	// 			unsupport_count: 1
-	// 		},
-	// 		comment_count: 3,
-	// 		share_count: 0
-	// 	}
-	// ];
 
 	export default {
 		components: {

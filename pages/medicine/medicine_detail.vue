@@ -94,10 +94,10 @@
 	}
 
 	.diary-item {
-		border: 1px solid #D9F9D9;
+		border: 1px solid #fefbe0;
 		padding: 10px;
 		margin-bottom: 10px;
-		background-color: #D9F9D9;
+		background-color: #fefbe0;
 	}
 
 	.item-row {
@@ -109,12 +109,12 @@
 	.item-label {
 		font-weight: bold;
 		margin-right: 5px;
-		font-size: 20px;
+		font-size: 16px;
 	}
 
 	.item-value {
 		flex: 1;
-		font-size: 20px;
+		font-size: 16px;
 	}
 
 	button {

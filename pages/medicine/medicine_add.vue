@@ -196,20 +196,19 @@
 		margin-bottom: 60rpx;
 		width: 60%;
 		border-radius: 12px;
-		background-color: #008CBA;
+		background-color: #527853;
 		box-shadow: 0 8px 16px 0 rgba(0, 0, 0, 0.2), 0 6px 20px 0 rgba(0, 0, 0, 0.19);
 
 	}
 
 	.time {
 		display: flex;
-
 		justify-content: space-between;
 		align-items: center;
 		margin-bottom: 10px;
 		margin-right: 280rpx;
 		margin-left: 10rpx;
-		border: 2px solid #008CBA;
+		border: 2px solid #527853;
 		/* 边框样式 */
 		border-radius: 5px;
 		/* 可以添加圆角 */

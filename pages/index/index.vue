@@ -142,10 +142,14 @@
 						header: {
 							'Authorization': `Bearer ${token}`,
 						},
+						
+						
 					});
-					//console.log(userInfoRes[1].data);
+					if(userInfoRes[1].statusCode  === 200)
+					{//console.log(userInfoRes[1].data);
 					const userInfo = userInfoRes[1].data;
-					//console.log(userInfo);
+					
+					console.log("aaaa",userInfoRes[1]);
 					// 在获取用户信息后，将其存储在本地存储中以备将来使用
 					// uni.setStorageSync('userInfo', userInfo);
 					// 修改为先判断本地存储中是否有userInfo，如果存在，则更新它，否则就存储新的 userInfo。
@@ -158,11 +162,16 @@
 						storedUserInfo = userInfo;
 					}
 					// 存储 userInfo 到本地存储
-					uni.setStorageSync('userInfo', storedUserInfo);
+					uni.setStorageSync('userInfo', storedUserInfo);}
+					else
+					{
+						// 如果没有令牌，执行登录和注册流程（操作A）
+						this.performLoginAndRegistration();
+					}
 
 					// 做任何其他关于用户信息的操作
 				} catch (error) {
-					console.error(error);
+					console.error("token失效",error);
 					// 处理获取用户信息失败的逻辑
 				}
 			},

@@ -86,7 +86,7 @@
     max-width: 800px;
     margin: 0 auto;
     padding: 20px;
-    background-color: #f2f2f2;
+    background-color: #ffffff;
     color: #333;
   }
 
@@ -102,7 +102,7 @@
   .diary-title {
     font-size: 28px;
     font-weight: bold;
-    color: #0066cc;
+    color: #000000;
     margin: 0;
   }
 

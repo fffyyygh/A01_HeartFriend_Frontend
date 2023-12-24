@@ -91,6 +91,7 @@
 	.chat-container {
 		height: 100vh;
 		display: flex;
+		width: 700rpx;
 		flex-direction: column;
 	}
 
@@ -98,6 +99,7 @@
 		flex: 1;
 		padding: 10px;
 		overflow-y: auto;
+		overflow-x: hidden;
 	}
 
 	.message {
@@ -120,11 +122,13 @@
 	}
 
 	.input-container {
+		width: 700rpx;
 		box-sizing: border-box;
 		display: flex;
 		align-items: center;
 		justify-content: space-between;
 		padding: 10px;
+		margin-bottom: 40rpx;
 	}
 
 	input {
@@ -136,8 +140,10 @@
 	}
 
 	button {
+		width: auto;
+		margin-right: -20px;
 		border-radius: 5px;
-		background-color: #007AFF;
+		background-color: #527853;
 		color: white;
 		border: none;
 	}
