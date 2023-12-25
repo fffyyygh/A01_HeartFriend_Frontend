@@ -29,26 +29,36 @@
 			<textarea v-model="content" class="content-input" placeholder="请输入内容"></textarea>
 		</view>
 
-		<!-- 在记录日记的时候选择和显示图片的功能，后端的接口还没有开发好先搁置一下 -->
-		<view>
+		<!-- 旧的方法 -->
+<!-- 		<view>
 			<view class="image-grid" v-if="imageUrls.length > 0">
 				<image v-for="(imageUrl, index) in displayedImages" :key="index" :src="imageUrl" mode="aspectFit"
 					class="grid-item" @longpress="showDeleteButton(index)"></image>
 			</view>
 
-
-			<uni-popup ref="popup" type="bottom">
-				<view class="popup-content">
-					<button class="delete-button" @tap="deleteImage">删除图片</button>
-				</view>
-			</uni-popup>
-			<view class="tip">图片长按可删除</view>
 			<button class="btn" @tap="chooseImage">
 				<view class="button-content">
 					<text class="btn-text">选择图片</text>
 				</view>
 			</button>
+		</view> -->
+		
+		
+		<!-- 图片改变方法 -->
+		
+		<view class="image-upload-container">
+			<view v-for="(item, index) in imageList" :key="index" class="image-item">
+				<image :src="item" mode="aspectFill" style="width: 100%; height: 100%;" @click="previewImage(index)" />
+				<view class="delete-btn" @click="deleteImage(index)">×</view>
+			</view>
+		
+			<view v-show="imageList.length < maxImages" class="add-image" @click="addImage">
+				<text>+</text>
+			</view>
 		</view>
+		
+		
+		<!-- 图片上传改变方法 -->
 
 		<button class="btn" @click="uploadData">
 			<view class="button-content">
@@ -63,32 +73,34 @@
 	export default {
 		data() {
 			return {
-				imageUrls: [], // 存储选择的图片地址数组
 				appetite: 8,
 				mood: 8,
 				sleep: 8,
 				title: '', // 保存用户输入的标题
 				content: '', // 保存用户输入的内容
-				deleteIndex: null // 保存需要删除的图片索引
+				deleteIndex: null, // 保存需要删除的图片索引
+				
+				//
+				imageList: [], // 存储已上传的图片地址
+				maxImages: 9, // 最大上传图片数量
 			};
-		},
-		computed: {
-			displayedImages() {
-				// 显示的图片数量最多为9张
-				return this.imageUrls.slice(0, 9);
-			},
-			remainingImageCount() {
-				// 剩余未显示的图片数量
-				return Math.max(0, this.imageUrls.length - 9);
-			},
 		},
 
 		methods: {
-			chooseImage() {
+			//
+			addImage() {
+				console.log(this.imageList);
+				if (this.imageList.length >= this.maxImages) {
+					uni.showToast({
+						title: '最多只能上传' + this.maxImages + '张图片',
+						icon: 'none',
+					});
+					return;
+				}
+			
 				uni.chooseImage({
-					count: 9 - this.imageUrls.length, // 最多选择未选择的图片数量
+					count: this.maxImages - this.imageList.length,
 					sizeType: ['compressed'], // 压缩图片
-					sourceType: ['album', 'camera'], // 从相册选择或拍照
 					success: (res) => {
 						const tempFilePaths = res.tempFilePaths;
 						tempFilePaths.forEach((item, index) => {
@@ -97,7 +109,7 @@
 								success: async (saveRes) => {
 									const savedFilePath = saveRes.savedFilePath;
 									console.log(savedFilePath);
-									this.imageUrls = this.imageUrls.concat(
+									this.imageList = this.imageList.concat(
 										savedFilePath); // 将选择的图片添加到数组中
 								},
 								fail: (saveErr) => {
@@ -105,8 +117,8 @@
 									// Handle the save failure
 								},
 							});
-
-
+			
+			
 						});
 					},
 					fail: (err) => {
@@ -114,22 +126,17 @@
 					},
 				});
 			},
+			
 
-			showDeleteButton(index) {
-				// 点击图片时展示删除按钮
-
-				this.deleteIndex = index;
-				this.$refs.popup.open();
-
+			
+			deleteImage(index) {
+				this.imageList.splice(index, 1);
 			},
-
-			deleteImage() {
-				// 点击删除按钮时删除对应图片
-				if (this.deleteIndex !== null) {
-					this.imageUrls.splice(this.deleteIndex, 1); // 从数组中删除图片
-					this.deleteIndex = null; // 重置删除索引
-					this.$refs.popup.close();
-				}
+			previewImage(index) {
+				uni.previewImage({
+					urls: this.imageList,
+					current: this.imageList[index],
+				});
 			},
 
 
@@ -178,7 +185,7 @@
 					const uploadedImageUrls = []; // 保存上传后的图片地址的数组
 
 					// 循环上传图片
-					const promises = this.imageUrls.map((imageUrl) => {
+					const promises = this.imageList.map((imageUrl) => {
 						return new Promise((resolve, reject) => {
 							console.log("上传图片地址", imageUrl);
 
@@ -223,6 +230,46 @@
 	};
 </script>
 <style lang="scss">
+	
+	.add-image {
+		width: 100px;
+		height: 100px;
+		background-color: #eee;
+		display: flex;
+		align-items: center;
+		justify-content: center;
+		font-size: 40px;
+		cursor: pointer;
+	}
+	.image-upload-container {
+		display: flex;
+		flex-wrap: wrap;
+		margin: 10px 0;
+	}
+	
+	.image-item {
+		position: relative;
+		width: 100px;
+		height: 100px;
+		margin-right: 10px;
+		margin-bottom: 10px;
+	}
+	
+	.delete-btn {
+		position: absolute;
+		top: 5px;
+		right: 5px;
+		width: 20px;
+		height: 20px;
+		line-height: 20px;
+		text-align: center;
+		background-color: rgba(0, 0, 0, 0.5);
+		color: #fff;
+		font-size: 14px;
+		border-radius: 50%;
+		cursor: pointer;
+	}
+	
 	.btn {
 		display: flex;
 		justify-content: center;
