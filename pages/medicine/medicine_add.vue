@@ -18,9 +18,6 @@
 						@change="bindTimeChange">
 						选择提醒时间
 					</picker>
-
-
-
 					<view v-for="(time, index) in selectedTimes" :key="index" class="time">
 						<text class="medicine_time">{{ time }}</text>
 						<image class="delete_img" @click="deleteTime(index)" src="/static/medicine/叉号.png"></image>

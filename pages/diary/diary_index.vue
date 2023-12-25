@@ -2,7 +2,7 @@
 	<view class="diary_index">
 		<!-- 写日记入口 -->
 		<add-diary-tag></add-diary-tag>
-		
+		<view class="tip">日记长按可删除</view>
 		<div v-for="(diary, index) in diaries" :key="index" class="diary-item">
 			<div @click="showDiaryContent(diary)" class="diary-content" @longpress="showDeleteDiaryButton(diary)">
 				<p class="diary-date">{{ diary.create_time }}</p>
@@ -12,7 +12,7 @@
 
 		<uni-popup ref="popup" type="bottom">
 			<view class="popup-content">
-				<button class="delete-button" @tap="deleteDiary">删除日记</button>
+				<button class="delete-button" @tap="deleteDiary">删除这篇日记</button>
 			</view>
 		</uni-popup>
 	</view>
@@ -100,6 +100,14 @@
 </script>
 
 <style scoped>
+	.tip {
+		color: #888;
+		/* Set the font color to gray */
+		text-align: left;
+		margin-bottom: -20rpx;
+		font-size: 25rpx;
+	}
+
 	.diary-item {
 		margin-top: 30rpx;
 		margin-left: 10rpx;

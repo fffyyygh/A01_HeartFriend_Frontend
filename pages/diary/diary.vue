@@ -3,19 +3,19 @@
 		<view class="container">
 			<view class="rate-section">
 				<text class="rate-title">食欲</text>
-				<uni-rate :max="10" :value="10" v-model="appetite"  :size="25"
-					active-color="#FFD700" :void-color="'#ccc'"></uni-rate>
+				<uni-rate :max="10" :value="10" v-model="appetite" :size="25" active-color="#FFD700"
+					:void-color="'#ccc'"></uni-rate>
 				<text class="rate-value">{{ appetite }}</text>
 			</view>
 			<view class="rate-section">
 				<text class="rate-title">心情</text>
-				<uni-rate :max="10" :value="10" v-model="mood"  :size="25" active-color="#FFA07A"
+				<uni-rate :max="10" :value="10" v-model="mood" :size="25" active-color="#FFA07A"
 					:void-color="'#ccc'"></uni-rate>
 				<text class="rate-value">{{ mood }}</text>
 			</view>
 			<view class="rate-section">
 				<text class="rate-title">睡眠</text>
-				<uni-rate :max="10" :value="10" v-model="sleep"  :size="25" active-color="#87CEFA"
+				<uni-rate :max="10" :value="10" v-model="sleep" :size="25" active-color="#87CEFA"
 					:void-color="'#ccc'"></uni-rate>
 				<text class="rate-value">{{ sleep }}</text>
 			</view>
@@ -28,7 +28,7 @@
 			<text class="input-title">内容</text>
 			<textarea v-model="content" class="content-input" placeholder="请输入内容"></textarea>
 		</view>
-		
+
 		<!-- 在记录日记的时候选择和显示图片的功能，后端的接口还没有开发好先搁置一下 -->
 		<view>
 			<view class="image-grid" v-if="imageUrls.length > 0">
@@ -36,17 +36,26 @@
 					class="grid-item" @longpress="showDeleteButton(index)"></image>
 			</view>
 
-			
+
 			<uni-popup ref="popup" type="bottom">
 				<view class="popup-content">
 					<button class="delete-button" @tap="deleteImage">删除图片</button>
 				</view>
 			</uni-popup>
-			<button @tap="chooseImage">选择图片</button>
+			<view class="tip">图片长按可删除</view>
+			<button class="btn" @tap="chooseImage">
+				<view class="button-content">
+					<text class="btn-text">选择图片</text>
+				</view>
+			</button>
 		</view>
-		
-		
-		<button @click="uploadData">提交</button>
+
+		<button class="btn" @click="uploadData">
+			<view class="button-content">
+				<text class="btn-text">提交</text>
+			</view>
+		</button>
+		<view style="height: 60rpx;"></view>
 	</view>
 </template>
 
@@ -81,23 +90,24 @@
 					sizeType: ['compressed'], // 压缩图片
 					sourceType: ['album', 'camera'], // 从相册选择或拍照
 					success: (res) => {
-						const tempFilePaths = res.tempFilePaths;						
-						tempFilePaths.forEach((item,index)=>{
+						const tempFilePaths = res.tempFilePaths;
+						tempFilePaths.forEach((item, index) => {
 							wx.getFileSystemManager().saveFile({
 								tempFilePath: item,
 								success: async (saveRes) => {
 									const savedFilePath = saveRes.savedFilePath;
 									console.log(savedFilePath);
-									this.imageUrls = this.imageUrls.concat(savedFilePath); // 将选择的图片添加到数组中
+									this.imageUrls = this.imageUrls.concat(
+										savedFilePath); // 将选择的图片添加到数组中
 								},
 								fail: (saveErr) => {
 									console.error('Save file failed:', saveErr);
 									// Handle the save failure
 								},
 							});
-							
-						
-						});						
+
+
+						});
 					},
 					fail: (err) => {
 						console.log('选择图片失败:', err);
@@ -107,10 +117,10 @@
 
 			showDeleteButton(index) {
 				// 点击图片时展示删除按钮
-				
+
 				this.deleteIndex = index;
 				this.$refs.popup.open();
-				
+
 			},
 
 			deleteImage() {
@@ -121,7 +131,7 @@
 					this.$refs.popup.close();
 				}
 			},
-			
+
 
 			uploadData() {
 				// 首先上传图片
@@ -142,14 +152,14 @@
 						method: 'POST', // POST 或者适合你的请求方式
 						header: {
 							'Authorization': `Bearer ${uni.getStorageSync('token')}`,
-							
+
 						},
 						data: dataToSend,
 						success: (res) => {
 							console.log('数据发送成功:', res.data);
-							
+
 							uni.redirectTo({
-								url:"/pages/diary/diary_index"
+								url: "/pages/diary/diary_index"
 							});
 							console.log(dataToSend);
 						},
@@ -170,22 +180,25 @@
 					// 循环上传图片
 					const promises = this.imageUrls.map((imageUrl) => {
 						return new Promise((resolve, reject) => {
-							console.log("上传图片地址",imageUrl);
-							
+							console.log("上传图片地址", imageUrl);
+
 							uni.uploadFile({
 								url: 'http://82.157.244.44:8000/api/v1/diary/upload-image/', // 后端上传图片接口地址
 								method: 'POST',
 								filePath: imageUrl,
 								name: 'image',
 								header: {
-									'Authorization': `Bearer ${uni.getStorageSync('token')}`,									
+									'Authorization': `Bearer ${uni.getStorageSync('token')}`,
 								},
 								success: (uploadRes) => {
 									console.log('上传成功:', uploadRes.data);
-									const imageFinalPath = "http://82.157.244.44:8000" + JSON.parse(uploadRes.data)["image"];
+									const imageFinalPath =
+										"http://82.157.244.44:8000" + JSON.parse(
+											uploadRes.data)["image"];
 									console.log(imageFinalPath);
-									uploadedImageUrls.push(imageFinalPath); // 将上传后的图片地址保存到数组中
-									console.log("a",);
+									uploadedImageUrls.push(
+										imageFinalPath); // 将上传后的图片地址保存到数组中
+									console.log("a", );
 									resolve();
 								},
 								fail: (err) => {
@@ -210,6 +223,41 @@
 	};
 </script>
 <style lang="scss">
+	.btn {
+		display: flex;
+		justify-content: center;
+		align-items: center;
+		width: calc(100% - 60rpx);
+		height: 120rpx;
+		margin-top: 20rpx;
+		padding: 12px 20px;
+		border-radius: 5px;
+		background-color: #527853;
+		color: #fff;
+		text-align: center;
+		font-size: 18px;
+		/* 调整字体大小 */
+		font-weight: bold;
+		text-decoration: none;
+		box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
+		transition: transform 0.3s ease, background-color 0.3s ease, box-shadow 0.3s ease;
+	}
+
+	.btn-text {
+		color: #fff;
+		font-size: 16px;
+		/* 调整字体大小 */
+		font-weight: bold;
+	}
+
+	.tip {
+		color: #888;
+		/* Set the font color to gray */
+		text-align: left;
+		margin-bottom: -20rpx;
+		font-size: 25rpx;
+	}
+
 	.image-grid {
 		display: flex;
 		flex-wrap: wrap;
@@ -281,8 +329,8 @@
 		border-radius: 5px;
 		resize: none;
 		/* 禁止调整文本框大小 */
-		font-size: 18px;
+		font-size: 16px;
 		line-height: 1.5;
-		background-color: antiquewhite;
+		background-color: white;
 	}
 </style>

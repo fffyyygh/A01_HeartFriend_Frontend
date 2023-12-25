@@ -1,5 +1,6 @@
 <template>
 	<view>
+		<view class="tip">提醒长按可删除</view>
 		<div v-for="(medicine, index) in medicines" :key="index" class="diary-item">
 			<div @click="showMedicineContent(medicine)" class="diary-content"
 				@longpress="showDeleteMedicineButton(medicine)">
@@ -59,7 +60,7 @@
 
 					uni.request({
 						url: 'http://82.157.244.44:8000/api/v1/medicine/' + String(this
-						.deleteMedicineId), // 后端接口地址
+							.deleteMedicineId), // 后端接口地址
 						method: 'DELETE',
 						header: {
 							'Authorization': `Bearer ${uni.getStorageSync('token')}`,
@@ -88,6 +89,14 @@
 </script>
 
 <style>
+	.tip {
+		color: #888;
+		/* Set the font color to gray */
+		text-align: left;
+		margin-bottom: -20rpx;
+		font-size: 25rpx;
+	}
+
 	.diary-item {
 		margin-top: 30rpx;
 		margin-left: 10rpx;
