@@ -95,7 +95,7 @@
 
 			getIfAdmin() {
 				uni.request({
-					url: `http://82.157.244.44:8000/api/v1/user/info/`,
+					url: `https://vx.mikumikumi.xyz/api/v1/user/info/`,
 					method: "GET",
 					header: {
 						'Authorization': `Bearer ${uni.getStorageSync('token')}`,
@@ -145,7 +145,7 @@
 
 			get_all_post() {
 				uni.request({
-					url: `http://82.157.244.44:8000/api/v1/forum/posts/getUserPosts/?offset=0&limit=20`, // 后端接口地址
+					url: `https://vx.mikumikumi.xyz/api/v1/forum/posts/getUserPosts/?offset=0&limit=20`, // 后端接口地址
 					method: 'GET',
 					header: {
 						'Authorization': `Bearer ${uni.getStorageSync('token')}`,
@@ -168,7 +168,7 @@
 
 			get_all_focus() {
 				uni.request({
-					url: 'http://82.157.244.44:8000/api/v1/user/following/', // 后端接口地址
+					url: 'https://vx.mikumikumi.xyz/api/v1/user/following/', // 后端接口地址
 					method: 'GET',
 					header: {
 						'Authorization': `Bearer ${uni.getStorageSync('token')}`,
@@ -186,7 +186,7 @@
 
 			get_all_fans() {
 				uni.request({
-					url: 'http://82.157.244.44:8000/api/v1/user/followers/', // 后端接口地址
+					url: 'https://vx.mikumikumi.xyz/api/v1/user/followers/', // 后端接口地址
 					method: 'GET',
 					header: {
 						'Authorization': `Bearer ${uni.getStorageSync('token')}`,

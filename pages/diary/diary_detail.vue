@@ -56,7 +56,7 @@
 				// 向后端 API 发送请求，获取基于 diaryId 的日记详情
 				// 使用获取的日记详情更新 this.diary
 				uni.request({
-					url: 'http://82.157.244.44:8000/api/v1/diary/', // 后端接口地址
+					url: 'https://vx.mikumikumi.xyz/api/v1/diary/', // 后端接口地址
 					method: 'GET',
 					header: {
 						'Authorization': `Bearer ${uni.getStorageSync('token')}`,

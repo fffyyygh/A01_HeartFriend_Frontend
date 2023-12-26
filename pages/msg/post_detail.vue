@@ -152,7 +152,7 @@
 			deletePost() {
 				const id = this.post.id;
 				uni.request({
-					url: 'http://82.157.244.44:8000/api/v1/forum/posts/' + id + "/", // 后端接口地址
+					url: 'https://vx.mikumikumi.xyz/api/v1/forum/posts/' + id + "/", // 后端接口地址
 					method: 'DELETE',
 					header: {
 						'Authorization': `Bearer ${uni.getStorageSync('token')}`,
@@ -174,7 +174,7 @@
 
 			getIfAdmin() {
 				uni.request({
-					url: `http://82.157.244.44:8000/api/v1/user/info/`,
+					url: `https://vx.mikumikumi.xyz/api/v1/user/info/`,
 					method: "GET",
 					header: {
 						'Authorization': `Bearer ${uni.getStorageSync('token')}`,
@@ -218,7 +218,7 @@
 				if (index == 0) {
 
 					uni.request({
-						url: `http://82.157.244.44:8000/api/v1/forum/posts/${this.post.id}/allowComment/`,
+						url: `https://vx.mikumikumi.xyz/api/v1/forum/posts/${this.post.id}/allowComment/`,
 						method: "POST",
 						header: {
 							'Authorization': `Bearer ${uni.getStorageSync('token')}`,
@@ -244,7 +244,7 @@
 					})
 				} else if (index == 1) {
 					uni.request({
-						url: `http://82.157.244.44:8000/api/v1/forum/posts/${this.post.id}/allowComment/`,
+						url: `https://vx.mikumikumi.xyz/api/v1/forum/posts/${this.post.id}/allowComment/`,
 						method: "POST",
 						header: {
 							'Authorization': `Bearer ${uni.getStorageSync('token')}`,
@@ -268,7 +268,7 @@
 					})
 				} else {
 					uni.request({
-						url: `http://82.157.244.44:8000/api/v1/forum/posts/${this.post.id}/allowComment/`,
+						url: `https://vx.mikumikumi.xyz/api/v1/forum/posts/${this.post.id}/allowComment/`,
 						method: "POST",
 						header: {
 							'Authorization': `Bearer ${uni.getStorageSync('token')}`,
@@ -300,7 +300,7 @@
 				const index = event.detail.value;
 				if (index == 0) {
 					uni.request({
-						url: `http://82.157.244.44:8000/api/v1/forum/posts/${this.post.id}/setVisibility/`,
+						url: `https://vx.mikumikumi.xyz/api/v1/forum/posts/${this.post.id}/setVisibility/`,
 						method: "POST",
 						header: {
 							'Authorization': `Bearer ${uni.getStorageSync('token')}`,
@@ -325,7 +325,7 @@
 					})
 				} else {
 					uni.request({
-						url: `http://82.157.244.44:8000/api/v1/forum/posts/${this.post.id}/setVisibility/`,
+						url: `https://vx.mikumikumi.xyz/api/v1/forum/posts/${this.post.id}/setVisibility/`,
 						method: "POST",
 						header: {
 							'Authorization': `Bearer ${uni.getStorageSync('token')}`,
@@ -383,7 +383,7 @@
 
 			get_if_followed() {
 				uni.request({
-					url: "http://82.157.244.44:8000/api/v1/user/following/",
+					url: "https://vx.mikumikumi.xyz/api/v1/user/following/",
 					method: "GET",
 					header: {
 						'Authorization': `Bearer ${uni.getStorageSync('token')}`,
@@ -406,7 +406,7 @@
 
 				this.isFollowed = !this.isFollowed;
 				uni.request({
-					url: "http://82.157.244.44:8000/api/v1/user/follow-unfollow/",
+					url: "https://vx.mikumikumi.xyz/api/v1/user/follow-unfollow/",
 					method: "POST",
 					header: {
 						'Authorization': `Bearer ${uni.getStorageSync('token')}`,
@@ -425,7 +425,7 @@
 				try {
 					// 发送点赞请求
 					const response = await uni.request({
-						url: `http://82.157.244.44:8000/api/v1/forum/posts/${post.id}/like/`,
+						url: `https://vx.mikumikumi.xyz/api/v1/forum/posts/${post.id}/like/`,
 						method: 'POST',
 						header: {
 							'Authorization': `Bearer ${uni.getStorageSync('token')}`,
@@ -459,7 +459,7 @@
 				try {
 					// 发送点踩请求
 					const response = await uni.request({
-						url: `http://82.157.244.44:8000/api/v1/forum/posts/${post.id}/dislike/`,
+						url: `https://vx.mikumikumi.xyz/api/v1/forum/posts/${post.id}/dislike/`,
 						method: 'POST',
 						header: {
 							'Authorization': `Bearer ${uni.getStorageSync('token')}`,
@@ -547,7 +547,7 @@
 
 				// 向后端发送评论请求
 				uni.request({
-					url: 'http://82.157.244.44:8000/api/v1/forum/comments/',
+					url: 'https://vx.mikumikumi.xyz/api/v1/forum/comments/',
 					method: 'POST',
 					header: {
 						'Authorization': `Bearer ${uni.getStorageSync('token')}`,
@@ -565,7 +565,7 @@
 							post: res.data.post,
 							content: res.data.content,
 							author: res.data.author,
-							author_avatar: "http://82.157.244.44:8000" + res.data
+							author_avatar: "https://vx.mikumikumi.xyz" + res.data
 								.author_avatar, // Update with the correct property
 							created_at: res.data.created_at,
 						};
@@ -592,7 +592,7 @@
 
 			get_id_post(id) {	
 				uni.request({
-					url: `http://82.157.244.44:8000/api/v1/forum/posts/${id}/`, // 后端接口地址
+					url: `https://vx.mikumikumi.xyz/api/v1/forum/posts/${id}/`, // 后端接口地址
 					method: 'GET',
 					header: {
 						'Authorization': `Bearer ${uni.getStorageSync('token')}`,
@@ -619,7 +619,7 @@
 
 						// 获取评论列表
 						uni.request({
-							url: `http://82.157.244.44:8000/api/v1/forum/comments/?post_id=${this.post.id}`, // 根据帖子ID获取评论列表
+							url: `https://vx.mikumikumi.xyz/api/v1/forum/comments/?post_id=${this.post.id}`, // 根据帖子ID获取评论列表
 							method: 'GET',
 							header: {
 								'Authorization': `Bearer ${uni.getStorageSync('token')}`,
@@ -647,7 +647,7 @@
 
 						// 获取帖子作者信息
 						uni.request({
-							url: `http://82.157.244.44:8000/api/v1/user/query-info/?uuid=${this.post.author_uuid}`, // 后端接口地址
+							url: `https://vx.mikumikumi.xyz/api/v1/user/query-info/?uuid=${this.post.author_uuid}`, // 后端接口地址
 							method: 'GET',
 							header: {
 								'Authorization': `Bearer ${uni.getStorageSync('token')}`,
@@ -655,7 +655,7 @@
 							success: (res) => {
 								console.log('数据接收成功:', res.data);
 								this.user = res.data;
-								this.user.avatar_url = "http://82.157.244.44:8000" + this.user
+								this.user.avatar_url = "https://vx.mikumikumi.xyz" + this.user
 									.avatar_url;
 								console.log(this.user.avatar_url);
 								this.get_if_followed();
@@ -676,7 +676,7 @@
 			// 获取评论用户信息
 			getCommentAuthorInfo(authorUuid) {
 				uni.request({
-					url: `http://82.157.244.44:8000/api/v1/user/query-info/?uuid=${authorUuid}`,
+					url: `https://vx.mikumikumi.xyz/api/v1/user/query-info/?uuid=${authorUuid}`,
 					method: 'GET',
 					header: {
 						'Authorization': `Bearer ${uni.getStorageSync('token')}`,
@@ -685,7 +685,7 @@
 						//console.log('评论用户信息接收成功:', res.data);
 						// 将评论用户的头像信息保存到commentAuthors对象中
 						this.$set(this.commentAuthors, authorUuid, {
-							avatar_url: "http://82.157.244.44:8000" + res.data.avatar_url,
+							avatar_url: "https://vx.mikumikumi.xyz" + res.data.avatar_url,
 						});
 					},
 					fail: (err) => {
@@ -696,7 +696,7 @@
 
 			deleteComment(commentId, authorUuid) {
 				uni.request({
-					url: `http://82.157.244.44:8000/api/v1/forum/comments/${commentId}/`, // 删除评论的后端接口
+					url: `https://vx.mikumikumi.xyz/api/v1/forum/comments/${commentId}/`, // 删除评论的后端接口
 					method: 'DELETE',
 					header: {
 						'Authorization': `Bearer ${uni.getStorageSync('token')}`,

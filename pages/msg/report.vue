@@ -57,7 +57,7 @@
 
 				try {
 					const response = await uni.request({
-						url: 'http://82.157.244.44:8000/api/v1/forum/reports/',
+						url: 'https://vx.mikumikumi.xyz/api/v1/forum/reports/',
 						method: 'POST',
 						header: {
 							'Authorization': `Bearer ${uni.getStorageSync('token')}`,

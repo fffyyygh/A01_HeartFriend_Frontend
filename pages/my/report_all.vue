@@ -59,7 +59,7 @@
 			},
 			get_report() {
 				uni.request({
-					url: 'http://82.157.244.44:8000/api/v1/forum/reports/manage/all/',
+					url: 'https://vx.mikumikumi.xyz/api/v1/forum/reports/manage/all/',
 					method: 'GET',
 					header: {
 						'Authorization': `Bearer ${uni.getStorageSync('token')}`,

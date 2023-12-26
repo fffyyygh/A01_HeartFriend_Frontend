@@ -61,7 +61,7 @@
 			},
 			fetchMedicineDetails(medicineId) {
 				uni.request({
-					url: 'http://82.157.244.44:8000/api/v1/medicine/', // 后端接口地址
+					url: 'https://vx.mikumikumi.xyz/api/v1/medicine/', // 后端接口地址
 					method: 'GET',
 					header: {
 						'Authorization': `Bearer ${uni.getStorageSync('token')}`,
@@ -116,7 +116,7 @@
 
 				console.log(this.medicine);
 				uni.request({
-					url: 'http://82.157.244.44:8000/api/v1/medicine/' + String(this.medicine.id), // 后端接口地址
+					url: 'https://vx.mikumikumi.xyz/api/v1/medicine/' + String(this.medicine.id), // 后端接口地址
 					method: 'PATCH',
 					header: {
 						'Authorization': `Bearer ${uni.getStorageSync('token')}`,

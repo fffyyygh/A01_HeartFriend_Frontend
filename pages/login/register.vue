@@ -124,7 +124,7 @@
 							console.log("图片地址")
 							// Step 3: Upload the saved file to the server
 							uni.uploadFile({
-								url: 'http://82.157.244.44:8000/api/v1/user/upload-avatar/',
+								url: 'https://vx.mikumikumi.xyz/api/v1/user/upload-avatar/',
 								filePath: savedFilePath,
 								name: 'avatar_url',
 								header: {
@@ -167,7 +167,7 @@
 				// 在这里实现使用令牌向后端请求用户信息的逻辑
 				try {
 					const userInfoRes = await uni.request({
-						url: 'http://82.157.244.44:8000/api/v1/user/info/',
+						url: 'https://vx.mikumikumi.xyz/api/v1/user/info/',
 						method: 'GET',
 						header: {
 							'Authorization': `Bearer ${token}`,
@@ -213,7 +213,7 @@
 					console.log(uni.getStorageSync('token'));
 					console.log('开始发送注册请求');
 					const res = await uni.request({
-						url: 'http://82.157.244.44:8000/api/v1/user/info/',
+						url: 'https://vx.mikumikumi.xyz/api/v1/user/info/',
 						method: 'PATCH',
 						header: {
 							'Authorization': `Bearer ${uni.getStorageSync('token')}`,

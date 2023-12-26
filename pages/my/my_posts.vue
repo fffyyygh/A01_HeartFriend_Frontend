@@ -92,7 +92,7 @@
 				const id = post.id;
 				console.log(id);
 				uni.request({
-					url: 'http://82.157.244.44:8000/api/v1/forum/posts/' + id + "/", // 后端接口地址
+					url: 'https://vx.mikumikumi.xyz/api/v1/forum/posts/' + id + "/", // 后端接口地址
 					method: 'DELETE',
 					header: {
 						'Authorization': `Bearer ${uni.getStorageSync('token')}`,
@@ -127,14 +127,14 @@
 				});
 			},
 			getFullAvatarUrl(relativeUrl) {
-				return `http://82.157.244.44:8000${relativeUrl}`;
+				return `https://vx.mikumikumi.xyz${relativeUrl}`;
 			},
 
 			get_user_posts() {
 				this.posts = [];
 				this.users = [];
 				uni.request({
-					url: `http://82.157.244.44:8000/api/v1/forum/posts/getUserPosts/?offset=0&limit=20`,
+					url: `https://vx.mikumikumi.xyz/api/v1/forum/posts/getUserPosts/?offset=0&limit=20`,
 					method: "GET",
 					header: {
 						'Authorization': `Bearer ${uni.getStorageSync('token')}`,
@@ -203,7 +203,7 @@
 				try {
 					// 发送点赞请求
 					const response = await uni.request({
-						url: `http://82.157.244.44:8000/api/v1/forum/posts/${post.id}/like/`,
+						url: `https://vx.mikumikumi.xyz/api/v1/forum/posts/${post.id}/like/`,
 						method: 'POST',
 						header: {
 							'Authorization': `Bearer ${uni.getStorageSync('token')}`,
@@ -241,7 +241,7 @@
 				try {
 					// 发送点踩请求
 					const response = await uni.request({
-						url: `http://82.157.244.44:8000/api/v1/forum/posts/${post.id}/dislike/`,
+						url: `https://vx.mikumikumi.xyz/api/v1/forum/posts/${post.id}/dislike/`,
 						method: 'POST',
 						header: {
 							'Authorization': `Bearer ${uni.getStorageSync('token')}`,
@@ -289,7 +289,7 @@
 					let a = this.posts.length;
 					console.log(a);
 					uni.request({
-						url: `http://82.157.244.44:8000/api/v1/forum/posts/getUserPosts/?offset=${a}&limit=20`,
+						url: `https://vx.mikumikumi.xyz/api/v1/forum/posts/getUserPosts/?offset=${a}&limit=20`,
 						method: 'GET',
 						header: {
 							'Authorization': `Bearer ${uni.getStorageSync('token')}`,

@@ -61,7 +61,7 @@
 					try {
 						// Make a request to the backend API
 						const response = await uni.request({
-							url: 'http://82.157.244.44:8000/api/v1/chat/',
+							url: 'https://vx.mikumikumi.xyz/api/v1/chat/',
 							method: 'POST',
 							header: {
 								'Content-Type': 'application/json',

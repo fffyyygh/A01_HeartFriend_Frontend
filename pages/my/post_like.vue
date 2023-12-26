@@ -108,7 +108,7 @@
 				// 包装 uni.request 在 Promise 中
 				return new Promise((resolve, reject) => {
 					uni.request({
-						url: `http://82.157.244.44:8000/api/v1/forum/posts/getLikedPosts/?sort_by=${this.sort}&offset=0&limit=20`,
+						url: `https://vx.mikumikumi.xyz/api/v1/forum/posts/getLikedPosts/?sort_by=${this.sort}&offset=0&limit=20`,
 						method: 'GET',
 						header: {
 							'Authorization': `Bearer ${uni.getStorageSync('token')}`,
@@ -162,7 +162,7 @@
 				try {
 					for (const post of this.posts) {
 						// const response = await this.makeRequest(
-						// 	'http://82.157.244.44:8000/api/v1/user/query-info/?uuid=' + post.author_uuid,
+						// 	'https://vx.mikumikumi.xyz/api/v1/user/query-info/?uuid=' + post.author_uuid,
 						// 	'GET', {
 						// 		'Authorization': `Bearer ${uni.getStorageSync('token')}`,
 						// 	}
@@ -170,7 +170,7 @@
 						// //console.log('数据接收成功:', response);
 						// const user = response;
 						
-						const avatar_url = "http://82.157.244.44:8000" + post.author_avatar;
+						const avatar_url = "https://vx.mikumikumi.xyz" + post.author_avatar;
 						this.users.push(avatar_url);
 					}
 				} catch (error) {
@@ -218,7 +218,7 @@
 				try {
 					// 发送点赞请求
 					const response = await uni.request({
-						url: `http://82.157.244.44:8000/api/v1/forum/posts/${post.id}/like/`,
+						url: `https://vx.mikumikumi.xyz/api/v1/forum/posts/${post.id}/like/`,
 						method: 'POST',
 						header: {
 							'Authorization': `Bearer ${uni.getStorageSync('token')}`,
@@ -256,7 +256,7 @@
 				try {
 					// 发送点踩请求
 					const response = await uni.request({
-						url: `http://82.157.244.44:8000/api/v1/forum/posts/${post.id}/dislike/`,
+						url: `https://vx.mikumikumi.xyz/api/v1/forum/posts/${post.id}/dislike/`,
 						method: 'POST',
 						header: {
 							'Authorization': `Bearer ${uni.getStorageSync('token')}`,
@@ -302,14 +302,14 @@
 				try {
 					for (const post of this.newposts) {
 						// const response = await this.makeRequest(
-						// 	'http://82.157.244.44:8000/api/v1/user/query-info/?uuid=' + post.author_uuid,
+						// 	'https://vx.mikumikumi.xyz/api/v1/user/query-info/?uuid=' + post.author_uuid,
 						// 	'GET', {
 						// 		'Authorization': `Bearer ${uni.getStorageSync('token')}`,
 						// 	}
 						// );
 						//console.log('数据接收成功:', response);
 						// const user = response;
-						const avatar_url = "http://82.157.244.44:8000" + post.author_avatar;
+						const avatar_url = "https://vx.mikumikumi.xyz" + post.author_avatar;
 						this.users.push(avatar_url);
 					}
 				} catch (error) {
@@ -334,7 +334,7 @@
 					let a = this.posts.length;
 
 					uni.request({
-						url: `http://82.157.244.44:8000/api/v1/forum/posts/getLikedPosts/?sort_by=${this.sort}&limit=20&offset=${a}`,
+						url: `https://vx.mikumikumi.xyz/api/v1/forum/posts/getLikedPosts/?sort_by=${this.sort}&limit=20&offset=${a}`,
 
 						method: 'GET',
 						header: {

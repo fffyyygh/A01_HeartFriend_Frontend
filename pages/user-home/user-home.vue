@@ -103,7 +103,7 @@
 
 
 				uni.request({
-					url: "http://82.157.244.44:8000/api/v1/user/follow-unfollow/",
+					url: "https://vx.mikumikumi.xyz/api/v1/user/follow-unfollow/",
 					method: "POST",
 					header: {
 						'Authorization': `Bearer ${uni.getStorageSync('token')}`,
@@ -121,7 +121,7 @@
 
 			get_if_followed() {
 				uni.request({
-					url: "http://82.157.244.44:8000/api/v1/user/following/",
+					url: "https://vx.mikumikumi.xyz/api/v1/user/following/",
 					method: "GET",
 					header: {
 						'Authorization': `Bearer ${uni.getStorageSync('token')}`,
@@ -140,7 +140,7 @@
 
 			getUserInfo(uuid) {
 				uni.request({
-					url: `http://82.157.244.44:8000/api/v1/user/query-info/?uuid=${uuid}`,
+					url: `https://vx.mikumikumi.xyz/api/v1/user/query-info/?uuid=${uuid}`,
 					method: 'GET',
 					header: {
 						'Authorization': `Bearer ${uni.getStorageSync('token')}`,
@@ -156,7 +156,7 @@
 				});
 			},
 			getFullAvatarUrl(relativeUrl) {
-				return `http://82.157.244.44:8000${relativeUrl}`;
+				return `https://vx.mikumikumi.xyz${relativeUrl}`;
 			},
 			// 添加关注按钮点击事件
 			followUser() {
@@ -165,7 +165,7 @@
 			},
 			get_user_posts() {
 				uni.request({
-					url: `http://82.157.244.44:8000/api/v1/forum/posts/getUserPosts/?offset=0&limit=20`,
+					url: `https://vx.mikumikumi.xyz/api/v1/forum/posts/getUserPosts/?offset=0&limit=20`,
 					method: "GET",
 					header: {
 						'Authorization': `Bearer ${uni.getStorageSync('token')}`,
@@ -221,7 +221,7 @@
 				try {
 					// 发送点赞请求
 					const response = await uni.request({
-						url: `http://82.157.244.44:8000/api/v1/forum/posts/${post.id}/like/`,
+						url: `https://vx.mikumikumi.xyz/api/v1/forum/posts/${post.id}/like/`,
 						method: 'POST',
 						header: {
 							'Authorization': `Bearer ${uni.getStorageSync('token')}`,
@@ -259,7 +259,7 @@
 				try {
 					// 发送点踩请求
 					const response = await uni.request({
-						url: `http://82.157.244.44:8000/api/v1/forum/posts/${post.id}/dislike/`,
+						url: `https://vx.mikumikumi.xyz/api/v1/forum/posts/${post.id}/dislike/`,
 						method: 'POST',
 						header: {
 							'Authorization': `Bearer ${uni.getStorageSync('token')}`,
@@ -316,7 +316,7 @@
 					let a = this.posts.length;
 					console.log(a);
 					uni.request({
-						url: `http://82.157.244.44:8000/api/v1/forum/posts/getUserPosts/?offset=${a}&limit=20`,
+						url: `https://vx.mikumikumi.xyz/api/v1/forum/posts/getUserPosts/?offset=${a}&limit=20`,
 						method: 'GET',
 						header: {
 							'Authorization': `Bearer ${uni.getStorageSync('token')}`,

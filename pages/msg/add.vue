@@ -89,7 +89,7 @@
 					console.log(dataToSend);
 					// 发送数据给后端服务器
 					uni.request({
-						url: 'http://82.157.244.44:8000/api/v1/forum/posts/', // 后端接口地址
+						url: 'https://vx.mikumikumi.xyz/api/v1/forum/posts/', // 后端接口地址
 						method: 'POST', // POST 或者适合你的请求方式
 						header: {
 							'Authorization': `Bearer ${uni.getStorageSync('token')}`,
@@ -124,7 +124,7 @@
 							console.log("上传图片地址", imageUrl);
 
 							uni.uploadFile({
-								url: 'http://82.157.244.44:8000/api/v1/forum/upload-image/', // 后端上传图片接口地址
+								url: 'https://vx.mikumikumi.xyz/api/v1/forum/upload-image/', // 后端上传图片接口地址
 								method: 'POST',
 								filePath: imageUrl,
 								name: 'image',
@@ -134,7 +134,7 @@
 								success: (uploadRes) => {
 									console.log('上传成功:', uploadRes.data);
 									const imageFinalPath =
-										"http://82.157.244.44:8000" + JSON.parse(
+										"https://vx.mikumikumi.xyz" + JSON.parse(
 											uploadRes.data)["image"];
 									console.log(imageFinalPath);
 									uploadedImageUrls.push(

@@ -36,7 +36,7 @@
 		methods: {
 			get_all_diary() {
 				uni.request({
-					url: 'http://82.157.244.44:8000/api/v1/diary/', // 后端接口地址
+					url: 'https://vx.mikumikumi.xyz/api/v1/diary/', // 后端接口地址
 					method: 'GET',
 					header: {
 						'Authorization': `Bearer ${uni.getStorageSync('token')}`,
@@ -70,7 +70,7 @@
 				if (this.deleteDiaryId !== null) {
 
 					uni.request({
-						url: 'http://82.157.244.44:8000/api/v1/diary/' + String(this.deleteDiaryId), // 后端接口地址
+						url: 'https://vx.mikumikumi.xyz/api/v1/diary/' + String(this.deleteDiaryId), // 后端接口地址
 						method: 'DELETE',
 						header: {
 							'Authorization': `Bearer ${uni.getStorageSync('token')}`,

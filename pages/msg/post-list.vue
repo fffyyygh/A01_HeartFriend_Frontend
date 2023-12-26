@@ -12,7 +12,7 @@
 			<!-- 用户信息 -->
 			<view class="user-info" @click="goToPostDetail(post)">
 				<!-- 头像 -->
-				<image class="user-avatar" :src="users[index].avatar_url" mode="aspectFill"></image>
+				<image class="user-avatar" :src="post.author_avatar" mode="aspectFill"></image>
 				<!-- 用户名、发帖时间等信息 -->
 				<view class="user-details">
 					<text class="user-name">{{ post.author }}</text>
@@ -156,7 +156,7 @@
 				// 包装 uni.request 在 Promise 中
 				return new Promise((resolve, reject) => {
 					uni.request({
-						url: `http://82.157.244.44:8000/api/v1/forum/posts/getFollowingPosts/?sort_by=${this.sort}&offset=0&limit=20`,
+						url: `https://vx.mikumikumi.xyz/api/v1/forum/posts/getFollowingPosts/?sort_by=${this.sort}&offset=0&limit=20`,
 						method: 'GET',
 						header: {
 							'Authorization': `Bearer ${uni.getStorageSync('token')}`,
@@ -167,8 +167,10 @@
 							this.posts.forEach((post, index) => {
 								const image_addr = post.images;
 								post.images = image_addr.split(',');
+								const avatar_url = "https://vx.mikumikumi.xyz" + post.author_avatar;
+								post.author_avatar = avatar_url;	
 							});
-							this.getUsers();
+							
 							resolve(); // 请求成功时调用 resolve
 						},
 						fail: (err) => {
@@ -184,7 +186,7 @@
 				// 包装 uni.request 在 Promise 中
 				return new Promise((resolve, reject) => {
 					uni.request({
-						url: `http://82.157.244.44:8000/api/v1/forum/posts/?sort_by=${this.sort}&offset=0&limit=20`,
+						url: `https://vx.mikumikumi.xyz/api/v1/forum/posts/?sort_by=${this.sort}&offset=0&limit=20`,
 						method: 'GET',
 						header: {
 							'Authorization': `Bearer ${uni.getStorageSync('token')}`,
@@ -195,8 +197,9 @@
 							this.posts.forEach((post, index) => {
 								const image_addr = post.images;
 								post.images = image_addr.split(',');
+								const avatar_url = "https://vx.mikumikumi.xyz" + post.author_avatar;
+								post.author_avatar = avatar_url;								
 							});
-							this.getUsers();
 							resolve(); // 请求成功时调用 resolve
 						},
 						fail: (err) => {
@@ -213,7 +216,7 @@
 					let a = this.posts.length;
 
 					uni.request({
-						url: `http://82.157.244.44:8000/api/v1/forum/posts/getFollowingPosts/?sort_by=${this.sort}&limit=20&offset=${a}`,
+						url: `https://vx.mikumikumi.xyz/api/v1/forum/posts/getFollowingPosts/?sort_by=${this.sort}&limit=20&offset=${a}`,
 
 						method: 'GET',
 						header: {
@@ -226,11 +229,12 @@
 							this.newposts.forEach((post, index) => {
 								const image_addr = post.images;
 								post.images = image_addr.split(',');
+								const avatar_url = "https://vx.mikumikumi.xyz" + post.author_avatar;
+								post.author_avatar = avatar_url;	
 								this.posts.push(post);
 							});
 
 							this.getNewLikeDislikeStatus();
-							this.getNewUsers();
 							resolve(); // 请求成功时调用 resolve
 						},
 						fail: (err) => {
@@ -280,27 +284,6 @@
 				});
 			},
 
-			async getUsers() {
-				try {
-					for (const post of this.posts) {
-						const response = await this.makeRequest(
-							'http://82.157.244.44:8000/api/v1/user/query-info/?uuid=' + post.author_uuid,
-							'GET', {
-								'Authorization': `Bearer ${uni.getStorageSync('token')}`,
-							}
-						);
-						//console.log('数据接收成功:', response);
-						const user = response;
-						user.avatar_url = "http://82.157.244.44:8000" + user.avatar_url;
-						this.users.push(user);
-					}
-				} catch (error) {
-					console.error('数据发送失败:', error);
-				}
-			},
-
-
-
 			formatPostTime(time) {
 				// 检查 time 是否为 undefined 或者 null
 				if (time == null) {
@@ -339,7 +322,7 @@
 				try {
 					// 发送点赞请求
 					const response = await uni.request({
-						url: `http://82.157.244.44:8000/api/v1/forum/posts/${post.id}/like/`,
+						url: `https://vx.mikumikumi.xyz/api/v1/forum/posts/${post.id}/like/`,
 						method: 'POST',
 						header: {
 							'Authorization': `Bearer ${uni.getStorageSync('token')}`,
@@ -377,7 +360,7 @@
 				try {
 					// 发送点踩请求
 					const response = await uni.request({
-						url: `http://82.157.244.44:8000/api/v1/forum/posts/${post.id}/dislike/`,
+						url: `https://vx.mikumikumi.xyz/api/v1/forum/posts/${post.id}/dislike/`,
 						method: 'POST',
 						header: {
 							'Authorization': `Bearer ${uni.getStorageSync('token')}`,
@@ -416,28 +399,7 @@
 					url: '/pages/msg/post_detail?id=' + post.id,
 				});
 			},
-
-			//以下是拉倒最底下更新贴子详情的部分
-
-			async getNewUsers() {
-				try {
-					for (const post of this.newposts) {
-						const response = await this.makeRequest(
-							'http://82.157.244.44:8000/api/v1/user/query-info/?uuid=' + post.author_uuid,
-							'GET', {
-								'Authorization': `Bearer ${uni.getStorageSync('token')}`,
-							}
-						);
-						//console.log('数据接收成功:', response);
-						const user = response;
-						user.avatar_url = "http://82.157.244.44:8000" + user.avatar_url;
-						this.users.push(user);
-					}
-				} catch (error) {
-					console.error('数据发送失败:', error);
-				}
-			},
-
+			
 			async getNewLikeDislikeStatus() {
 				try {
 					for (const post of this.newposts) {
@@ -455,7 +417,7 @@
 					let a = this.posts.length;
 
 					uni.request({
-						url: `http://82.157.244.44:8000/api/v1/forum/posts/?sort_by=${this.sort}&limit=20&offset=${a}`,
+						url: `https://vx.mikumikumi.xyz/api/v1/forum/posts/?sort_by=${this.sort}&limit=20&offset=${a}`,
 
 						method: 'GET',
 						header: {
@@ -467,13 +429,12 @@
 							this.newposts.forEach((post, index) => {
 								const image_addr = post.images;
 								post.images = image_addr.split(',');
+								const avatar_url = "https://vx.mikumikumi.xyz" + post.author_avatar;
+								post.author_avatar = avatar_url;
 								this.posts.push(post);
 							});
 
 							this.getNewLikeDislikeStatus();
-
-
-							this.getNewUsers();
 							resolve(); // 请求成功时调用 resolve
 						},
 						fail: (err) => {

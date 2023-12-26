@@ -58,7 +58,7 @@
 		methods: {
 			goToUserHome() {
 				uni.request({
-					url: `http://82.157.244.44:8000/api/v1/forum/getAdmin/`,
+					url: `https://vx.mikumikumi.xyz/api/v1/forum/getAdmin/`,
 					method: "POST",
 					header: {
 						'Authorization': `Bearer ${uni.getStorageSync('token')}`,
@@ -95,7 +95,7 @@
 					console.log(code);
 					// 发送登录请求
 					const loginRes = await uni.request({
-						url: 'http://82.157.244.44:8000/api/v1/user/login/',
+						url: 'https://vx.mikumikumi.xyz/api/v1/user/login/',
 						method: 'POST',
 						header: {
 							'Content-Type': 'application/json',
@@ -137,7 +137,7 @@
 				// 在这里实现使用令牌向后端请求用户信息的逻辑
 				try {
 					const userInfoRes = await uni.request({
-						url: 'http://82.157.244.44:8000/api/v1/user/info/',
+						url: 'https://vx.mikumikumi.xyz/api/v1/user/info/',
 						method: 'GET',
 						header: {
 							'Authorization': `Bearer ${token}`,

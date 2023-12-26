@@ -93,7 +93,7 @@
 			},
 			get_report() {
 				uni.request({
-					url: `http://82.157.244.44:8000/api/v1/forum/reports/${this.report_id}/`,
+					url: `https://vx.mikumikumi.xyz/api/v1/forum/reports/${this.report_id}/`,
 					method: 'GET',
 					header: {
 						'Authorization': `Bearer ${uni.getStorageSync('token')}`,
@@ -122,7 +122,7 @@
 				const reportId = this.report_id; // Use the actual report ID
 				// Send PUT request to handle the report
 				uni.request({
-					url: `http://82.157.244.44:8000/api/v1/forum/reports/manage/${reportId}/`,
+					url: `https://vx.mikumikumi.xyz/api/v1/forum/reports/manage/${reportId}/`,
 					method: 'PUT',
 					header: {
 						'Authorization': `Bearer ${uni.getStorageSync('token')}`,

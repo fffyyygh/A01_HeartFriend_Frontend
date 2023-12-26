@@ -34,7 +34,7 @@
 
 			get_all_medicine() {
 				uni.request({
-					url: 'http://82.157.244.44:8000/api/v1/medicine/', // 后端接口地址
+					url: 'https://vx.mikumikumi.xyz/api/v1/medicine/', // 后端接口地址
 					method: 'GET',
 					header: {
 						'Authorization': `Bearer ${uni.getStorageSync('token')}`,
@@ -59,7 +59,7 @@
 			deleteMedicine() {
 				if (!this.deleteDiaryId) {
 					uni.request({
-						url: 'http://82.157.244.44:8000/api/v1/medicine/' + String(this
+						url: 'https://vx.mikumikumi.xyz/api/v1/medicine/' + String(this
 							.deleteMedicineId), // 后端接口地址
 						method: 'DELETE',
 						header: {

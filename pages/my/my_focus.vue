@@ -41,7 +41,7 @@
 			follow_click(index) {
 				console.log("a");
 				uni.request({
-					url: "http://82.157.244.44:8000/api/v1/user/follow-unfollow/",
+					url: "https://vx.mikumikumi.xyz/api/v1/user/follow-unfollow/",
 					method: "POST",
 					header: {
 						'Authorization': `Bearer ${uni.getStorageSync('token')}`,
@@ -62,7 +62,7 @@
 
 			get_all_focus() {
 				uni.request({
-					url: 'http://82.157.244.44:8000/api/v1/user/following/', // 后端接口地址
+					url: 'https://vx.mikumikumi.xyz/api/v1/user/following/', // 后端接口地址
 					method: 'GET',
 					header: {
 						'Authorization': `Bearer ${uni.getStorageSync('token')}`,
@@ -71,7 +71,7 @@
 						console.log('数据接收成功:', res.data);
 						this.my_focus = res.data.following
 						for (const user of this.my_focus) {
-							user.avatar_url = "http://82.157.244.44:8000" + user.avatar_url;
+							user.avatar_url = "https://vx.mikumikumi.xyz" + user.avatar_url;
 							this.if_focus.push(true);
 						}
 					},

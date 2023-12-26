@@ -114,7 +114,7 @@
 
 				console.log(dataToSend);
 				uni.request({
-					url: 'http://82.157.244.44:8000/api/v1/medicine/', // 后端接口地址
+					url: 'https://vx.mikumikumi.xyz/api/v1/medicine/', // 后端接口地址
 					method: 'POST',
 					header: {
 						'Authorization': `Bearer ${uni.getStorageSync('token')}`,
