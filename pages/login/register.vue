@@ -12,7 +12,7 @@
 						@input="bindinput" v-model="userInfo.username"></uni-easyinput>
 				</uni-forms-item>
 				<uni-forms-item name="self_intro" label="个人介绍" required>
-					<uni-easyinput focus prefixIcon="person-filled" placeholder="请输入个人介绍"
+					<uni-easyinput prefixIcon="person-filled" placeholder="请输入个人介绍"
 						v-model="userInfo.self_intro"></uni-easyinput>
 				</uni-forms-item>
 				<uni-forms-item name="gender" label="性别" required>

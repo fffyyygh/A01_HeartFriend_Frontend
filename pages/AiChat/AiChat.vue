@@ -21,7 +21,7 @@
 
 			<view class="input-container">
 				<input v-model="newMessage" type="text" placeholder="在这里输入您的消息" @confirm="sendMessage" />
-				<button @tap="sendMessage">发送</button>
+				<button  :disabled="disable" @tap="sendMessage">发送</button>
 			</view>
 		</view>
 	</view>
@@ -32,7 +32,8 @@
 		data() {
 			return {
 				messages: [],
-				newMessage: ''
+				newMessage: '',
+				disable: false, 
 			};
 		},
 		methods: {
@@ -45,6 +46,7 @@
 			},
 
 			async sendMessage() {
+				this.disable = true;
 				if (this.newMessage.trim() !== '') {
 					// Add the user's message to the chat history
 					this.messages.push({
@@ -54,7 +56,8 @@
 
 					// Prepare the request payload
 					const payload = JSON.stringify(this.messages);
-
+					this.newMessage = '';
+					
 					try {
 						// Make a request to the backend API
 						const response = await uni.request({
@@ -80,7 +83,8 @@
 					}
 
 					// Clear the input field
-					this.newMessage = '';
+					this.disable = false;
+					
 				}
 			}
 		}

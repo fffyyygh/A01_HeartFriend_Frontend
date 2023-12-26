@@ -26,7 +26,7 @@
 		</view>
 		<view class="input-section">
 			<text class="input-title">内容</text>
-			<textarea v-model="content" class="content-input" placeholder="请输入内容"></textarea>
+			<textarea v-model="content" class="content-input" placeholder="请输入内容" maxlength="-1"></textarea>
 		</view>
 
 		<!-- 旧的方法 -->
@@ -144,6 +144,13 @@
 				// 首先上传图片
 				this.uploadImages().then((imageUrls) => {
 					// 图片上传成功后，将图片地址和其他数据一起发送给后端
+					if(imageUrls.length===0)
+						
+					{
+						imageUrls.push("null");
+						console.log("没有选择图片")
+					}
+					
 					const dataToSend = {
 						title: this.title,
 						content: this.content,
@@ -242,6 +249,7 @@
 		cursor: pointer;
 	}
 	.image-upload-container {
+		padding:22px;
 		display: flex;
 		flex-wrap: wrap;
 		margin: 10px 0;

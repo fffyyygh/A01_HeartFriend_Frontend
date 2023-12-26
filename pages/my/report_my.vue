@@ -6,7 +6,7 @@
 		<view v-if="reportLoaded && report.length > 0">
 			<view v-for="(item, index) in report" :key="index" @click="goToDetailPage(item.id)" class="report-item">
 				<text class="item-title">举报时间：{{ formatReportTime(item.created_at) }}</text>
-				<text class="item-status">{{ item.report_status }}</text>
+				<text class="item-status" :style="{ color: getStatusColor(item.report_status) }">{{ getStatusText(item.report_status) }}</text>
 			</view>
 		</view>
 
@@ -75,6 +75,12 @@
 					},
 				});
 			},
+			getStatusText(status) {
+			    return status === 'accepted' ? '接受' : status === 'rejected' ? '驳回' : '待处理';
+			},
+			getStatusColor(status) {
+			    return status === 'accepted' ? '#4CAF50' : status === 'rejected' ? '#F44336' : '#333'; // 更改颜色以匹配你的设计
+			  },
 			goToDetailPage(reportId) {
 				console.log('reportId:', reportId);
 				uni.navigateTo({
@@ -107,7 +113,7 @@
 }
 
 .item-status {
-	margin-left: 30px;
+  margin-left: 30rpx;
   font-size: 14px;
   color: #888;
 }

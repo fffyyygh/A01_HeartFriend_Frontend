@@ -72,7 +72,6 @@
 			{
 				"navigationBarTitleText" : "心情记录",
 				"enablePullDownRefresh" : false,
-				"backgroundColor": "#FFcc99",
 				"navigationBarBackgroundColor": "#F9E8D9"
 			}
 		},
@@ -80,7 +79,7 @@
 			"path" : "pages/diary/diary_detail",
 			"style" : 
 			{
-				"navigationBarTitleText" : "",
+				"navigationBarTitleText" : "日记详情",
 				"enablePullDownRefresh" : false,
 				"backgroundColor": "#FFcc99",
 				"navigationBarBackgroundColor": "#F9E8D9"
@@ -90,7 +89,7 @@
 			"path" : "pages/medicine/medicine_add",
 			"style" : 
 			{
-				"navigationBarTitleText" : "",
+				"navigationBarTitleText" : "添加药物",
 				"enablePullDownRefresh" : false,
 				"navigationBarBackgroundColor": "#F9E8D9"
 			}
@@ -99,7 +98,7 @@
 			"path" : "pages/medicine/medicine_all",
 			"style" : 
 			{
-				"navigationBarTitleText" : "",
+				"navigationBarTitleText" : "用药信息",
 				"enablePullDownRefresh" : false,
 				"navigationBarBackgroundColor": "#F9E8D9"
 			}
@@ -108,7 +107,7 @@
 			"path" : "pages/medicine/medicine_detail",
 			"style" : 
 			{
-				"navigationBarTitleText" : "",
+				"navigationBarTitleText" : "用药详情",
 				"enablePullDownRefresh" : false,
 				"navigationBarBackgroundColor": "#F9E8D9"
 			}
@@ -118,7 +117,7 @@
 			"path" : "pages/medicine/medicine_change",
 			"style" : 
 			{
-				"navigationBarTitleText" : "",
+				"navigationBarTitleText" : "修改药物信息",
 				"enablePullDownRefresh" : false,
 				"navigationBarBackgroundColor": "#F9E8D9"
 			}
@@ -127,7 +126,7 @@
 			"path" : "pages/msg/add",
 			"style" : 
 			{
-				"navigationBarTitleText" : "",
+				"navigationBarTitleText" : "发帖",
 				"enablePullDownRefresh" : false,
 				"navigationBarBackgroundColor": "#F9E8D9"
 			}
@@ -155,7 +154,7 @@
 			"path" : "pages/msg/post-list",
 			"style" : 
 			{
-				"navigationBarTitleText" : "",
+				"navigationBarTitleText" : "HeartFriend",
 				"enablePullDownRefresh" : false,
 				"onReachBottomDistance": 50,
 				"navigationBarBackgroundColor": "#F9E8D9"
@@ -165,7 +164,7 @@
 			"path" : "pages/my/my_posts",
 			"style" : 
 			{
-				"navigationBarTitleText" : "",
+				"navigationBarTitleText" : "我的帖子",
 				"enablePullDownRefresh" : false,
 				"navigationBarBackgroundColor": "#F9E8D9"
 			}
@@ -174,7 +173,7 @@
 			"path" : "pages/my/my_fans",
 			"style" : 
 			{
-				"navigationBarTitleText" : "",
+				"navigationBarTitleText" : "我的粉丝",
 				"enablePullDownRefresh" : false,
 				"navigationBarBackgroundColor": "#F9E8D9"
 			}
@@ -183,7 +182,7 @@
 			"path" : "pages/my/my_focus",
 			"style" : 
 			{
-				"navigationBarTitleText" : "",
+				"navigationBarTitleText" : "我的关注",
 				"enablePullDownRefresh" : false,
 				"navigationBarBackgroundColor": "#F9E8D9"
 			}
@@ -192,7 +191,7 @@
 			"path" : "pages/user-home/user-home",
 			"style" : 
 			{
-				"navigationBarTitleText" : "",
+				"navigationBarTitleText" : "用户主页",
 				"enablePullDownRefresh" : false,
 				"onReachBottomDistance": 50,
 				"navigationBarBackgroundColor": "#F9E8D9"
@@ -202,7 +201,7 @@
 			"path" : "pages/msg/report",
 			"style" : 
 			{
-				"navigationBarTitleText" : "",
+				"navigationBarTitleText" : "举报",
 				"enablePullDownRefresh" : false,
 				"navigationBarBackgroundColor": "#F9E8D9"
 			}
@@ -211,7 +210,7 @@
 			"path" : "pages/my/admin",
 			"style" : 
 			{
-				"navigationBarTitleText" : "",
+				"navigationBarTitleText" : "管理举报",
 				"enablePullDownRefresh" : false,
 				"navigationBarBackgroundColor": "#F9E8D9"
 			}
@@ -220,7 +219,7 @@
 			"path" : "pages/my/report_all",
 			"style" : 
 			{
-				"navigationBarTitleText" : "",
+				"navigationBarTitleText" : "所有举报",
 				"enablePullDownRefresh" : false,
 				"navigationBarBackgroundColor": "#F9E8D9"
 			}
@@ -229,7 +228,7 @@
 			"path" : "pages/my/report_handel",
 			"style" : 
 			{
-				"navigationBarTitleText" : "",
+				"navigationBarTitleText" : "已处理举报",
 				"enablePullDownRefresh" : false,
 				"navigationBarBackgroundColor": "#F9E8D9"
 			}
@@ -238,7 +237,7 @@
 			"path" : "pages/my/report_unhandel",
 			"style" : 
 			{
-				"navigationBarTitleText" : "",
+				"navigationBarTitleText" : "未处理举报",
 				"enablePullDownRefresh" : false,
 				"navigationBarBackgroundColor": "#F9E8D9"
 			}
@@ -248,7 +247,7 @@
 			"path" : "pages/my/post_like",
 			"style" : 
 			{
-				"navigationBarTitleText" : "",
+				"navigationBarTitleText" : "我的点赞",
 				"enablePullDownRefresh" : false,
 				"navigationBarBackgroundColor": "#F9E8D9"
 			}
@@ -257,7 +256,7 @@
 			"path" : "pages/my/post_dislike",
 			"style" : 
 			{
-				"navigationBarTitleText" : "",
+				"navigationBarTitleText" : "我的点踩",
 				"enablePullDownRefresh" : false,
 				"navigationBarBackgroundColor": "#F9E8D9"
 			}
@@ -267,7 +266,7 @@
 			"path" : "pages/my/report_detail",
 			"style" : 
 			{
-				"navigationBarTitleText" : "",
+				"navigationBarTitleText" : "举报详情",
 				"enablePullDownRefresh" : false,
 				"navigationBarBackgroundColor": "#F9E8D9"
 			}
@@ -277,7 +276,7 @@
 			"path" : "pages/my/report_my",
 			"style" : 
 			{
-				"navigationBarTitleText" : "",
+				"navigationBarTitleText" : "我的举报",
 				"enablePullDownRefresh" : false,
 				"navigationBarBackgroundColor": "#F9E8D9"
 			}
@@ -286,7 +285,7 @@
 			"path" : "pages/my/report_detail_user",
 			"style" : 
 			{
-				"navigationBarTitleText" : "",
+				"navigationBarTitleText" : "举报详情",
 				"enablePullDownRefresh" : false,
 				"navigationBarBackgroundColor": "#F9E8D9"
 			}

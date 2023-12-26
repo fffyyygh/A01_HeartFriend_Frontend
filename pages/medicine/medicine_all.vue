@@ -25,8 +25,9 @@
 		},
 		data() {
 			return {
-				deleteMedicineId: "",
 				medicines: [],
+				deleteMedicineId: null
+
 			}
 		},
 		methods: {
@@ -56,8 +57,7 @@
 				this.$refs.popup.open();
 			},
 			deleteMedicine() {
-				if (this.deleteDiaryId !== null) {
-
+				if (!this.deleteDiaryId) {
 					uni.request({
 						url: 'http://82.157.244.44:8000/api/v1/medicine/' + String(this
 							.deleteMedicineId), // 后端接口地址
@@ -67,6 +67,7 @@
 						},
 						success: (res) => {
 							console.log("删除成功");
+							this.medicines = [];
 							this.get_all_medicine();
 						},
 						fail: (err) => {
@@ -75,6 +76,8 @@
 					});
 					this.deleteDiaryId = null; // 重置删除索引
 					this.$refs.popup.close();
+				} else {
+					console.log("就是删不掉");
 				}
 			},
 			showMedicineContent(medicine) {

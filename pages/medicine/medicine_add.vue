@@ -2,19 +2,19 @@
 	<view>
 		<view>
 			<uni-section title="药物名称" type="line" padding>
-				<uni-easyinput v-model="medicineName" focus placeholder="请输入药物名称"></uni-easyinput>
+				<uni-easyinput v-model="medicineName" placeholder="请输入药物名称"></uni-easyinput>
 			</uni-section>
 			<uni-section title="剂量" type="line" padding>
 				<view class="input-container">
 					<input class="input-left" type="number" v-model="quantity" placeholder="输入数量">
 					<picker class="input-right" mode="selector" :range="units" @change="unitSelected">
-						<view>{{ selectedUnit }}</view>
+						<view>单位：{{ selectedUnit }}</view>
 					</picker>
 				</view>
 			</uni-section>
 			<uni-section title="提醒时间" type="line" padding>
 				<view>
-					<picker class="time-picker" mode="time" :value="time" start="09:01" end="21:01"
+					<picker class="time-picker" mode="time" :value="time"
 						@change="bindTimeChange">
 						选择提醒时间
 					</picker>
@@ -33,7 +33,7 @@
 			</uni-section>
 
 			<uni-section title="服药备注" type="line" padding>
-				<uni-easyinput v-model="note" focus placeholder="请输入服药提醒事项"></uni-easyinput>
+				<uni-easyinput v-model="note" placeholder="请输入服药提醒事项"></uni-easyinput>
 			</uni-section>
 
 			<button class="submit_medicine" @click="submitForm">提交</button>
@@ -51,7 +51,7 @@
 
 				quantity: '', // 左侧输入的数字
 				units: ['粒', '瓶', '毫升', '毫克'], // 可选择的单位列表
-				selectedUnit: '单位', // 初始显示的单位
+				selectedUnit: '粒', // 初始显示的单位
 
 				selectedTimes: [],
 
@@ -91,17 +91,18 @@
 					note: this.note, //用药备注					
 				};
 
-				const requiredFields = ['name', 'amount', 'unit', 'select_time', "start_date"];
+				const requiredFields = ['name', 'amount', 'unit', 'select_time', "start_date","next_pick_date"];
 				const text = {
 					name: "药物名称",
 					amount: "剂量",
 					unit: "单位",
 					select_time: "用药时间",
-					start_date: "用药周期"
+					start_date: "用药周期",
+					next_pick_date:"下次取药时间"
 
 				}
 				for (const field of requiredFields) {
-					if (!dataToSend[field]) {
+					if (!dataToSend[field] || dataToSend[field].length=== 0 ) {
 						uni.showToast({
 							title: `请填写${text[field]}`,
 							icon: 'none',

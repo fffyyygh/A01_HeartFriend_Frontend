@@ -153,8 +153,6 @@
 			},
 
 			async get_focus_post() {
-				this.users = [];
-				this.posts = [];
 				// 包装 uni.request 在 Promise 中
 				return new Promise((resolve, reject) => {
 					uni.request({
@@ -182,8 +180,7 @@
 			},
 
 			async get_all_post() {
-				this.users = [];
-				this.posts = [];
+
 				// 包装 uni.request 在 Promise 中
 				return new Promise((resolve, reject) => {
 					uni.request({
@@ -245,17 +242,10 @@
 			},
 
 
-
-
-			// 上面的是
-			//获取关注的贴子列表和获取全部的贴子列表的切换
-			change_button() {
-				this.posts = this.posts.slice().reverse();
-				this.users = this.users.slice().reverse();
-			},
-
 			async loadPostData() {
-
+				
+				this.users = [];
+				this.posts = [];
 				this.isLiked = [];
 				this.isDisliked = [];
 				await this.get_all_post();
@@ -263,7 +253,9 @@
 			},
 
 			async loadFocusPostData() {
-
+				
+				this.users = [];
+				this.posts = [];
 				this.isLiked = [];
 				this.isDisliked = [];
 				await this.get_focus_post();

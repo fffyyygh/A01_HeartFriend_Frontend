@@ -24,7 +24,7 @@
 	      </div>
 	    </div>
 		
-		<view class="images">
+		<view class="images" v-if="showpic">
 			<image v-for="(image, index) in diary.images" :key="index" :src="image" mode="aspectFill"
 				class="post-image" @click="previewImage(index)"></image>
 		</view>
@@ -36,6 +36,7 @@
 		data() {
 			return {
 				diary: {}, // 存储选定的日记数据
+				showpic:true,
 			};
 		},
 		onLoad(query) {
@@ -66,6 +67,11 @@
 						const diaries = res.data; // 将获取的日记信息存储到diaries数组中
 						this.diary = res.data.find(a => a.id === Number(diaryId));
 						console.log("这个日记的信息",this.diary);
+						if(this.diary.images[0]==="null")
+							
+						{
+							this.showpic = false;
+						}
 
 					},
 					fail: (err) => {

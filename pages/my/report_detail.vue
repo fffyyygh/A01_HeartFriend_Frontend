@@ -32,7 +32,7 @@
 				</view>
 			</picker>
 			<textarea v-if="canHandleReport" v-model="resolutionDetails" placeholder="处理详情"
-				class="resolution-input"></textarea>
+				class="resolution-input" maxlength="-1"></textarea>
 			<button class="post-btn" @click="toPost">查看被举报贴子详情</button>
 			<button class="handle-btn" v-if="canHandleReport" @click="handleReport">处理举报</button>
 		</view>

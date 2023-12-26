@@ -15,7 +15,7 @@
 		},
 		methods: {
 			goPostAdd() {
-				uni.navigateTo({
+				uni.redirectTo({
 					url: '/pages/diary/diary'
 				})
 			}

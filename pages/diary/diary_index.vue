@@ -53,8 +53,6 @@
 
 			},
 			showDiaryContent(diary) {
-
-				console.log(diary);
 				uni.navigateTo({
 					url: `/pages/diary/diary_detail?diaryId=${diary.id}`,
 				});
@@ -62,10 +60,9 @@
 
 			showDeleteDiaryButton(diary) {
 				// 点击图片时展示删除按钮
-				console.log("s");
+			
 				this.deleteDiaryId = diary.id;
 				this.$refs.popup.open();
-				console.log(this.deleteDiaryId);
 
 			},
 			deleteDiary() {
@@ -80,6 +77,7 @@
 						},
 						success: (res) => {
 							console.log("删除成功");
+							this.diaries = [];
 							this.get_all_diary();
 						},
 						fail: (err) => {
