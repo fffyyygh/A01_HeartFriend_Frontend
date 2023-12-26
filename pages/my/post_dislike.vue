@@ -9,7 +9,7 @@
 			<!-- 用户信息 -->
 			<view class="user-info" @click="goToPostDetail(post)">
 				<!-- 头像 -->
-				<image class="user-avatar" :src="users[index].avatar_url" mode="aspectFill"></image>
+				<image class="user-avatar" :src="users[index]" mode="aspectFill"></image>
 				<!-- 用户名、发帖时间等信息 -->
 				<view class="user-details">
 					<text class="user-name">{{ post.author }}</text>
@@ -162,16 +162,16 @@
 			async getUsers() {
 				try {
 					for (const post of this.posts) {
-						const response = await this.makeRequest(
-							'http://82.157.244.44:8000/api/v1/user/query-info/?uuid=' + post.author_uuid,
-							'GET', {
-								'Authorization': `Bearer ${uni.getStorageSync('token')}`,
-							}
-						);
-						//console.log('数据接收成功:', response);
-						const user = response;
-						user.avatar_url = "http://82.157.244.44:8000" + user.avatar_url;
-						this.users.push(user);
+						// const response = await this.makeRequest(
+						// 	'http://82.157.244.44:8000/api/v1/user/query-info/?uuid=' + post.author_uuid,
+						// 	'GET', {
+						// 		'Authorization': `Bearer ${uni.getStorageSync('token')}`,
+						// 	}
+						// );
+						// //console.log('数据接收成功:', response);
+						// const user = response;
+						const avatar_url = "http://82.157.244.44:8000" + post.author_avatar;
+						this.users.push(avatar_url);
 					}
 				} catch (error) {
 					console.error('数据发送失败:', error);
@@ -301,16 +301,16 @@
 			async getNewUsers() {
 				try {
 					for (const post of this.newposts) {
-						const response = await this.makeRequest(
-							'http://82.157.244.44:8000/api/v1/user/query-info/?uuid=' + post.author_uuid,
-							'GET', {
-								'Authorization': `Bearer ${uni.getStorageSync('token')}`,
-							}
-						);
-						//console.log('数据接收成功:', response);
-						const user = response;
-						user.avatar_url = "http://82.157.244.44:8000" + user.avatar_url;
-						this.users.push(user);
+						// const response = await this.makeRequest(
+						// 	'http://82.157.244.44:8000/api/v1/user/query-info/?uuid=' + post.author_uuid,
+						// 	'GET', {
+						// 		'Authorization': `Bearer ${uni.getStorageSync('token')}`,
+						// 	}
+						// );
+						// //console.log('数据接收成功:', response);
+						// const user = response;
+						const avatar_url = "http://82.157.244.44:8000" + post.author_avatar;
+						this.users.push(avatar_url);
 					}
 				} catch (error) {
 					console.error('数据发送失败:', error);
