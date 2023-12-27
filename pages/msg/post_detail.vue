@@ -906,7 +906,7 @@
 	}
 
 	.action-item.dislikeactive {
-		color: #527853;
+		color: lightskyblue;
 		/* 设置激活状态下的颜色，可以根据需要调整 */
 	}
 
