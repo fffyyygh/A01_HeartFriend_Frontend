@@ -108,10 +108,30 @@
 	}
 
 	.picker,
-	textarea,
-	.submit-button {
+	textarea {
 		width: calc(100% - 20px); // 考虑到左右各边距 10px
 		margin-top: 5px;
+	}
+
+	.submit-button {
+		display: flex;
+		justify-content: center;
+		align-items: center;
+		width: calc(100% - 60rpx);
+		height: 120rpx;
+		margin: 20px auto;
+		padding: 12px 20px;
+		border-radius: 5px;
+		background-color: #527853;
+		color: #fff;
+		text-align: center;
+		font-size: 18px;
+		/* 调整字体大小 */
+		font-weight: bold;
+		text-decoration: none;
+		box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
+		transition: transform 0.3s ease, background-color 0.3s ease, box-shadow 0.3s ease;
+
 	}
 
 	.picker {
@@ -130,15 +150,5 @@
 		border: 1px solid #ccc;
 		border-radius: 5px;
 		box-sizing: border-box;
-	}
-
-	.submit-button {
-		padding: 10px;
-		background-color: #007BFF;
-		color: #fff;
-		border: none;
-		border-radius: 5px;
-		cursor: pointer;
-		margin-left: 0; // 确保左边无额外间距
 	}
 </style>

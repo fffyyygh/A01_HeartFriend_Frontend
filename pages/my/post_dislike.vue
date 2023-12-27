@@ -384,7 +384,7 @@
 	}
 
 	.liked {
-		color: #ff6347;
+		color: #EF4040;
 		/* 设置喜欢状态的图标颜色为红色 */
 	}
 
@@ -395,7 +395,7 @@
 	}
 
 	.disliked {
-		color: #ff6347;
+		color: lightskyblue;
 		/* 设置不喜欢状态的图标颜色为蓝色 */
 	}
 

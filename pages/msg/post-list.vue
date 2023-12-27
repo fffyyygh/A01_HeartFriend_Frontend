@@ -478,7 +478,7 @@
 	}
 
 	.disliked {
-		color: #527853;
+		color: lightskyblue;
 		/* 设置不喜欢状态的图标颜色为蓝色 */
 	}
 

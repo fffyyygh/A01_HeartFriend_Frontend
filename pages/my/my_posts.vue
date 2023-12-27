@@ -17,7 +17,7 @@
 			<view class="post-content">
 				<text class="post-title" @click="goToPostDetail(post)">{{ post.title }}</text>
 				<!-- 前三张图片 -->
-				<view class="post-images"  @click="goToPostDetail(post)">
+				<view class="post-images" @click="goToPostDetail(post)">
 					<image v-for="(image, imageIndex) in post.images.slice(0, 3)" :key="imageIndex" :src="image"
 						mode="aspectFill" class="post-image"></image>
 				</view>
@@ -25,11 +25,11 @@
 
 			<!-- 点赞、点踩、评论图标和数量 -->
 			<view class="post-actions">
-				<view class="action-item" @click="likePost(post)">
+				<view class="action-item" @click="likePost(post,index)" :class="{ 'liked': isLiked[index] }">
 					<text class="iconfont icon-dianzan"></text>
 					<text class="action-count">{{ post.likes_count }}</text>
 				</view>
-				<view class="action-item" @click="dislikePost(post)">
+				<view class="action-item" @click="dislikePost(post,index)" :class="{ 'disliked': isDisliked[index] }">
 					<text class="iconfont icon-cai"></text>
 					<text class="action-count">{{ post.dislikes_count }}</text>
 				</view>
@@ -101,6 +101,8 @@
 						console.log('数据接收成功:', res.data);
 						this.posts = [];
 						this.users = [];
+						this.isLiked = [];
+						this.isDisliked = [];
 						this.get_user_posts();
 
 					},
@@ -133,6 +135,8 @@
 			get_user_posts() {
 				this.posts = [];
 				this.users = [];
+				this.isLiked = [];
+				this.isDisliked = [];
 				uni.request({
 					url: `https://vx.mikumikumi.xyz/api/v1/forum/posts/getUserPosts/?sort_by=cteated_at&offset=0&limit=20`,
 					method: "GET",
@@ -142,16 +146,18 @@
 					data: {
 						"uuid": this.userInfo.uuid,
 					},
-					success: (res) => {
+					success: async (res) => {
 						console.log("获取到了贴子列表", res.data);
+
 						this.posts = res.data.data;
-						this.posts.forEach((post, index) => {
+
+						for (const post of this.posts) {
 							const image_addr = post.images;
 							post.images = image_addr.split(',');
-						});
-						this.getLikeDislikeStatus();
-					}
+						}
 
+						await this.getLikeDislikeStatus();
+					}
 				});
 			},
 
@@ -191,7 +197,10 @@
 			async getLikeDislikeStatus() {
 				try {
 					for (const post of this.posts) {
+						console.log("post.id:::", post.id);
+						console.log("post.is_liked:::", post.is_liked);
 						this.isLiked.push(post.is_liked);
+						console.log("isLiked[]:::", this.isLiked);
 						this.isDisliked.push(post.is_disliked);
 					}
 				} catch (error) {
@@ -333,6 +342,7 @@
 		font-size: 25rpx;
 		margin-right: 20rpx;
 	}
+
 	.post-list {
 		padding: 20rpx;
 	}
@@ -364,7 +374,7 @@
 		display: flex;
 		flex-direction: column;
 	}
-	
+
 	.user-name {
 		font-weight: bold;
 	}
@@ -420,5 +430,15 @@
 	.action-count {
 		/* Style for action count (likes, dislikes, comments) */
 		color: #888;
+	}
+
+	.liked {
+		color: #EF4040;
+		/* 设置喜欢状态的图标颜色为红色 */
+	}
+
+	.disliked {
+		color: lightskyblue;
+		/* 设置不喜欢状态的图标颜色为蓝色 */
 	}
 </style>
