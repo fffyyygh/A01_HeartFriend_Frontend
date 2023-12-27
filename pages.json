@@ -62,7 +62,7 @@
 		{
 			"path": "pages/medicine/medicine",
 			"style": {
-				"navigationBarTitleText": "药物",
+				"navigationBarTitleText": "HeartFriend",
 				"navigationBarBackgroundColor": "#F9E8D9"
 			}
 		},
@@ -292,6 +292,24 @@
 		},
 		{
 			"path" : "pages/msg/post_empty",
+			"style" : 
+			{
+				"navigationBarTitleText" : "",
+				"enablePullDownRefresh" : false,
+				"navigationBarBackgroundColor": "#F9E8D9"
+			}
+		},
+		{
+			"path" : "pages/medicine/medicine_focuspic",
+			"style" : 
+			{
+				"navigationBarTitleText" : "",
+				"enablePullDownRefresh" : false,
+				"navigationBarBackgroundColor": "#F9E8D9"
+			}
+		},
+		{
+			"path" : "pages/msg/post_detail_fromuserhome",
 			"style" : 
 			{
 				"navigationBarTitleText" : "",

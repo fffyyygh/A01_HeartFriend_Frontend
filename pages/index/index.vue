@@ -28,7 +28,7 @@
 			</view>
 		</view>
 		<!-- 用于测试的按钮，点击后跳转到 user-home 页面 -->
-		<button @click="goToUserHome">提升我自己为管理员</button>
+		
 	</view>
 </template>
 
@@ -56,20 +56,6 @@
 			}
 		},
 		methods: {
-			goToUserHome() {
-				uni.request({
-					url: `https://vx.mikumikumi.xyz/api/v1/forum/getAdmin/`,
-					method: "POST",
-					header: {
-						'Authorization': `Bearer ${uni.getStorageSync('token')}`,
-					},
-					success: (res) => {
-						console.log(res);
-					}
-				
-				});
-			},
-
 			async getLoginCode() {
 				return new Promise((resolve, reject) => {
 					uni.login({

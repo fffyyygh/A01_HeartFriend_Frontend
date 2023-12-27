@@ -17,7 +17,7 @@
 			<view class="post-content">
 				<text class="post-title" @click="goToPostDetail(post)">{{ post.title }}</text>
 				<!-- 前三张图片 -->
-				<view class="post-images">
+				<view class="post-images"  @click="goToPostDetail(post)">
 					<image v-for="(image, imageIndex) in post.images.slice(0, 3)" :key="imageIndex" :src="image"
 						mode="aspectFill" class="post-image"></image>
 				</view>
@@ -134,7 +134,7 @@
 				this.posts = [];
 				this.users = [];
 				uni.request({
-					url: `https://vx.mikumikumi.xyz/api/v1/forum/posts/getUserPosts/?offset=0&limit=20`,
+					url: `https://vx.mikumikumi.xyz/api/v1/forum/posts/getUserPosts/?sort_by=cteated_at&offset=0&limit=20`,
 					method: "GET",
 					header: {
 						'Authorization': `Bearer ${uni.getStorageSync('token')}`,
@@ -289,7 +289,7 @@
 					let a = this.posts.length;
 					console.log(a);
 					uni.request({
-						url: `https://vx.mikumikumi.xyz/api/v1/forum/posts/getUserPosts/?offset=${a}&limit=20`,
+						url: `https://vx.mikumikumi.xyz/api/v1/forum/posts/getUserPosts/?sort_by=cteated_at&offset=${a}&limit=20`,
 						method: 'GET',
 						header: {
 							'Authorization': `Bearer ${uni.getStorageSync('token')}`,

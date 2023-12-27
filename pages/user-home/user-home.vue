@@ -88,10 +88,17 @@
 		onLoad(query) {
 			this.uuid = query.uuid;
 			console.log('this.uuid::::', this.uuid);
+			// this.getUserInfo(this.uuid);
+			// this.get_user_posts();
+		},
+		onShow() {
+			console.log("试试这个第一次出现的时候");
+			this.posts =[];
+			this.isLiked= [];
+			this.isDisliked=[];
 			this.getUserInfo(this.uuid);
 			this.get_user_posts();
 		},
-		onShow() {},
 		onReachBottom() {
 			this.get_other_post();
 
@@ -165,7 +172,7 @@
 			},
 			get_user_posts() {
 				uni.request({
-					url: `https://vx.mikumikumi.xyz/api/v1/forum/posts/getUserPosts/?offset=0&limit=20`,
+					url: `https://vx.mikumikumi.xyz/api/v1/forum/posts/getUserPosts/?sort_by=cteated_at&offset=0&limit=20`,
 					method: "GET",
 					header: {
 						'Authorization': `Bearer ${uni.getStorageSync('token')}`,
@@ -295,7 +302,7 @@
 				console.log('传递的id:', post.id);
 				// 使用 uni.navigateTo 进行页面跳转，并通过 query 参数传递帖子的ID
 				uni.navigateTo({
-					url: '/pages/msg/post_detail?id=' + post.id,
+					url: '/pages/msg/post_detail_fromuserhome?id=' + post.id,
 				});
 			},
 
@@ -316,7 +323,7 @@
 					let a = this.posts.length;
 					console.log(a);
 					uni.request({
-						url: `https://vx.mikumikumi.xyz/api/v1/forum/posts/getUserPosts/?offset=${a}&limit=20`,
+						url: `https://vx.mikumikumi.xyz/api/v1/forum/posts/getUserPosts/?sort_by=cteated_at&offset=${a}&limit=20`,
 						method: 'GET',
 						header: {
 							'Authorization': `Bearer ${uni.getStorageSync('token')}`,

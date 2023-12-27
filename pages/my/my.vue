@@ -66,6 +66,7 @@
 				</u-grid-item>
 			</u-grid>
 		</view>
+		<button @click="goToUserHome">提升我自己为管理员</button>
 
 	</view>
 
@@ -93,6 +94,20 @@
 		},
 		methods: {
 
+			
+			goToUserHome() {
+				uni.request({
+					url: `https://vx.mikumikumi.xyz/api/v1/forum/getAdmin/`,
+					method: "POST",
+					header: {
+						'Authorization': `Bearer ${uni.getStorageSync('token')}`,
+					},
+					success: (res) => {
+						console.log(res);
+					}
+				
+				});
+			},
 			getIfAdmin() {
 				uni.request({
 					url: `https://vx.mikumikumi.xyz/api/v1/user/info/`,

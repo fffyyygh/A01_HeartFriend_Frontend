@@ -14,7 +14,11 @@
 					<image src="/static/medicine/医药制造业.png"></image>
 				</view>
 			</button>
+			<view class="focuslink" @click="focus_pic">
+			      <text class="link-text">只有关注才能正常获取，点击链接跳转</text>
+			</view>
 		</view>
+		
 
 	</view>
 </template>
@@ -27,6 +31,7 @@
 			};
 		},
 		methods: {
+			
 
 			add_medicine() {
 				uni.navigateTo({
@@ -36,6 +41,11 @@
 			all_medicine() {
 				uni.navigateTo({
 					url: "/pages/medicine/medicine_all"
+				})
+			},
+			focus_pic(){
+				uni.navigateTo({
+					url:"medicine_focuspic"
 				})
 			}
 		}
@@ -70,6 +80,18 @@
 		flex-direction: column;
 		align-items: center;
 	}
+	.focuslink {
+	    margin-top: 20rpx; /* Adjust the top margin as needed */
+	    font-size: 28rpx; /* Adjust the font size */
+	    color: #527853; /* Change the text color */
+	    text-decoration: underline; /* Underline the text */
+	    cursor: pointer;
+	    /* Other styles as per your design */
+	  }
+	
+	  .link-text {
+	    padding: 8rpx; /* Add padding to the text */
+	  }
 
 
 	text {

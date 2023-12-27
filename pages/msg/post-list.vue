@@ -10,6 +10,7 @@
 		</view>
 		<view v-for="(post, index) in posts" :key="index" class="post-item">
 			<!-- 用户信息 -->
+			<view v-if="post.visibility === 'PU'">
 			<view class="user-info" @click="goToPostDetail(post)">
 				<!-- 头像 -->
 				<image class="user-avatar" :src="post.author_avatar" mode="aspectFill"></image>
@@ -44,6 +45,7 @@
 					<text class="iconfont icon-pinglun"></text>
 					<text class="action-count">{{ post.comments_count }}</text>
 				</view>
+			</view>
 			</view>
 		</view>
 		<!-- 发贴入口 -->
@@ -193,12 +195,14 @@
 						},
 						success: (res) => {
 							this.posts = res.data.data;
+							console.log(this.posts);
 							//this.posts = this.posts.slice().reverse();
 							this.posts.forEach((post, index) => {
 								const image_addr = post.images;
 								post.images = image_addr.split(',');
 								const avatar_url = "https://vx.mikumikumi.xyz" + post.author_avatar;
-								post.author_avatar = avatar_url;								
+								post.author_avatar = avatar_url;	
+															
 							});
 							resolve(); // 请求成功时调用 resolve
 						},
