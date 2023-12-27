@@ -15,7 +15,7 @@
 				</view>
 			</button>
 			<view class="focuslink" @click="focus_pic">
-			      <text class="link-text">只有关注才能正常获取，点击链接跳转</text>
+			      <text class="link-text">请确保您已经关注公众号以获取药物提醒，点击链接查看公众号二维码</text>
 			</view>
 		</view>
 		
@@ -86,6 +86,8 @@
 	    color: #527853; /* Change the text color */
 	    text-decoration: underline; /* Underline the text */
 	    cursor: pointer;
+		margin-left: 80rpx;
+		margin-right: 80rpx;
 	    /* Other styles as per your design */
 	  }
 	

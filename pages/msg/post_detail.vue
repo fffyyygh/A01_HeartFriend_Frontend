@@ -53,7 +53,7 @@
 		</view>
 
 		<view v-if="showCommentInput" class="comment-input">
-			<textarea v-model="commentText" class="input-textarea" placeholder="请输入评论"></textarea>
+			<textarea v-model="commentText" class="input-textarea" focus placeholder="请输入评论"></textarea>
 			<button class="submit-button" @click="submitComment">提交</button>
 		</view>
 
@@ -83,6 +83,7 @@
 				<view class="divider"></view>
 			</view>
 		</view>
+		<view style="height: 100rpx;"></view>
 
 	</view>
 </template>

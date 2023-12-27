@@ -2,7 +2,7 @@
 	<view>
 		<view>
 			<uni-section title="药物名称" type="line" padding>
-				<uni-easyinput v-model="medicine.name" focus placeholder="请输入药物名称"></uni-easyinput>
+				<uni-easyinput v-model="medicine.name"  placeholder="请输入药物名称"></uni-easyinput>
 			</uni-section>
 			<uni-section title="剂量" type="line" padding>
 				<view class="input-container">
@@ -29,11 +29,11 @@
 			</uni-section>
 
 			<uni-section title="下次取药时间" type="line" padding>
-				<uni-datetime-picker v-model="nextPickTime" type="date"></uni-datetime-picker>
+				<uni-datetime-picker v-model="medicine.next_pick_date" type="date"></uni-datetime-picker>
 			</uni-section>
 
 			<uni-section title="服药备注" type="line" padding>
-				<uni-easyinput v-model="medicine.note" focus placeholder="请输入服药提醒事项"></uni-easyinput>
+				<uni-easyinput v-model="medicine.note"  placeholder="请输入服药提醒事项"></uni-easyinput>
 			</uni-section>
 
 			<button class="submit_medicine" @click="submitForm">保存修改</button>
@@ -82,14 +82,15 @@
 
 
 			bindTimeChange: function(e) {
-				this.selectedTimes.push(e.detail.value);
+				this.medicine.select_time.push(e.detail.value);
 			},
 			unitSelected(event) {
 				const index = event.detail.value;
 				this.medicine.unit = this.units[index];
 			},
 			deleteTime(index) {
-				this.selectedTimes.splice(index, 1);
+				console.log(this.medicine);
+				this.medicine.select_time.splice(index, 1);
 			},
 			submitForm() {
 				const requiredFields = ['name', 'amount', 'unit', 'select_time', "start_date"];
