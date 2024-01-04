@@ -66,7 +66,8 @@
 				</u-grid-item>
 			</u-grid>
 		</view>
-		<button @click="goToUserHome">提升我自己为管理员</button>
+		<button v-show="!if_admin" class="btn" @click="goAdminlogin">管理员登陆</button>
+		<button v-show="if_admin" class="btn" @click="adminlogout">管理员退出</button>
 
 	</view>
 
@@ -93,6 +94,18 @@
 			};
 		},
 		methods: {
+			adminlogout(){
+				let old_token = uni.getStorageSync("old_token");
+				uni.setStorageSync("token","old_token");
+				uni.switchTab({
+					url:"/pages/index/index",
+				})
+			},
+			goAdminlogin(){
+				uni.redirectTo({
+					url:"/pages/my/admin_login"
+				})
+			},
 
 			
 			goToUserHome() {
@@ -358,6 +371,26 @@
 				font-size: 26rpx; // Adjust font size as needed
 			}
 		}
+	}
+	
+	.btn {
+		display: flex;
+		justify-content: center;
+		align-items: center;
+		width: calc(100% - 60rpx);
+		height: 120rpx;
+		margin-top: 20rpx;
+		padding: 12px 20px;
+		border-radius: 5px;
+		background-color: #527853;
+		color: #fff;
+		text-align: center;
+		font-size: 18px;
+		/* 调整字体大小 */
+		font-weight: bold;
+		text-decoration: none;
+		box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
+		transition: transform 0.3s ease, background-color 0.3s ease, box-shadow 0.3s ease;
 	}
 
 	.gender-icon {

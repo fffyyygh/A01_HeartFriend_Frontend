@@ -316,6 +316,15 @@
 				"enablePullDownRefresh" : false,
 				"navigationBarBackgroundColor": "#F9E8D9"
 			}
+		},
+		{
+			"path" : "pages/my/admin_login",
+			"style" : 
+			{
+				"navigationBarTitleText" : "",
+				"enablePullDownRefresh" : false,
+				"navigationBarBackgroundColor": "#F9E8D9"
+			}
 		}
 
 	],

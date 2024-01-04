@@ -34,8 +34,7 @@
 
 <script>
 	export default {
-		onLoad() {
-			console.log("a");
+		onShow() {
 			// 检查本地存储中是否有令牌
 			const token = uni.getStorageSync('token');
 			if (!token) {
@@ -119,7 +118,7 @@
 				}
 			},
 			async requestUserInfo(token) {
-				console.log("开始请求用户信息");
+
 				// 在这里实现使用令牌向后端请求用户信息的逻辑
 				try {
 					const userInfoRes = await uni.request({
@@ -134,8 +133,6 @@
 					if(userInfoRes[1].statusCode  === 200)
 					{//console.log(userInfoRes[1].data);
 					const userInfo = userInfoRes[1].data;
-					
-					console.log("aaaa",userInfoRes[1]);
 					// 在获取用户信息后，将其存储在本地存储中以备将来使用
 					// uni.setStorageSync('userInfo', userInfo);
 					// 修改为先判断本地存储中是否有userInfo，如果存在，则更新它，否则就存储新的 userInfo。
