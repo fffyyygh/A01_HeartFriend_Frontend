@@ -96,10 +96,31 @@
 		methods: {
 			adminlogout(){
 				let old_token = uni.getStorageSync("old_token");
-				uni.setStorageSync("token","old_token");
-				uni.switchTab({
-					url:"/pages/index/index",
-				})
+				if(old_token){
+					uni.setStorageSync("token","old_token");
+					uni.switchTab({
+						url:"/pages/index/index",
+					})
+				}
+				else{
+					uni.request({
+						url: `https://vx.mikumikumi.xyz/api/v1/forum/getAdmin/`,
+						method: "POST",
+						header: {
+							'Authorization': `Bearer ${uni.getStorageSync('token')}`,
+						},
+						success: (res) => {
+							console.log(res);
+							uni.switchTab({
+								url:"/pages/index/index",
+							})
+						}
+					
+					});
+					
+				}
+				
+				
 			},
 			goAdminlogin(){
 				uni.redirectTo({
